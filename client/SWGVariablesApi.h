@@ -2,11 +2,16 @@
 #import "SWGVariable.h"
 #import "SWGVariableCategory.h"
 #import "SWGVariableUserSettings.h"
+#import "SWGVariablesNew.h"
 #import "SWGObject.h"
+#import "SWGApiClient.h"
 
 
 @interface SWGVariablesApi: NSObject
 
+@property(nonatomic, assign)SWGApiClient *apiClient;
+
+-(instancetype) initWithApiClient:(SWGApiClient *)apiClient;
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGVariablesApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
@@ -41,11 +46,11 @@
 
  
 
- return type: 
+ return type: SWGVariable*
  */
 -(NSNumber*) publicVariablesGetWithCompletionBlock :
+    (void (^)(SWGVariable* output, NSError* error))completionBlock;
     
-    (void (^)(NSError* error))completionBlock;
 
 
 /**
@@ -57,13 +62,13 @@
  @param effectOrCause Allows us to specify which column in the `correlations` table will be searched. Choices are effect or cause.
  
 
- return type: 
+ return type: SWGVariable*
  */
 -(NSNumber*) publicVariablesSearchSearchGetWithCompletionBlock :(NSString*) search 
      effectOrCause:(NSString*) effectOrCause 
     
+    completionHandler: (void (^)(SWGVariable* output, NSError* error))completionBlock;
     
-    completionHandler: (void (^)(NSError* error))completionBlock;
 
 
 /**
@@ -73,11 +78,11 @@
 
  
 
- return type: 
+ return type: NSArray<SWGVariableCategory>*
  */
 -(NSNumber*) variableCategoriesGetWithCompletionBlock :
+    (void (^)(NSArray<SWGVariableCategory>* output, NSError* error))completionBlock;
     
-    (void (^)(NSError* error))completionBlock;
 
 
 /**
@@ -90,7 +95,7 @@
 
  return type: 
  */
--(NSNumber*) variableUserSettingsPostWithCompletionBlock :(NSArray<SWGVariableUserSettings>*) sharingData 
+-(NSNumber*) variableUserSettingsPostWithCompletionBlock :(SWGVariableUserSettings*) sharingData 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -105,13 +110,13 @@
  @param categoryName Category name
  
 
- return type: 
+ return type: SWGVariable*
  */
 -(NSNumber*) variablesGetWithCompletionBlock :(NSNumber*) userId 
      categoryName:(NSString*) categoryName 
     
+    completionHandler: (void (^)(SWGVariable* output, NSError* error))completionBlock;
     
-    completionHandler: (void (^)(NSError* error))completionBlock;
 
 
 /**
@@ -124,7 +129,7 @@
 
  return type: 
  */
--(NSNumber*) variablesPostWithCompletionBlock :(NSArray<SWGVariable>*) variableName 
+-(NSNumber*) variablesPostWithCompletionBlock :(SWGVariablesNew*) variableName 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -142,7 +147,7 @@
  @param offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10.
  
 
- return type: 
+ return type: NSArray<SWGVariable>*
  */
 -(NSNumber*) variablesSearchSearchGetWithCompletionBlock :(NSString*) search 
      categoryName:(NSString*) categoryName 
@@ -150,8 +155,8 @@
      limit:(NSNumber*) limit 
      offset:(NSNumber*) offset 
     
+    completionHandler: (void (^)(NSArray<SWGVariable>* output, NSError* error))completionBlock;
     
-    completionHandler: (void (^)(NSError* error))completionBlock;
 
 
 /**
@@ -162,12 +167,12 @@
  @param variableName Variable name
  
 
- return type: 
+ return type: SWGVariable*
  */
 -(NSNumber*) variablesVariableNameGetWithCompletionBlock :(NSString*) variableName 
     
+    completionHandler: (void (^)(SWGVariable* output, NSError* error))completionBlock;
     
-    completionHandler: (void (^)(NSError* error))completionBlock;
 
 
 

@@ -16,14 +16,17 @@
 /* Timestamp for the measurement event in epoch time 
  */
 @property(nonatomic) NSNumber* timestamp;
-/* Measurement value 
+/* Converted measurement value in requested unit 
  */
 @property(nonatomic) NSNumber* value;
-/* Unit of Measurement 
+/* Unit of measurement as requested in GET request 
  */
 @property(nonatomic) NSString* unit;
-/* Optional note supplied with the measurement. Can be up to 255 characters in length. [optional]
+/* Measurement value in the unit as orignally submitted [optional]
  */
-@property(nonatomic) NSString* note;
+@property(nonatomic) NSNumber* storedValue;
+/* Unit of measurement as originally submitted [optional]
+ */
+@property(nonatomic) NSString* storedUnit;
 
 @end

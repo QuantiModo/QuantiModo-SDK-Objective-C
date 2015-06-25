@@ -3,10 +3,14 @@
 #import "SWGJsonErrorResponse.h"
 #import "SWGPostCorrelation.h"
 #import "SWGObject.h"
+#import "SWGApiClient.h"
 
 
 @interface SWGCorrelationsApi: NSObject
 
+@property(nonatomic, assign)SWGApiClient *apiClient;
+
+-(instancetype) initWithApiClient:(SWGApiClient *)apiClient;
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGCorrelationsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;

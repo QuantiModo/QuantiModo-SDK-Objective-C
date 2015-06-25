@@ -1,9 +1,9 @@
 #import "SWGMeasurementsApi.h"
 #import "SWGFile.h"
 #import "SWGQueryParamCollection.h"
-#import "SWGApiClient.h"
 #import "SWGMeasurementSource.h"
 #import "SWGMeasurement.h"
+#import "SWGMeasurementSet.h"
 #import "SWGMeasurementRange.h"
 
 
@@ -12,7 +12,35 @@
 @end
 
 @implementation SWGMeasurementsApi
+
 static NSString * basePath = @"https://localhost/api";
+
+#pragma mark - Initialize methods
+
+- (id) init {
+    self = [super init];
+    if (self) {
+        self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        self.defaultHeaders = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+- (id) initWithApiClient:(SWGApiClient *)apiClient {
+    self = [super init];
+    if (self) {
+        if (apiClient) {
+            self.apiClient = apiClient;
+        }
+        else {
+            self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        }
+        self.defaultHeaders = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+#pragma mark -
 
 +(SWGMeasurementsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key {
     static SWGMeasurementsApi* singletonAPI = nil;
@@ -32,19 +60,8 @@ static NSString * basePath = @"https://localhost/api";
     return basePath;
 }
 
--(SWGApiClient*) apiClient {
-    return [SWGApiClient sharedClientFromPool:basePath];
-}
-
 -(void) addHeader:(NSString*)value forKey:(NSString*)key {
     [self.defaultHeaders setValue:value forKey:key];
-}
-
--(id) init {
-    self = [super init];
-    self.defaultHeaders = [NSMutableDictionary dictionary];
-    [self apiClient];
-    return self;
 }
 
 -(void) setHeaderValue:(NSString*) value
@@ -60,11 +77,11 @@ static NSString * basePath = @"https://localhost/api";
 /*!
  * Get measurement sources
  * Returns a list of all the apps from which measurement data is obtained.
- * \returns void
+ * \returns SWGMeasurementSource*
  */
 -(NSNumber*) measurementSourcesGetWithCompletionBlock: 
-        
-        (void (^)(NSError* error))completionBlock {
+        (void (^)(SWGMeasurementSource* output, NSError* error))completionBlock
+         {
 
     
 
@@ -100,6 +117,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -111,28 +131,41 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
+    
+
+    
+    // non container response
 
     
 
     
-
-    
-    // it's void
-        return [client stringWithCompletionBlock: requestUrl 
-                                      method: @"GET" 
-                                 queryParams: queryParams 
-                                        body: bodyDictionary 
-                                headerParams: headerParams
-                          requestContentType: requestContentType
-                         responseContentType: responseContentType
-                             completionBlock: ^(NSString *data, NSError *error) {
+    // complex response
+        
+    // comples response type
+    return [self.apiClient dictionary: requestUrl
+                       method: @"GET"
+                  queryParams: queryParams
+                         body: bodyDictionary
+                 headerParams: headerParams
+                 authSettings: authSettings
+           requestContentType: requestContentType
+          responseContentType: responseContentType
+              completionBlock: ^(NSDictionary *data, NSError *error) {
                 if (error) {
-                    completionBlock(error);
+                    completionBlock(nil, error);
+                    
                     return;
                 }
-                completionBlock(nil);
-                    }];
+                SWGMeasurementSource* result = nil;
+                if (data) {
+                    result = [[SWGMeasurementSource  alloc]  initWithDictionary:data error:nil];
+                }
+                completionBlock(result , nil);
+                
+              }];
+    
+
+    
 
     
 }
@@ -143,7 +176,7 @@ static NSString * basePath = @"https://localhost/api";
  * \param name An array of names of data sources you want to add.
  * \returns void
  */
--(NSNumber*) measurementSourcesPostWithCompletionBlock: (NSArray<SWGMeasurementSource>*) name
+-(NSNumber*) measurementSourcesPostWithCompletionBlock: (SWGMeasurementSource*) name
         
         
         completionHandler: (void (^)(NSError* error))completionBlock {
@@ -185,6 +218,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     id __body = name;
@@ -219,19 +255,18 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
 
     
 
     
     // it's void
-        return [client stringWithCompletionBlock: requestUrl 
+        return [self.apiClient stringWithCompletionBlock: requestUrl 
                                       method: @"POST" 
                                  queryParams: queryParams 
                                         body: bodyDictionary 
                                 headerParams: headerParams
+                                authSettings: authSettings
                           requestContentType: requestContentType
                          responseContentType: responseContentType
                              completionBlock: ^(NSString *data, NSError *error) {
@@ -254,7 +289,7 @@ static NSString * basePath = @"https://localhost/api";
  * \param endTime The upper limit of measurements returned (Epoch)
  * \param groupingWidth The time (in seconds) over which measurements are grouped together
  * \param groupingTimezone The time (in seconds) over which measurements are grouped together
- * \returns void
+ * \returns SWGMeasurement*
  */
 -(NSNumber*) measurementsGetWithCompletionBlock: (NSString*) variableName
          unit: (NSString*) unit
@@ -263,8 +298,8 @@ static NSString * basePath = @"https://localhost/api";
          groupingWidth: (NSNumber*) groupingWidth
          groupingTimezone: (NSString*) groupingTimezone
         
-        
-        completionHandler: (void (^)(NSError* error))completionBlock {
+        completionHandler: (void (^)(SWGMeasurement* output, NSError* error))completionBlock
+         {
 
     
     // verify the required parameter 'variableName' is set
@@ -327,6 +362,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -338,39 +376,52 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
+    
+
+    
+    // non container response
 
     
 
     
-
-    
-    // it's void
-        return [client stringWithCompletionBlock: requestUrl 
-                                      method: @"GET" 
-                                 queryParams: queryParams 
-                                        body: bodyDictionary 
-                                headerParams: headerParams
-                          requestContentType: requestContentType
-                         responseContentType: responseContentType
-                             completionBlock: ^(NSString *data, NSError *error) {
+    // complex response
+        
+    // comples response type
+    return [self.apiClient dictionary: requestUrl
+                       method: @"GET"
+                  queryParams: queryParams
+                         body: bodyDictionary
+                 headerParams: headerParams
+                 authSettings: authSettings
+           requestContentType: requestContentType
+          responseContentType: responseContentType
+              completionBlock: ^(NSDictionary *data, NSError *error) {
                 if (error) {
-                    completionBlock(error);
+                    completionBlock(nil, error);
+                    
                     return;
                 }
-                completionBlock(nil);
-                    }];
+                SWGMeasurement* result = nil;
+                if (data) {
+                    result = [[SWGMeasurement  alloc]  initWithDictionary:data error:nil];
+                }
+                completionBlock(result , nil);
+                
+              }];
+    
+
+    
 
     
 }
 
 /*!
- * Post a new set of measurements to the database
- * You can submit multiple measurements in a \"measurements\" sub-array.  If the variable these measurements correspond to does not already exist in the database, it will be automatically added.  The request body should look something like [{\"measurements\":[{\"timestamp\":1406419860,\"value\":\"1\",\"note\":\"I am a note about back pain.\"},{\"timestamp\":1406519865,\"value\":\"3\",\"note\":\"I am another note about back pain.\"}],\"name\":\"Back Pain\",\"source\":\"QuantiModo\",\"category\":\"Symptoms\",\"combinationOperation\":\"MEAN\",\"unit\":\"/5\"}]
+ * Post a new set or update existing measurements to the database
+ * You can submit or update multiple measurements in a \"measurements\" sub-array.  If the variable these measurements correspond to does not already exist in the database, it will be automatically added.  The request body should look something like [{\"measurements\":[{\"timestamp\":1406419860,\"value\":\"1\",\"note\":\"I am a note about back pain.\"},{\"timestamp\":1406519865,\"value\":\"3\",\"note\":\"I am another note about back pain.\"}],\"name\":\"Back Pain\",\"source\":\"QuantiModo\",\"category\":\"Symptoms\",\"combinationOperation\":\"MEAN\",\"unit\":\"/5\"}]
  * \param measurements An array of measurements you want to insert.
  * \returns void
  */
--(NSNumber*) measurementsV2PostWithCompletionBlock: (NSArray<SWGMeasurement>*) measurements
+-(NSNumber*) measurementsV2PostWithCompletionBlock: (SWGMeasurementSet*) measurements
         
         
         completionHandler: (void (^)(NSError* error))completionBlock {
@@ -412,6 +463,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     id __body = measurements;
@@ -446,19 +500,18 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
 
     
 
     
     // it's void
-        return [client stringWithCompletionBlock: requestUrl 
+        return [self.apiClient stringWithCompletionBlock: requestUrl 
                                       method: @"POST" 
                                  queryParams: queryParams 
                                         body: bodyDictionary 
                                 headerParams: headerParams
+                                authSettings: authSettings
                           requestContentType: requestContentType
                          responseContentType: responseContentType
                              completionBlock: ^(NSString *data, NSError *error) {
@@ -477,13 +530,13 @@ static NSString * basePath = @"https://localhost/api";
  * Get Unix time-stamp (epoch time) of the user's first and last measurements taken.
  * \param sources Enter source name to limit to specific source (varchar)
  * \param user If not specified, uses currently logged in user (bigint)
- * \returns void
+ * \returns SWGMeasurementRange*
  */
 -(NSNumber*) measurementsRangeGetWithCompletionBlock: (NSString*) sources
          user: (NSNumber*) user
         
-        
-        completionHandler: (void (^)(NSError* error))completionBlock {
+        completionHandler: (void (^)(SWGMeasurementRange* output, NSError* error))completionBlock
+         {
 
     
 
@@ -527,6 +580,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -538,28 +594,41 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
+    
+
+    
+    // non container response
 
     
 
     
-
-    
-    // it's void
-        return [client stringWithCompletionBlock: requestUrl 
-                                      method: @"GET" 
-                                 queryParams: queryParams 
-                                        body: bodyDictionary 
-                                headerParams: headerParams
-                          requestContentType: requestContentType
-                         responseContentType: responseContentType
-                             completionBlock: ^(NSString *data, NSError *error) {
+    // complex response
+        
+    // comples response type
+    return [self.apiClient dictionary: requestUrl
+                       method: @"GET"
+                  queryParams: queryParams
+                         body: bodyDictionary
+                 headerParams: headerParams
+                 authSettings: authSettings
+           requestContentType: requestContentType
+          responseContentType: responseContentType
+              completionBlock: ^(NSDictionary *data, NSError *error) {
                 if (error) {
-                    completionBlock(error);
+                    completionBlock(nil, error);
+                    
                     return;
                 }
-                completionBlock(nil);
-                    }];
+                SWGMeasurementRange* result = nil;
+                if (data) {
+                    result = [[SWGMeasurementRange  alloc]  initWithDictionary:data error:nil];
+                }
+                completionBlock(result , nil);
+                
+              }];
+    
+
+    
 
     
 }
@@ -567,3 +636,6 @@ static NSString * basePath = @"https://localhost/api";
 
 
 @end
+
+
+

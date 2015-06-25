@@ -4,10 +4,14 @@
 #import "SWGUserTokenFailedResponse.h"
 #import "SWGUserTokenSuccessfulResponse.h"
 #import "SWGObject.h"
+#import "SWGApiClient.h"
 
 
 @interface SWGUserApi: NSObject
 
+@property(nonatomic, assign)SWGApiClient *apiClient;
+
+-(instancetype) initWithApiClient:(SWGApiClient *)apiClient;
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGUserApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
@@ -20,11 +24,11 @@
 
  
 
- return type: 
+ return type: SWGUser*
  */
 -(NSNumber*) userMeGetWithCompletionBlock :
+    (void (^)(SWGUser* output, NSError* error))completionBlock;
     
-    (void (^)(NSError* error))completionBlock;
 
 
 /**

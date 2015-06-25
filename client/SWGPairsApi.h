@@ -1,10 +1,14 @@
 #import <Foundation/Foundation.h>
 #import "SWGPairs.h"
 #import "SWGObject.h"
+#import "SWGApiClient.h"
 
 
 @interface SWGPairsApi: NSObject
 
+@property(nonatomic, assign)SWGApiClient *apiClient;
+
+-(instancetype) initWithApiClient:(SWGApiClient *)apiClient;
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGPairsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
@@ -27,7 +31,7 @@
  @param startTime The earliest date (in epoch time) for which we should return measurements
  
 
- return type: 
+ return type: NSArray<SWGPairs>*
  */
 -(NSNumber*) pairsGetWithCompletionBlock :(NSString*) cause 
      causeSource:(NSString*) causeSource 
@@ -40,8 +44,8 @@
      endTime:(NSString*) endTime 
      startTime:(NSString*) startTime 
     
+    completionHandler: (void (^)(NSArray<SWGPairs>* output, NSError* error))completionBlock;
     
-    completionHandler: (void (^)(NSError* error))completionBlock;
 
 
 

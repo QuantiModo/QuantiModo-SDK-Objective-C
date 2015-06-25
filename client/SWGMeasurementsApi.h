@@ -1,12 +1,17 @@
 #import <Foundation/Foundation.h>
 #import "SWGMeasurementSource.h"
 #import "SWGMeasurement.h"
+#import "SWGMeasurementSet.h"
 #import "SWGMeasurementRange.h"
 #import "SWGObject.h"
+#import "SWGApiClient.h"
 
 
 @interface SWGMeasurementsApi: NSObject
 
+@property(nonatomic, assign)SWGApiClient *apiClient;
+
+-(instancetype) initWithApiClient:(SWGApiClient *)apiClient;
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGMeasurementsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
@@ -19,11 +24,11 @@
 
  
 
- return type: 
+ return type: SWGMeasurementSource*
  */
 -(NSNumber*) measurementSourcesGetWithCompletionBlock :
+    (void (^)(SWGMeasurementSource* output, NSError* error))completionBlock;
     
-    (void (^)(NSError* error))completionBlock;
 
 
 /**
@@ -36,7 +41,7 @@
 
  return type: 
  */
--(NSNumber*) measurementSourcesPostWithCompletionBlock :(NSArray<SWGMeasurementSource>*) name 
+-(NSNumber*) measurementSourcesPostWithCompletionBlock :(SWGMeasurementSource*) name 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -55,7 +60,7 @@
  @param groupingTimezone The time (in seconds) over which measurements are grouped together
  
 
- return type: 
+ return type: SWGMeasurement*
  */
 -(NSNumber*) measurementsGetWithCompletionBlock :(NSString*) variableName 
      unit:(NSString*) unit 
@@ -64,21 +69,21 @@
      groupingWidth:(NSNumber*) groupingWidth 
      groupingTimezone:(NSString*) groupingTimezone 
     
+    completionHandler: (void (^)(SWGMeasurement* output, NSError* error))completionBlock;
     
-    completionHandler: (void (^)(NSError* error))completionBlock;
 
 
 /**
 
- Post a new set of measurements to the database
- You can submit multiple measurements in a \"measurements\" sub-array.  If the variable these measurements correspond to does not already exist in the database, it will be automatically added.  The request body should look something like [{\"measurements\":[{\"timestamp\":1406419860,\"value\":\"1\",\"note\":\"I am a note about back pain.\"},{\"timestamp\":1406519865,\"value\":\"3\",\"note\":\"I am another note about back pain.\"}],\"name\":\"Back Pain\",\"source\":\"QuantiModo\",\"category\":\"Symptoms\",\"combinationOperation\":\"MEAN\",\"unit\":\"/5\"}]
+ Post a new set or update existing measurements to the database
+ You can submit or update multiple measurements in a \"measurements\" sub-array.  If the variable these measurements correspond to does not already exist in the database, it will be automatically added.  The request body should look something like [{\"measurements\":[{\"timestamp\":1406419860,\"value\":\"1\",\"note\":\"I am a note about back pain.\"},{\"timestamp\":1406519865,\"value\":\"3\",\"note\":\"I am another note about back pain.\"}],\"name\":\"Back Pain\",\"source\":\"QuantiModo\",\"category\":\"Symptoms\",\"combinationOperation\":\"MEAN\",\"unit\":\"/5\"}]
 
  @param measurements An array of measurements you want to insert.
  
 
  return type: 
  */
--(NSNumber*) measurementsV2PostWithCompletionBlock :(NSArray<SWGMeasurement>*) measurements 
+-(NSNumber*) measurementsV2PostWithCompletionBlock :(SWGMeasurementSet*) measurements 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -93,13 +98,13 @@
  @param user If not specified, uses currently logged in user (bigint)
  
 
- return type: 
+ return type: SWGMeasurementRange*
  */
 -(NSNumber*) measurementsRangeGetWithCompletionBlock :(NSString*) sources 
      user:(NSNumber*) user 
     
+    completionHandler: (void (^)(SWGMeasurementRange* output, NSError* error))completionBlock;
     
-    completionHandler: (void (^)(NSError* error))completionBlock;
 
 
 

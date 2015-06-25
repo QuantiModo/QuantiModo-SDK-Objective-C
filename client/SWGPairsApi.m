@@ -1,7 +1,6 @@
 #import "SWGPairsApi.h"
 #import "SWGFile.h"
 #import "SWGQueryParamCollection.h"
-#import "SWGApiClient.h"
 #import "SWGPairs.h"
 
 
@@ -10,7 +9,35 @@
 @end
 
 @implementation SWGPairsApi
+
 static NSString * basePath = @"https://localhost/api";
+
+#pragma mark - Initialize methods
+
+- (id) init {
+    self = [super init];
+    if (self) {
+        self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        self.defaultHeaders = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+- (id) initWithApiClient:(SWGApiClient *)apiClient {
+    self = [super init];
+    if (self) {
+        if (apiClient) {
+            self.apiClient = apiClient;
+        }
+        else {
+            self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        }
+        self.defaultHeaders = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+#pragma mark -
 
 +(SWGPairsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key {
     static SWGPairsApi* singletonAPI = nil;
@@ -30,19 +57,8 @@ static NSString * basePath = @"https://localhost/api";
     return basePath;
 }
 
--(SWGApiClient*) apiClient {
-    return [SWGApiClient sharedClientFromPool:basePath];
-}
-
 -(void) addHeader:(NSString*)value forKey:(NSString*)key {
     [self.defaultHeaders setValue:value forKey:key];
-}
-
--(id) init {
-    self = [super init];
-    self.defaultHeaders = [NSMutableDictionary dictionary];
-    [self apiClient];
-    return self;
 }
 
 -(void) setHeaderValue:(NSString*) value
@@ -68,7 +84,7 @@ static NSString * basePath = @"https://localhost/api";
  * \param effectUnit Abbreviated name for the unit effect measurements to be returned in
  * \param endTime The most recent date (in epoch time) for which we should return measurements
  * \param startTime The earliest date (in epoch time) for which we should return measurements
- * \returns void
+ * \returns NSArray<SWGPairs>*
  */
 -(NSNumber*) pairsGetWithCompletionBlock: (NSString*) cause
          causeSource: (NSString*) causeSource
@@ -81,8 +97,8 @@ static NSString * basePath = @"https://localhost/api";
          endTime: (NSString*) endTime
          startTime: (NSString*) startTime
         
-        
-        completionHandler: (void (^)(NSError* error))completionBlock {
+        completionHandler: (void (^)(NSArray<SWGPairs>* output, NSError* error))completionBlock
+         {
 
     
     // verify the required parameter 'cause' is set
@@ -164,6 +180,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -175,28 +194,41 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
-
-    
-
-    
-    // it's void
-        return [client stringWithCompletionBlock: requestUrl 
-                                      method: @"GET" 
-                                 queryParams: queryParams 
-                                        body: bodyDictionary 
-                                headerParams: headerParams
-                          requestContentType: requestContentType
-                         responseContentType: responseContentType
-                             completionBlock: ^(NSString *data, NSError *error) {
+    // response is in a container
+        // array container response type
+    return [self.apiClient dictionary: requestUrl 
+                       method: @"GET" 
+                  queryParams: queryParams 
+                         body: bodyDictionary 
+                 headerParams: headerParams
+                 authSettings: authSettings
+           requestContentType: requestContentType
+          responseContentType: responseContentType
+              completionBlock: ^(NSDictionary *data, NSError *error) {
                 if (error) {
-                    completionBlock(error);
+                    completionBlock(nil, error);
                     return;
                 }
-                completionBlock(nil);
-                    }];
+                
+                if([data isKindOfClass:[NSArray class]]){
+                    NSMutableArray * objs = [[NSMutableArray alloc] initWithCapacity:[data count]];
+                    for (NSDictionary* dict in (NSArray*)data) {
+                        
+                        
+                        SWGPairs* d = [[SWGPairs alloc] initWithDictionary:dict error:nil];
+                        
+                        [objs addObject:d];
+                    }
+                    completionBlock((NSArray<SWGPairs>*)objs, nil);
+                }
+                
+                
+            }];
+    
+
+
+    
 
     
 }
@@ -204,3 +236,6 @@ static NSString * basePath = @"https://localhost/api";
 
 
 @end
+
+
+

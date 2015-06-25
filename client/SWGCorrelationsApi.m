@@ -1,7 +1,6 @@
 #import "SWGCorrelationsApi.h"
 #import "SWGFile.h"
 #import "SWGQueryParamCollection.h"
-#import "SWGApiClient.h"
 #import "SWGCorrelation.h"
 #import "SWGJsonErrorResponse.h"
 #import "SWGPostCorrelation.h"
@@ -12,7 +11,35 @@
 @end
 
 @implementation SWGCorrelationsApi
+
 static NSString * basePath = @"https://localhost/api";
+
+#pragma mark - Initialize methods
+
+- (id) init {
+    self = [super init];
+    if (self) {
+        self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        self.defaultHeaders = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+- (id) initWithApiClient:(SWGApiClient *)apiClient {
+    self = [super init];
+    if (self) {
+        if (apiClient) {
+            self.apiClient = apiClient;
+        }
+        else {
+            self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        }
+        self.defaultHeaders = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+#pragma mark -
 
 +(SWGCorrelationsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key {
     static SWGCorrelationsApi* singletonAPI = nil;
@@ -32,19 +59,8 @@ static NSString * basePath = @"https://localhost/api";
     return basePath;
 }
 
--(SWGApiClient*) apiClient {
-    return [SWGApiClient sharedClientFromPool:basePath];
-}
-
 -(void) addHeader:(NSString*)value forKey:(NSString*)key {
     [self.defaultHeaders setValue:value forKey:key];
-}
-
--(id) init {
-    self = [super init];
-    self.defaultHeaders = [NSMutableDictionary dictionary];
-    [self apiClient];
-    return self;
 }
 
 -(void) setHeaderValue:(NSString*) value
@@ -112,6 +128,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -123,16 +142,15 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
     // response is in a container
         // array container response type
-    return [client dictionary: requestUrl 
+    return [self.apiClient dictionary: requestUrl 
                        method: @"GET" 
                   queryParams: queryParams 
                          body: bodyDictionary 
                  headerParams: headerParams
+                 authSettings: authSettings
            requestContentType: requestContentType
           responseContentType: responseContentType
               completionBlock: ^(NSDictionary *data, NSError *error) {
@@ -156,6 +174,7 @@ static NSString * basePath = @"https://localhost/api";
                 
             }];
     
+
 
     
 
@@ -220,6 +239,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -231,16 +253,15 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
     // response is in a container
         // array container response type
-    return [client dictionary: requestUrl 
+    return [self.apiClient dictionary: requestUrl 
                        method: @"GET" 
                   queryParams: queryParams 
                          body: bodyDictionary 
                  headerParams: headerParams
+                 authSettings: authSettings
            requestContentType: requestContentType
           responseContentType: responseContentType
               completionBlock: ^(NSDictionary *data, NSError *error) {
@@ -264,6 +285,7 @@ static NSString * basePath = @"https://localhost/api";
                 
             }];
     
+
 
     
 
@@ -318,6 +340,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     id __body = body;
@@ -352,19 +377,18 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
 
     
 
     
     // it's void
-        return [client stringWithCompletionBlock: requestUrl 
+        return [self.apiClient stringWithCompletionBlock: requestUrl 
                                       method: @"POST" 
                                  queryParams: queryParams 
                                         body: bodyDictionary 
                                 headerParams: headerParams
+                                authSettings: authSettings
                           requestContentType: requestContentType
                          responseContentType: responseContentType
                              completionBlock: ^(NSString *data, NSError *error) {
@@ -454,6 +478,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -465,16 +492,15 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
     // response is in a container
         // array container response type
-    return [client dictionary: requestUrl 
+    return [self.apiClient dictionary: requestUrl 
                        method: @"GET" 
                   queryParams: queryParams 
                          body: bodyDictionary 
                  headerParams: headerParams
+                 authSettings: authSettings
            requestContentType: requestContentType
           responseContentType: responseContentType
               completionBlock: ^(NSDictionary *data, NSError *error) {
@@ -498,6 +524,7 @@ static NSString * basePath = @"https://localhost/api";
                 
             }];
     
+
 
     
 
@@ -580,6 +607,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -591,16 +621,15 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
     // response is in a container
         // array container response type
-    return [client dictionary: requestUrl 
+    return [self.apiClient dictionary: requestUrl 
                        method: @"GET" 
                   queryParams: queryParams 
                          body: bodyDictionary 
                  headerParams: headerParams
+                 authSettings: authSettings
            requestContentType: requestContentType
           responseContentType: responseContentType
               completionBlock: ^(NSDictionary *data, NSError *error) {
@@ -624,6 +653,7 @@ static NSString * basePath = @"https://localhost/api";
                 
             }];
     
+
 
     
 
@@ -679,6 +709,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -690,16 +723,15 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
     // response is in a container
         // array container response type
-    return [client dictionary: requestUrl 
+    return [self.apiClient dictionary: requestUrl 
                        method: @"GET" 
                   queryParams: queryParams 
                          body: bodyDictionary 
                  headerParams: headerParams
+                 authSettings: authSettings
            requestContentType: requestContentType
           responseContentType: responseContentType
               completionBlock: ^(NSDictionary *data, NSError *error) {
@@ -723,6 +755,7 @@ static NSString * basePath = @"https://localhost/api";
                 
             }];
     
+
 
     
 
@@ -778,6 +811,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -789,16 +825,15 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
     // response is in a container
         // array container response type
-    return [client dictionary: requestUrl 
+    return [self.apiClient dictionary: requestUrl 
                        method: @"GET" 
                   queryParams: queryParams 
                          body: bodyDictionary 
                  headerParams: headerParams
+                 authSettings: authSettings
            requestContentType: requestContentType
           responseContentType: responseContentType
               completionBlock: ^(NSDictionary *data, NSError *error) {
@@ -822,6 +857,7 @@ static NSString * basePath = @"https://localhost/api";
                 
             }];
     
+
 
     
 
@@ -877,6 +913,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -888,16 +927,15 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
     // response is in a container
         // array container response type
-    return [client dictionary: requestUrl 
+    return [self.apiClient dictionary: requestUrl 
                        method: @"GET" 
                   queryParams: queryParams 
                          body: bodyDictionary 
                  headerParams: headerParams
+                 authSettings: authSettings
            requestContentType: requestContentType
           responseContentType: responseContentType
               completionBlock: ^(NSDictionary *data, NSError *error) {
@@ -921,6 +959,7 @@ static NSString * basePath = @"https://localhost/api";
                 
             }];
     
+
 
     
 
@@ -976,6 +1015,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -987,16 +1029,15 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
     // response is in a container
         // array container response type
-    return [client dictionary: requestUrl 
+    return [self.apiClient dictionary: requestUrl 
                        method: @"GET" 
                   queryParams: queryParams 
                          body: bodyDictionary 
                  headerParams: headerParams
+                 authSettings: authSettings
            requestContentType: requestContentType
           responseContentType: responseContentType
               completionBlock: ^(NSDictionary *data, NSError *error) {
@@ -1021,6 +1062,7 @@ static NSString * basePath = @"https://localhost/api";
             }];
     
 
+
     
 
     
@@ -1029,3 +1071,6 @@ static NSString * basePath = @"https://localhost/api";
 
 
 @end
+
+
+

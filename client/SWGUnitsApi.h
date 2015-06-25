@@ -2,10 +2,14 @@
 #import "SWGUnitCategory.h"
 #import "SWGUnit.h"
 #import "SWGObject.h"
+#import "SWGApiClient.h"
 
 
 @interface SWGUnitsApi: NSObject
 
+@property(nonatomic, assign)SWGApiClient *apiClient;
+
+-(instancetype) initWithApiClient:(SWGApiClient *)apiClient;
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGUnitsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
@@ -18,11 +22,11 @@
 
  
 
- return type: 
+ return type: SWGUnitCategory*
  */
 -(NSNumber*) unitCategoriesGetWithCompletionBlock :
+    (void (^)(SWGUnitCategory* output, NSError* error))completionBlock;
     
-    (void (^)(NSError* error))completionBlock;
 
 
 /**
@@ -35,14 +39,14 @@
  @param categoryName Restrict the results to a specific unit category by providing the unit category name.
  
 
- return type: 
+ return type: NSArray<SWGUnit>*
  */
 -(NSNumber*) unitsGetWithCompletionBlock :(NSString*) unitName 
      abbreviatedUnitName:(NSString*) abbreviatedUnitName 
      categoryName:(NSString*) categoryName 
     
+    completionHandler: (void (^)(NSArray<SWGUnit>* output, NSError* error))completionBlock;
     
-    completionHandler: (void (^)(NSError* error))completionBlock;
 
 
 

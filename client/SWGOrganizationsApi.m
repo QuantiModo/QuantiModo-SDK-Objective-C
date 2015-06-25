@@ -1,7 +1,6 @@
 #import "SWGOrganizationsApi.h"
 #import "SWGFile.h"
 #import "SWGQueryParamCollection.h"
-#import "SWGApiClient.h"
 #import "SWGUserTokenRequest.h"
 #import "SWGUserTokenFailedResponse.h"
 #import "SWGUserTokenSuccessfulResponse.h"
@@ -12,7 +11,35 @@
 @end
 
 @implementation SWGOrganizationsApi
+
 static NSString * basePath = @"https://localhost/api";
+
+#pragma mark - Initialize methods
+
+- (id) init {
+    self = [super init];
+    if (self) {
+        self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        self.defaultHeaders = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+- (id) initWithApiClient:(SWGApiClient *)apiClient {
+    self = [super init];
+    if (self) {
+        if (apiClient) {
+            self.apiClient = apiClient;
+        }
+        else {
+            self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        }
+        self.defaultHeaders = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+#pragma mark -
 
 +(SWGOrganizationsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key {
     static SWGOrganizationsApi* singletonAPI = nil;
@@ -32,19 +59,8 @@ static NSString * basePath = @"https://localhost/api";
     return basePath;
 }
 
--(SWGApiClient*) apiClient {
-    return [SWGApiClient sharedClientFromPool:basePath];
-}
-
 -(void) addHeader:(NSString*)value forKey:(NSString*)key {
     [self.defaultHeaders setValue:value forKey:key];
-}
-
--(id) init {
-    self = [super init];
-    self.defaultHeaders = [NSMutableDictionary dictionary];
-    [self apiClient];
-    return self;
 }
 
 -(void) setHeaderValue:(NSString*) value
@@ -111,6 +127,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[];
+    
     id bodyDictionary = nil;
     
     id __body = body;
@@ -145,8 +164,6 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
 
     
@@ -158,11 +175,12 @@ static NSString * basePath = @"https://localhost/api";
     // complex response
         
     // comples response type
-    return [client dictionary: requestUrl
+    return [self.apiClient dictionary: requestUrl
                        method: @"POST"
                   queryParams: queryParams
                          body: bodyDictionary
                  headerParams: headerParams
+                 authSettings: authSettings
            requestContentType: requestContentType
           responseContentType: responseContentType
               completionBlock: ^(NSDictionary *data, NSError *error) {
@@ -188,3 +206,6 @@ static NSString * basePath = @"https://localhost/api";
 
 
 @end
+
+
+

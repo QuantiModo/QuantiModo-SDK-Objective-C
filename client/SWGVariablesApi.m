@@ -1,10 +1,10 @@
 #import "SWGVariablesApi.h"
 #import "SWGFile.h"
 #import "SWGQueryParamCollection.h"
-#import "SWGApiClient.h"
 #import "SWGVariable.h"
 #import "SWGVariableCategory.h"
 #import "SWGVariableUserSettings.h"
+#import "SWGVariablesNew.h"
 
 
 @interface SWGVariablesApi ()
@@ -12,7 +12,35 @@
 @end
 
 @implementation SWGVariablesApi
+
 static NSString * basePath = @"https://localhost/api";
+
+#pragma mark - Initialize methods
+
+- (id) init {
+    self = [super init];
+    if (self) {
+        self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        self.defaultHeaders = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+- (id) initWithApiClient:(SWGApiClient *)apiClient {
+    self = [super init];
+    if (self) {
+        if (apiClient) {
+            self.apiClient = apiClient;
+        }
+        else {
+            self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        }
+        self.defaultHeaders = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+#pragma mark -
 
 +(SWGVariablesApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key {
     static SWGVariablesApi* singletonAPI = nil;
@@ -32,19 +60,8 @@ static NSString * basePath = @"https://localhost/api";
     return basePath;
 }
 
--(SWGApiClient*) apiClient {
-    return [SWGApiClient sharedClientFromPool:basePath];
-}
-
 -(void) addHeader:(NSString*)value forKey:(NSString*)key {
     [self.defaultHeaders setValue:value forKey:key];
-}
-
--(id) init {
-    self = [super init];
-    self.defaultHeaders = [NSMutableDictionary dictionary];
-    [self apiClient];
-    return self;
 }
 
 -(void) setHeaderValue:(NSString*) value
@@ -136,6 +153,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -147,19 +167,18 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
 
     
 
     
     // it's void
-        return [client stringWithCompletionBlock: requestUrl 
+        return [self.apiClient stringWithCompletionBlock: requestUrl 
                                       method: @"POST" 
                                  queryParams: queryParams 
                                         body: bodyDictionary 
                                 headerParams: headerParams
+                                authSettings: authSettings
                           requestContentType: requestContentType
                          responseContentType: responseContentType
                              completionBlock: ^(NSString *data, NSError *error) {
@@ -176,11 +195,11 @@ static NSString * basePath = @"https://localhost/api";
 /*!
  * Get public variables
  * This endpoint retrieves an array of all public variables. Public variables are things like foods, medications, symptoms, conditions, and anything not unique to a particular user. For instance, a telephone number or name would not be a public variable.
- * \returns void
+ * \returns SWGVariable*
  */
 -(NSNumber*) publicVariablesGetWithCompletionBlock: 
-        
-        (void (^)(NSError* error))completionBlock {
+        (void (^)(SWGVariable* output, NSError* error))completionBlock
+         {
 
     
 
@@ -216,6 +235,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -227,28 +249,41 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
+    
+
+    
+    // non container response
 
     
 
     
-
-    
-    // it's void
-        return [client stringWithCompletionBlock: requestUrl 
-                                      method: @"GET" 
-                                 queryParams: queryParams 
-                                        body: bodyDictionary 
-                                headerParams: headerParams
-                          requestContentType: requestContentType
-                         responseContentType: responseContentType
-                             completionBlock: ^(NSString *data, NSError *error) {
+    // complex response
+        
+    // comples response type
+    return [self.apiClient dictionary: requestUrl
+                       method: @"GET"
+                  queryParams: queryParams
+                         body: bodyDictionary
+                 headerParams: headerParams
+                 authSettings: authSettings
+           requestContentType: requestContentType
+          responseContentType: responseContentType
+              completionBlock: ^(NSDictionary *data, NSError *error) {
                 if (error) {
-                    completionBlock(error);
+                    completionBlock(nil, error);
+                    
                     return;
                 }
-                completionBlock(nil);
-                    }];
+                SWGVariable* result = nil;
+                if (data) {
+                    result = [[SWGVariable  alloc]  initWithDictionary:data error:nil];
+                }
+                completionBlock(result , nil);
+                
+              }];
+    
+
+    
 
     
 }
@@ -258,13 +293,13 @@ static NSString * basePath = @"https://localhost/api";
  * Get top 5 PUBLIC variables with the most correlations containing the entered search characters. For example, search for 'mood' as an effect. Since 'Overall Mood' has a lot of correlations with other variables, it should be in the autocomplete list.
  * \param search Search query can be some fraction of a variable name.
  * \param effectOrCause Allows us to specify which column in the `correlations` table will be searched. Choices are effect or cause.
- * \returns void
+ * \returns SWGVariable*
  */
 -(NSNumber*) publicVariablesSearchSearchGetWithCompletionBlock: (NSString*) search
          effectOrCause: (NSString*) effectOrCause
         
-        
-        completionHandler: (void (^)(NSError* error))completionBlock {
+        completionHandler: (void (^)(SWGVariable* output, NSError* error))completionBlock
+         {
 
     
     // verify the required parameter 'search' is set
@@ -308,6 +343,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -319,28 +357,41 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
+    
+
+    
+    // non container response
 
     
 
     
-
-    
-    // it's void
-        return [client stringWithCompletionBlock: requestUrl 
-                                      method: @"GET" 
-                                 queryParams: queryParams 
-                                        body: bodyDictionary 
-                                headerParams: headerParams
-                          requestContentType: requestContentType
-                         responseContentType: responseContentType
-                             completionBlock: ^(NSString *data, NSError *error) {
+    // complex response
+        
+    // comples response type
+    return [self.apiClient dictionary: requestUrl
+                       method: @"GET"
+                  queryParams: queryParams
+                         body: bodyDictionary
+                 headerParams: headerParams
+                 authSettings: authSettings
+           requestContentType: requestContentType
+          responseContentType: responseContentType
+              completionBlock: ^(NSDictionary *data, NSError *error) {
                 if (error) {
-                    completionBlock(error);
+                    completionBlock(nil, error);
+                    
                     return;
                 }
-                completionBlock(nil);
-                    }];
+                SWGVariable* result = nil;
+                if (data) {
+                    result = [[SWGVariable  alloc]  initWithDictionary:data error:nil];
+                }
+                completionBlock(result , nil);
+                
+              }];
+    
+
+    
 
     
 }
@@ -348,11 +399,11 @@ static NSString * basePath = @"https://localhost/api";
 /*!
  * Get variable categories
  * The variable categories include Activity, Causes of Illness, Cognitive Performance, Conditions, Environment, Foods, Location, Miscellaneous, Mood, Nutrition, Physical Activity, Physique, Sleep, Social Interactions, Symptoms, Treatments, Vital Signs, and Work.
- * \returns void
+ * \returns NSArray<SWGVariableCategory>*
  */
 -(NSNumber*) variableCategoriesGetWithCompletionBlock: 
-        
-        (void (^)(NSError* error))completionBlock {
+        (void (^)(NSArray<SWGVariableCategory>* output, NSError* error))completionBlock
+         {
 
     
 
@@ -388,6 +439,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -399,28 +453,41 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
-
-    
-
-    
-    // it's void
-        return [client stringWithCompletionBlock: requestUrl 
-                                      method: @"GET" 
-                                 queryParams: queryParams 
-                                        body: bodyDictionary 
-                                headerParams: headerParams
-                          requestContentType: requestContentType
-                         responseContentType: responseContentType
-                             completionBlock: ^(NSString *data, NSError *error) {
+    // response is in a container
+        // array container response type
+    return [self.apiClient dictionary: requestUrl 
+                       method: @"GET" 
+                  queryParams: queryParams 
+                         body: bodyDictionary 
+                 headerParams: headerParams
+                 authSettings: authSettings
+           requestContentType: requestContentType
+          responseContentType: responseContentType
+              completionBlock: ^(NSDictionary *data, NSError *error) {
                 if (error) {
-                    completionBlock(error);
+                    completionBlock(nil, error);
                     return;
                 }
-                completionBlock(nil);
-                    }];
+                
+                if([data isKindOfClass:[NSArray class]]){
+                    NSMutableArray * objs = [[NSMutableArray alloc] initWithCapacity:[data count]];
+                    for (NSDictionary* dict in (NSArray*)data) {
+                        
+                        
+                        SWGVariableCategory* d = [[SWGVariableCategory alloc] initWithDictionary:dict error:nil];
+                        
+                        [objs addObject:d];
+                    }
+                    completionBlock((NSArray<SWGVariableCategory>*)objs, nil);
+                }
+                
+                
+            }];
+    
+
+
+    
 
     
 }
@@ -431,7 +498,7 @@ static NSString * basePath = @"https://localhost/api";
  * \param sharingData Variable user settings data
  * \returns void
  */
--(NSNumber*) variableUserSettingsPostWithCompletionBlock: (NSArray<SWGVariableUserSettings>*) sharingData
+-(NSNumber*) variableUserSettingsPostWithCompletionBlock: (SWGVariableUserSettings*) sharingData
         
         
         completionHandler: (void (^)(NSError* error))completionBlock {
@@ -473,6 +540,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     id __body = sharingData;
@@ -507,19 +577,18 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
 
     
 
     
     // it's void
-        return [client stringWithCompletionBlock: requestUrl 
+        return [self.apiClient stringWithCompletionBlock: requestUrl 
                                       method: @"POST" 
                                  queryParams: queryParams 
                                         body: bodyDictionary 
                                 headerParams: headerParams
+                                authSettings: authSettings
                           requestContentType: requestContentType
                          responseContentType: responseContentType
                              completionBlock: ^(NSString *data, NSError *error) {
@@ -538,13 +607,13 @@ static NSString * basePath = @"https://localhost/api";
  * Get variables by the category name
  * \param userId User id
  * \param categoryName Category name
- * \returns void
+ * \returns SWGVariable*
  */
 -(NSNumber*) variablesGetWithCompletionBlock: (NSNumber*) userId
          categoryName: (NSString*) categoryName
         
-        
-        completionHandler: (void (^)(NSError* error))completionBlock {
+        completionHandler: (void (^)(SWGVariable* output, NSError* error))completionBlock
+         {
 
     
 
@@ -588,6 +657,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"basicAuth", @"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -599,28 +671,41 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
+    
+
+    
+    // non container response
 
     
 
     
-
-    
-    // it's void
-        return [client stringWithCompletionBlock: requestUrl 
-                                      method: @"GET" 
-                                 queryParams: queryParams 
-                                        body: bodyDictionary 
-                                headerParams: headerParams
-                          requestContentType: requestContentType
-                         responseContentType: responseContentType
-                             completionBlock: ^(NSString *data, NSError *error) {
+    // complex response
+        
+    // comples response type
+    return [self.apiClient dictionary: requestUrl
+                       method: @"GET"
+                  queryParams: queryParams
+                         body: bodyDictionary
+                 headerParams: headerParams
+                 authSettings: authSettings
+           requestContentType: requestContentType
+          responseContentType: responseContentType
+              completionBlock: ^(NSDictionary *data, NSError *error) {
                 if (error) {
-                    completionBlock(error);
+                    completionBlock(nil, error);
+                    
                     return;
                 }
-                completionBlock(nil);
-                    }];
+                SWGVariable* result = nil;
+                if (data) {
+                    result = [[SWGVariable  alloc]  initWithDictionary:data error:nil];
+                }
+                completionBlock(result , nil);
+                
+              }];
+    
+
+    
 
     
 }
@@ -631,7 +716,7 @@ static NSString * basePath = @"https://localhost/api";
  * \param variableName Original name for the variable.
  * \returns void
  */
--(NSNumber*) variablesPostWithCompletionBlock: (NSArray<SWGVariable>*) variableName
+-(NSNumber*) variablesPostWithCompletionBlock: (SWGVariablesNew*) variableName
         
         
         completionHandler: (void (^)(NSError* error))completionBlock {
@@ -673,6 +758,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     id __body = variableName;
@@ -707,19 +795,18 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
 
     
 
     
     // it's void
-        return [client stringWithCompletionBlock: requestUrl 
+        return [self.apiClient stringWithCompletionBlock: requestUrl 
                                       method: @"POST" 
                                  queryParams: queryParams 
                                         body: bodyDictionary 
                                 headerParams: headerParams
+                                authSettings: authSettings
                           requestContentType: requestContentType
                          responseContentType: responseContentType
                              completionBlock: ^(NSString *data, NSError *error) {
@@ -741,7 +828,7 @@ static NSString * basePath = @"https://localhost/api";
  * \param source Specify a data source name to only return variables from a specific data source.
  * \param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
  * \param offset Now suppose you wanted to show results 11-20. You'd set the offset to 10 and the limit to 10.
- * \returns void
+ * \returns NSArray<SWGVariable>*
  */
 -(NSNumber*) variablesSearchSearchGetWithCompletionBlock: (NSString*) search
          categoryName: (NSString*) categoryName
@@ -749,8 +836,8 @@ static NSString * basePath = @"https://localhost/api";
          limit: (NSNumber*) limit
          offset: (NSNumber*) offset
         
-        
-        completionHandler: (void (^)(NSError* error))completionBlock {
+        completionHandler: (void (^)(NSArray<SWGVariable>* output, NSError* error))completionBlock
+         {
 
     
     // verify the required parameter 'search' is set
@@ -806,6 +893,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -817,28 +907,41 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
-
-    
-
-    
-    // it's void
-        return [client stringWithCompletionBlock: requestUrl 
-                                      method: @"GET" 
-                                 queryParams: queryParams 
-                                        body: bodyDictionary 
-                                headerParams: headerParams
-                          requestContentType: requestContentType
-                         responseContentType: responseContentType
-                             completionBlock: ^(NSString *data, NSError *error) {
+    // response is in a container
+        // array container response type
+    return [self.apiClient dictionary: requestUrl 
+                       method: @"GET" 
+                  queryParams: queryParams 
+                         body: bodyDictionary 
+                 headerParams: headerParams
+                 authSettings: authSettings
+           requestContentType: requestContentType
+          responseContentType: responseContentType
+              completionBlock: ^(NSDictionary *data, NSError *error) {
                 if (error) {
-                    completionBlock(error);
+                    completionBlock(nil, error);
                     return;
                 }
-                completionBlock(nil);
-                    }];
+                
+                if([data isKindOfClass:[NSArray class]]){
+                    NSMutableArray * objs = [[NSMutableArray alloc] initWithCapacity:[data count]];
+                    for (NSDictionary* dict in (NSArray*)data) {
+                        
+                        
+                        SWGVariable* d = [[SWGVariable alloc] initWithDictionary:dict error:nil];
+                        
+                        [objs addObject:d];
+                    }
+                    completionBlock((NSArray<SWGVariable>*)objs, nil);
+                }
+                
+                
+            }];
+    
+
+
+    
 
     
 }
@@ -847,12 +950,12 @@ static NSString * basePath = @"https://localhost/api";
  * Get info about a variable
  * Get all of the settings and information about a variable by its name. If the logged in user has modified the settings for the variable, these will be provided instead of the default settings for that variable.
  * \param variableName Variable name
- * \returns void
+ * \returns SWGVariable*
  */
 -(NSNumber*) variablesVariableNameGetWithCompletionBlock: (NSString*) variableName
         
-        
-        completionHandler: (void (^)(NSError* error))completionBlock {
+        completionHandler: (void (^)(SWGVariable* output, NSError* error))completionBlock
+         {
 
     
     // verify the required parameter 'variableName' is set
@@ -892,6 +995,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -903,28 +1009,41 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
+    
+
+    
+    // non container response
 
     
 
     
-
-    
-    // it's void
-        return [client stringWithCompletionBlock: requestUrl 
-                                      method: @"GET" 
-                                 queryParams: queryParams 
-                                        body: bodyDictionary 
-                                headerParams: headerParams
-                          requestContentType: requestContentType
-                         responseContentType: responseContentType
-                             completionBlock: ^(NSString *data, NSError *error) {
+    // complex response
+        
+    // comples response type
+    return [self.apiClient dictionary: requestUrl
+                       method: @"GET"
+                  queryParams: queryParams
+                         body: bodyDictionary
+                 headerParams: headerParams
+                 authSettings: authSettings
+           requestContentType: requestContentType
+          responseContentType: responseContentType
+              completionBlock: ^(NSDictionary *data, NSError *error) {
                 if (error) {
-                    completionBlock(error);
+                    completionBlock(nil, error);
+                    
                     return;
                 }
-                completionBlock(nil);
-                    }];
+                SWGVariable* result = nil;
+                if (data) {
+                    result = [[SWGVariable  alloc]  initWithDictionary:data error:nil];
+                }
+                completionBlock(result , nil);
+                
+              }];
+    
+
+    
 
     
 }
@@ -932,3 +1051,6 @@ static NSString * basePath = @"https://localhost/api";
 
 
 @end
+
+
+

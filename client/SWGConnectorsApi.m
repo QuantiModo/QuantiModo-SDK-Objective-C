@@ -1,7 +1,6 @@
 #import "SWGConnectorsApi.h"
 #import "SWGFile.h"
 #import "SWGQueryParamCollection.h"
-#import "SWGApiClient.h"
 #import "SWGConnector.h"
 
 
@@ -10,7 +9,35 @@
 @end
 
 @implementation SWGConnectorsApi
+
 static NSString * basePath = @"https://localhost/api";
+
+#pragma mark - Initialize methods
+
+- (id) init {
+    self = [super init];
+    if (self) {
+        self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        self.defaultHeaders = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+- (id) initWithApiClient:(SWGApiClient *)apiClient {
+    self = [super init];
+    if (self) {
+        if (apiClient) {
+            self.apiClient = apiClient;
+        }
+        else {
+            self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        }
+        self.defaultHeaders = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+#pragma mark -
 
 +(SWGConnectorsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key {
     static SWGConnectorsApi* singletonAPI = nil;
@@ -30,19 +57,8 @@ static NSString * basePath = @"https://localhost/api";
     return basePath;
 }
 
--(SWGApiClient*) apiClient {
-    return [SWGApiClient sharedClientFromPool:basePath];
-}
-
 -(void) addHeader:(NSString*)value forKey:(NSString*)key {
     [self.defaultHeaders setValue:value forKey:key];
-}
-
--(id) init {
-    self = [super init];
-    self.defaultHeaders = [NSMutableDictionary dictionary];
-    [self apiClient];
-    return self;
 }
 
 -(void) setHeaderValue:(NSString*) value
@@ -98,6 +114,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -109,16 +128,15 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
     // response is in a container
         // array container response type
-    return [client dictionary: requestUrl 
+    return [self.apiClient dictionary: requestUrl 
                        method: @"GET" 
                   queryParams: queryParams 
                          body: bodyDictionary 
                  headerParams: headerParams
+                 authSettings: authSettings
            requestContentType: requestContentType
           responseContentType: responseContentType
               completionBlock: ^(NSDictionary *data, NSError *error) {
@@ -142,6 +160,7 @@ static NSString * basePath = @"https://localhost/api";
                 
             }];
     
+
 
     
 
@@ -197,6 +216,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -208,19 +230,18 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
 
     
 
     
     // it's void
-        return [client stringWithCompletionBlock: requestUrl 
+        return [self.apiClient stringWithCompletionBlock: requestUrl 
                                       method: @"GET" 
                                  queryParams: queryParams 
                                         body: bodyDictionary 
                                 headerParams: headerParams
+                                authSettings: authSettings
                           requestContentType: requestContentType
                          responseContentType: responseContentType
                              completionBlock: ^(NSString *data, NSError *error) {
@@ -238,9 +259,15 @@ static NSString * basePath = @"https://localhost/api";
  * Get connection parameters
  * Returns instructions that describe what parameters and endpoint to use to connect to the given data provider.
  * \param connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint.
+ * \param url URL which should be used to enable the connector
+ * \param parameters Array of Parameters for the request to enable connector
+ * \param usePopup Should use popup when enabling connector
  * \returns void
  */
 -(NSNumber*) connectorsConnectorConnectInstructionsGetWithCompletionBlock: (NSString*) connector
+         url: (NSString*) url
+         parameters: (NSArray*) parameters
+         usePopup: (BOOL) usePopup
         
         
         completionHandler: (void (^)(NSError* error))completionBlock {
@@ -248,6 +275,15 @@ static NSString * basePath = @"https://localhost/api";
     
     // verify the required parameter 'connector' is set
     NSAssert(connector != nil, @"Missing the required parameter `connector` when calling connectorsConnectorConnectInstructionsGet");
+    
+    // verify the required parameter 'url' is set
+    NSAssert(url != nil, @"Missing the required parameter `url` when calling connectorsConnectorConnectInstructionsGet");
+    
+    // verify the required parameter 'parameters' is set
+    NSAssert(parameters != nil, @"Missing the required parameter `parameters` when calling connectorsConnectorConnectInstructionsGet");
+    
+    // verify the required parameter 'usePopup' is set
+    NSAssert(usePopup != nil, @"Missing the required parameter `usePopup` when calling connectorsConnectorConnectInstructionsGet");
     
 
     NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/connectors/{connector}/connectInstructions", basePath];
@@ -260,6 +296,18 @@ static NSString * basePath = @"https://localhost/api";
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
+    if(url != nil) {
+        
+        queryParams[@"url"] = url;
+    }
+    if(parameters != nil) {
+        
+        queryParams[@"parameters"] = parameters;
+    }
+    if(usePopup != nil) {
+        
+        queryParams[@"usePopup"] = usePopup;
+    }
     
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
 
@@ -283,6 +331,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -294,7 +345,147 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
+    
+
+    
+
+    
+    // it's void
+        return [self.apiClient stringWithCompletionBlock: requestUrl 
+                                      method: @"GET" 
+                                 queryParams: queryParams 
+                                        body: bodyDictionary 
+                                headerParams: headerParams
+                                authSettings: authSettings
+                          requestContentType: requestContentType
+                         responseContentType: responseContentType
+                             completionBlock: ^(NSString *data, NSError *error) {
+                if (error) {
+                    completionBlock(error);
+                    return;
+                }
+                completionBlock(nil);
+                    }];
+
+    
+}
+
+/*!
+ * Get connection parameters
+ * Returns instructions that describe what parameters and endpoint to use to connect to the given data provider.
+ * \param connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint.
+ * \param displayName Name of the parameter that is user visible in the form
+ * \param key Name of the property that the user has to enter such as username or password Connector (used in HTTP request) TODO What's a connector key?
+ * \param usePopup Should use popup when enabling connector
+ * \param type Type of input field such as those found here http://www.w3schools.com/tags/tag_input.asp
+ * \param placeholder Placeholder hint value for the parameter input tag
+ * \param defaultValue Default parameter value
+ * \returns void
+ */
+-(NSNumber*) connectorsConnectorConnectParameterGetWithCompletionBlock: (NSString*) connector
+         displayName: (NSString*) displayName
+         key: (NSString*) key
+         usePopup: (BOOL) usePopup
+         type: (NSString*) type
+         placeholder: (NSString*) placeholder
+         defaultValue: (NSString*) defaultValue
+        
+        
+        completionHandler: (void (^)(NSError* error))completionBlock {
+
+    
+    // verify the required parameter 'connector' is set
+    NSAssert(connector != nil, @"Missing the required parameter `connector` when calling connectorsConnectorConnectParameterGet");
+    
+    // verify the required parameter 'displayName' is set
+    NSAssert(displayName != nil, @"Missing the required parameter `displayName` when calling connectorsConnectorConnectParameterGet");
+    
+    // verify the required parameter 'key' is set
+    NSAssert(key != nil, @"Missing the required parameter `key` when calling connectorsConnectorConnectParameterGet");
+    
+    // verify the required parameter 'usePopup' is set
+    NSAssert(usePopup != nil, @"Missing the required parameter `usePopup` when calling connectorsConnectorConnectParameterGet");
+    
+    // verify the required parameter 'type' is set
+    NSAssert(type != nil, @"Missing the required parameter `type` when calling connectorsConnectorConnectParameterGet");
+    
+    // verify the required parameter 'placeholder' is set
+    NSAssert(placeholder != nil, @"Missing the required parameter `placeholder` when calling connectorsConnectorConnectParameterGet");
+    
+    // verify the required parameter 'defaultValue' is set
+    NSAssert(defaultValue != nil, @"Missing the required parameter `defaultValue` when calling connectorsConnectorConnectParameterGet");
+    
+
+    NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/connectors/{connector}/connectParameter", basePath];
+
+    // remove format in URL if needed
+    if ([requestUrl rangeOfString:@".{format}"].location != NSNotFound)
+        [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:@".{format}"] withString:@".json"];
+
+    [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:[NSString stringWithFormat:@"%@%@%@", @"{", @"connector", @"}"]] withString: [SWGApiClient escape:connector]];
+    
+
+    NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
+    if(displayName != nil) {
+        
+        queryParams[@"displayName"] = displayName;
+    }
+    if(key != nil) {
+        
+        queryParams[@"key"] = key;
+    }
+    if(usePopup != nil) {
+        
+        queryParams[@"usePopup"] = usePopup;
+    }
+    if(type != nil) {
+        
+        queryParams[@"type"] = type;
+    }
+    if(placeholder != nil) {
+        
+        queryParams[@"placeholder"] = placeholder;
+    }
+    if(defaultValue != nil) {
+        
+        queryParams[@"defaultValue"] = defaultValue;
+    }
+    
+    NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
+
+    
+    
+    // HTTP header `Accept` 
+    headerParams[@"Accept"] = [SWGApiClient selectHeaderAccept:@[@"application/json"]];
+    if ([headerParams[@"Accept"] length] == 0) {
+        [headerParams removeObjectForKey:@"Accept"];
+    }
+
+    // response content type
+    NSString *responseContentType;
+    if ([headerParams objectForKey:@"Accept"]) {
+        responseContentType = [headerParams[@"Accept"] componentsSeparatedByString:@", "][0];
+    }
+    else {
+        responseContentType = @"";
+    }
+
+    // request content type
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
+    id bodyDictionary = nil;
+    
+    
+
+    NSMutableDictionary * formParams = [[NSMutableDictionary alloc]init];
+
+    
+    
+
+    
 
     
 
@@ -302,11 +493,12 @@ static NSString * basePath = @"https://localhost/api";
 
     
     // it's void
-        return [client stringWithCompletionBlock: requestUrl 
+        return [self.apiClient stringWithCompletionBlock: requestUrl 
                                       method: @"GET" 
                                  queryParams: queryParams 
                                         body: bodyDictionary 
                                 headerParams: headerParams
+                                authSettings: authSettings
                           requestContentType: requestContentType
                          responseContentType: responseContentType
                              completionBlock: ^(NSString *data, NSError *error) {
@@ -369,6 +561,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -380,19 +575,18 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
 
     
 
     
     // it's void
-        return [client stringWithCompletionBlock: requestUrl 
+        return [self.apiClient stringWithCompletionBlock: requestUrl 
                                       method: @"GET" 
                                  queryParams: queryParams 
                                         body: bodyDictionary 
                                 headerParams: headerParams
+                                authSettings: authSettings
                           requestContentType: requestContentType
                          responseContentType: responseContentType
                              completionBlock: ^(NSString *data, NSError *error) {
@@ -455,6 +649,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -466,19 +663,18 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
 
     
 
     
     // it's void
-        return [client stringWithCompletionBlock: requestUrl 
+        return [self.apiClient stringWithCompletionBlock: requestUrl 
                                       method: @"GET" 
                                  queryParams: queryParams 
                                         body: bodyDictionary 
                                 headerParams: headerParams
+                                authSettings: authSettings
                           requestContentType: requestContentType
                          responseContentType: responseContentType
                              completionBlock: ^(NSString *data, NSError *error) {
@@ -541,6 +737,9 @@ static NSString * basePath = @"https://localhost/api";
     // request content type
     NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
 
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+    
     id bodyDictionary = nil;
     
     
@@ -552,19 +751,18 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    SWGApiClient* client = [SWGApiClient sharedClientFromPool:basePath];
-
     
 
     
 
     
     // it's void
-        return [client stringWithCompletionBlock: requestUrl 
+        return [self.apiClient stringWithCompletionBlock: requestUrl 
                                       method: @"GET" 
                                  queryParams: queryParams 
                                         body: bodyDictionary 
                                 headerParams: headerParams
+                                authSettings: authSettings
                           requestContentType: requestContentType
                          responseContentType: responseContentType
                              completionBlock: ^(NSString *data, NSError *error) {
@@ -581,3 +779,6 @@ static NSString * basePath = @"https://localhost/api";
 
 
 @end
+
+
+

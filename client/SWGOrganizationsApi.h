@@ -3,10 +3,14 @@
 #import "SWGUserTokenFailedResponse.h"
 #import "SWGUserTokenSuccessfulResponse.h"
 #import "SWGObject.h"
+#import "SWGApiClient.h"
 
 
 @interface SWGOrganizationsApi: NSObject
 
+@property(nonatomic, assign)SWGApiClient *apiClient;
+
+-(instancetype) initWithApiClient:(SWGApiClient *)apiClient;
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGOrganizationsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;

@@ -4,12 +4,12 @@
   
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"variable": @"variable", @"source": @"source", @"timestamp": @"timestamp", @"value": @"value", @"unit": @"unit", @"note": @"note" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"variable": @"variable", @"source": @"source", @"timestamp": @"timestamp", @"value": @"value", @"unit": @"unit", @"storedValue": @"storedValue", @"storedUnit": @"storedUnit" }];
 }
 
 + (BOOL)propertyIsOptional:(NSString *)propertyName
 {
-  NSArray *optionalProperties = @[@"note"];
+  NSArray *optionalProperties = @[@"storedValue", @"storedUnit"];
 
   if ([optionalProperties containsObject:propertyName]) {
     return YES;

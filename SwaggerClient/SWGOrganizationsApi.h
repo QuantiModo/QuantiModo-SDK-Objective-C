@@ -20,8 +20,6 @@
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGOrganizationsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
-+(void) setBasePath:(NSString*)basePath;
-+(NSString*) getBasePath;
 ///
 ///
 /// Get user tokens for existing users, create new users

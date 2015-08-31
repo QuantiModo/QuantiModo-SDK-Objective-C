@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "SWGConnector.h"
+#import "SWGConnectorInfo.h"
 #import "SWGObject.h"
 #import "SWGApiClient.h"
 
@@ -18,8 +19,6 @@
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGConnectorsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
-+(void) setBasePath:(NSString*)basePath;
-+(NSString*) getBasePath;
 ///
 ///
 /// List of Connectors
@@ -28,7 +27,7 @@
 /// 
 ///
 /// @return NSArray<SWGConnector>*
--(NSNumber*) connectorsListGetWithCompletionBlock :
+-(NSNumber*) v1ConnectorsListGetWithCompletionBlock :
     (void (^)(NSArray<SWGConnector>* output, NSError* error))completionBlock;
     
 
@@ -42,55 +41,7 @@
 /// 
 ///
 /// @return 
--(NSNumber*) connectorsConnectorConnectGetWithCompletionBlock :(NSString*) connector 
-    
-    
-    completionHandler: (void (^)(NSError* error))completionBlock;
-
-
-///
-///
-/// Get connection parameters
-/// Returns instructions that describe what parameters and endpoint to use to connect to the given data provider.
-///
-/// @param connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint.
-/// @param url URL which should be used to enable the connector
-/// @param parameters Array of Parameters for the request to enable connector
-/// @param usePopup Should use popup when enabling connector
-/// 
-///
-/// @return 
--(NSNumber*) connectorsConnectorConnectInstructionsGetWithCompletionBlock :(NSString*) connector 
-     url:(NSString*) url 
-     parameters:(NSArray*) parameters 
-     usePopup:(NSNumber*) usePopup 
-    
-    
-    completionHandler: (void (^)(NSError* error))completionBlock;
-
-
-///
-///
-/// Get connection parameters
-/// Returns instructions that describe what parameters and endpoint to use to connect to the given data provider.
-///
-/// @param connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint.
-/// @param displayName Name of the parameter that is user visible in the form
-/// @param key Name of the property that the user has to enter such as username or password Connector (used in HTTP request) TODO What&#39;s a connector key?
-/// @param usePopup Should use popup when enabling connector
-/// @param type Type of input field such as those found here http://www.w3schools.com/tags/tag_input.asp
-/// @param placeholder Placeholder hint value for the parameter input tag
-/// @param defaultValue Default parameter value
-/// 
-///
-/// @return 
--(NSNumber*) connectorsConnectorConnectParameterGetWithCompletionBlock :(NSString*) connector 
-     displayName:(NSString*) displayName 
-     key:(NSString*) key 
-     usePopup:(NSNumber*) usePopup 
-     type:(NSString*) type 
-     placeholder:(NSString*) placeholder 
-     defaultValue:(NSString*) defaultValue 
+-(NSNumber*) v1ConnectorsConnectorConnectGetWithCompletionBlock :(NSString*) connector 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -105,7 +56,7 @@
 /// 
 ///
 /// @return 
--(NSNumber*) connectorsConnectorDisconnectGetWithCompletionBlock :(NSString*) connector 
+-(NSNumber*) v1ConnectorsConnectorDisconnectGetWithCompletionBlock :(NSString*) connector 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -119,11 +70,11 @@
 /// @param connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint.
 /// 
 ///
-/// @return 
--(NSNumber*) connectorsConnectorInfoGetWithCompletionBlock :(NSString*) connector 
+/// @return SWGConnectorInfo*
+-(NSNumber*) v1ConnectorsConnectorInfoGetWithCompletionBlock :(NSString*) connector 
     
+    completionHandler: (void (^)(SWGConnectorInfo* output, NSError* error))completionBlock;
     
-    completionHandler: (void (^)(NSError* error))completionBlock;
 
 
 ///
@@ -135,7 +86,7 @@
 /// 
 ///
 /// @return 
--(NSNumber*) connectorsConnectorUpdateGetWithCompletionBlock :(NSString*) connector 
+-(NSNumber*) v1ConnectorsConnectorUpdateGetWithCompletionBlock :(NSString*) connector 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;

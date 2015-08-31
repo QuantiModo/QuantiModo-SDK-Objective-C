@@ -10,14 +10,16 @@
 
 @implementation SWGUnitsApi
 
-static NSString * basePath = @"https://localhost/api";
-
 #pragma mark - Initialize methods
 
 - (id) init {
     self = [super init];
     if (self) {
-        self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        SWGConfiguration *config = [SWGConfiguration sharedConfig];
+        if (config.apiClient == nil) {
+            config.apiClient = [[SWGApiClient alloc] init];
+        }
+        self.apiClient = config.apiClient;
         self.defaultHeaders = [NSMutableDictionary dictionary];
     }
     return self;
@@ -26,12 +28,7 @@ static NSString * basePath = @"https://localhost/api";
 - (id) initWithApiClient:(SWGApiClient *)apiClient {
     self = [super init];
     if (self) {
-        if (apiClient) {
-            self.apiClient = apiClient;
-        }
-        else {
-            self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
-        }
+        self.apiClient = apiClient;
         self.defaultHeaders = [NSMutableDictionary dictionary];
     }
     return self;
@@ -47,14 +44,6 @@ static NSString * basePath = @"https://localhost/api";
         [singletonAPI addHeader:headerValue forKey:key];
     }
     return singletonAPI;
-}
-
-+(void) setBasePath:(NSString*)path {
-    basePath = path;
-}
-
-+(NSString*) getBasePath {
-    return basePath;
 }
 
 -(void) addHeader:(NSString*)value forKey:(NSString*)key {
@@ -83,12 +72,14 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/unitCategories", basePath];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/unitCategories"];
 
     // remove format in URL if needed
-    if ([requestUrl rangeOfString:@".{format}"].location != NSNotFound)
-        [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:@".{format}"] withString:@".json"];
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
 
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
@@ -126,8 +117,9 @@ static NSString * basePath = @"https://localhost/api";
     
 
     
-    return [self.apiClient requestWithCompletionBlock: requestUrl
+    return [self.apiClient requestWithCompletionBlock: resourcePath
                                                method: @"GET"
+                                           pathParams: pathParams
                                           queryParams: queryParams
                                            formParams: formParams
                                                 files: files
@@ -164,12 +156,14 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/units", basePath];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/units"];
 
     // remove format in URL if needed
-    if ([requestUrl rangeOfString:@".{format}"].location != NSNotFound)
-        [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:@".{format}"] withString:@".json"];
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
 
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
@@ -219,8 +213,9 @@ static NSString * basePath = @"https://localhost/api";
     
 
     
-    return [self.apiClient requestWithCompletionBlock: requestUrl
+    return [self.apiClient requestWithCompletionBlock: resourcePath
                                                method: @"GET"
+                                           pathParams: pathParams
                                           queryParams: queryParams
                                            formParams: formParams
                                                 files: files
@@ -260,12 +255,14 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/unitsVariable", basePath];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/unitsVariable"];
 
     // remove format in URL if needed
-    if ([requestUrl rangeOfString:@".{format}"].location != NSNotFound)
-        [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:@".{format}"] withString:@".json"];
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
 
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
@@ -319,8 +316,9 @@ static NSString * basePath = @"https://localhost/api";
     
 
     
-    return [self.apiClient requestWithCompletionBlock: requestUrl
+    return [self.apiClient requestWithCompletionBlock: resourcePath
                                                method: @"GET"
+                                           pathParams: pathParams
                                           queryParams: queryParams
                                            formParams: formParams
                                                 files: files

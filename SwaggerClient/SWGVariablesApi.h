@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 #import "SWGVariable.h"
+#import "SWGUserVariables.h"
 #import "SWGVariableCategory.h"
-#import "SWGVariableUserSettings.h"
 #import "SWGVariablesNew.h"
 #import "SWGObject.h"
 #import "SWGApiClient.h"
@@ -21,8 +21,6 @@
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGVariablesApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
-+(void) setBasePath:(NSString*)basePath;
-+(NSString*) getBasePath;
 ///
 ///
 /// Store or Update a Correlation
@@ -60,7 +58,7 @@
 ///
 ///
 /// Get top 5 PUBLIC variables with the most correlations
-/// Get top 5 PUBLIC variables with the most correlations containing the entered search characters. For example, search for 'mood' as an effect. Since 'Overall Mood' has a lot of correlations with other variables, it should be in the autocomplete list.
+/// Get top 5 PUBLIC variables with the most correlations containing the entered search characters. For example, search for 'mood' as an effect. Since 'Overall Mood' has a lot of correlations with other variables, it should be in the autocomplete list.<br>Supported filter parameters:<br><ul><li><b>category</b> - Category of Variable</li></ul><br>
 ///
 /// @param search Search query can be some fraction of a variable name.
 /// @param effectOrCause Allows us to specify which column in the `correlations` table will be searched. Choices are effect or cause.
@@ -82,6 +80,21 @@
 
 ///
 ///
+/// Update User Settings for a Variable
+/// Users can change things like the display name for a variable. They can also change the parameters used in analysis of that variable such as the expected duration of action for a variable to have an effect, the estimated delay before the onset of action. In order to filter out erroneous data, they are able to set the maximum and minimum reasonable daily values for a variable.
+///
+/// @param sharingData Variable user settings data
+/// 
+///
+/// @return 
+-(NSNumber*) v1UserVariablesPostWithCompletionBlock :(SWGUserVariables*) sharingData 
+    
+    
+    completionHandler: (void (^)(NSError* error))completionBlock;
+
+
+///
+///
 /// Variable categories
 /// The variable categories include Activity, Causes of Illness, Cognitive Performance, Conditions, Environment, Foods, Location, Miscellaneous, Mood, Nutrition, Physical Activity, Physique, Sleep, Social Interactions, Symptoms, Treatments, Vital Signs, and Work.
 ///
@@ -91,21 +104,6 @@
 -(NSNumber*) variableCategoriesGetWithCompletionBlock :
     (void (^)(NSArray<SWGVariableCategory>* output, NSError* error))completionBlock;
     
-
-
-///
-///
-/// Update User Settings for a Variable
-/// Users can change things like the display name for a variable. They can also change the parameters used in analysis of that variable such as the expected duration of action for a variable to have an effect, the estimated delay before the onset of action. In order to filter out erroneous data, they are able to set the maximum and minimum reasonable daily values for a variable.
-///
-/// @param sharingData Variable user settings data
-/// 
-///
-/// @return 
--(NSNumber*) variableUserSettingsPostWithCompletionBlock :(SWGVariableUserSettings*) sharingData 
-    
-    
-    completionHandler: (void (^)(NSError* error))completionBlock;
 
 
 ///

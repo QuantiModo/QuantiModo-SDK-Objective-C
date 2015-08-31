@@ -1,8 +1,8 @@
 #import "SWGVariablesApi.h"
 #import "SWGQueryParamCollection.h"
 #import "SWGVariable.h"
+#import "SWGUserVariables.h"
 #import "SWGVariableCategory.h"
-#import "SWGVariableUserSettings.h"
 #import "SWGVariablesNew.h"
 
 
@@ -12,14 +12,16 @@
 
 @implementation SWGVariablesApi
 
-static NSString * basePath = @"https://localhost/api";
-
 #pragma mark - Initialize methods
 
 - (id) init {
     self = [super init];
     if (self) {
-        self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        SWGConfiguration *config = [SWGConfiguration sharedConfig];
+        if (config.apiClient == nil) {
+            config.apiClient = [[SWGApiClient alloc] init];
+        }
+        self.apiClient = config.apiClient;
         self.defaultHeaders = [NSMutableDictionary dictionary];
     }
     return self;
@@ -28,12 +30,7 @@ static NSString * basePath = @"https://localhost/api";
 - (id) initWithApiClient:(SWGApiClient *)apiClient {
     self = [super init];
     if (self) {
-        if (apiClient) {
-            self.apiClient = apiClient;
-        }
-        else {
-            self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
-        }
+        self.apiClient = apiClient;
         self.defaultHeaders = [NSMutableDictionary dictionary];
     }
     return self;
@@ -49,14 +46,6 @@ static NSString * basePath = @"https://localhost/api";
         [singletonAPI addHeader:headerValue forKey:key];
     }
     return singletonAPI;
-}
-
-+(void) setBasePath:(NSString*)path {
-    basePath = path;
-}
-
-+(NSString*) getBasePath {
-    return basePath;
 }
 
 -(void) addHeader:(NSString*)value forKey:(NSString*)key {
@@ -117,12 +106,14 @@ static NSString * basePath = @"https://localhost/api";
     }
     
 
-    NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/correlations", basePath];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/correlations"];
 
     // remove format in URL if needed
-    if ([requestUrl rangeOfString:@".{format}"].location != NSNotFound)
-        [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:@".{format}"] withString:@".json"];
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
 
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
@@ -176,8 +167,9 @@ static NSString * basePath = @"https://localhost/api";
     
 
     
-    return [self.apiClient requestWithCompletionBlock: requestUrl
+    return [self.apiClient requestWithCompletionBlock: resourcePath
                                                method: @"POST"
+                                           pathParams: pathParams
                                           queryParams: queryParams
                                            formParams: formParams
                                                 files: files
@@ -205,12 +197,14 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/public/variables", basePath];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/public/variables"];
 
     // remove format in URL if needed
-    if ([requestUrl rangeOfString:@".{format}"].location != NSNotFound)
-        [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:@".{format}"] withString:@".json"];
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
 
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
@@ -248,8 +242,9 @@ static NSString * basePath = @"https://localhost/api";
     
 
     
-    return [self.apiClient requestWithCompletionBlock: requestUrl
+    return [self.apiClient requestWithCompletionBlock: resourcePath
                                                method: @"GET"
+                                           pathParams: pathParams
                                           queryParams: queryParams
                                            formParams: formParams
                                                 files: files
@@ -268,7 +263,7 @@ static NSString * basePath = @"https://localhost/api";
 
 ///
 /// Get top 5 PUBLIC variables with the most correlations
-/// Get top 5 PUBLIC variables with the most correlations containing the entered search characters. For example, search for 'mood' as an effect. Since 'Overall Mood' has a lot of correlations with other variables, it should be in the autocomplete list.
+/// Get top 5 PUBLIC variables with the most correlations containing the entered search characters. For example, search for 'mood' as an effect. Since 'Overall Mood' has a lot of correlations with other variables, it should be in the autocomplete list.<br>Supported filter parameters:<br><ul><li><b>category</b> - Category of Variable</li></ul><br>
 ///  @param search Search query can be some fraction of a variable name.
 ///
 ///  @param effectOrCause Allows us to specify which column in the `correlations` table will be searched. Choices are effect or cause.
@@ -297,13 +292,17 @@ static NSString * basePath = @"https://localhost/api";
     }
     
 
-    NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/public/variables/search/{search}", basePath];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/public/variables/search/{search}"];
 
     // remove format in URL if needed
-    if ([requestUrl rangeOfString:@".{format}"].location != NSNotFound)
-        [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:@".{format}"] withString:@".json"];
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
 
-    [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:[NSString stringWithFormat:@"%@%@%@", @"{", @"search", @"}"]] withString: [SWGApiClient escape:search]];
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
+    if (search != nil) {
+        pathParams[@"search"] = search;
+    }
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
@@ -357,8 +356,9 @@ static NSString * basePath = @"https://localhost/api";
     
 
     
-    return [self.apiClient requestWithCompletionBlock: requestUrl
+    return [self.apiClient requestWithCompletionBlock: resourcePath
                                                method: @"GET"
+                                           pathParams: pathParams
                                           queryParams: queryParams
                                            formParams: formParams
                                                 files: files
@@ -376,85 +376,13 @@ static NSString * basePath = @"https://localhost/api";
 }
 
 ///
-/// Variable categories
-/// The variable categories include Activity, Causes of Illness, Cognitive Performance, Conditions, Environment, Foods, Location, Miscellaneous, Mood, Nutrition, Physical Activity, Physique, Sleep, Social Interactions, Symptoms, Treatments, Vital Signs, and Work.
-///  @returns NSArray<SWGVariableCategory>*
-///
--(NSNumber*) variableCategoriesGetWithCompletionBlock: 
-        (void (^)(NSArray<SWGVariableCategory>* output, NSError* error))completionBlock { 
-        
-
-    
-
-    NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/variableCategories", basePath];
-
-    // remove format in URL if needed
-    if ([requestUrl rangeOfString:@".{format}"].location != NSNotFound)
-        [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:@".{format}"] withString:@".json"];
-
-    
-
-    NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    
-    NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
-
-    
-
-    // HTTP header `Accept`
-    headerParams[@"Accept"] = [SWGApiClient selectHeaderAccept:@[@"application/json"]];
-    if ([headerParams[@"Accept"] length] == 0) {
-        [headerParams removeObjectForKey:@"Accept"];
-    }
-
-    // response content type
-    NSString *responseContentType;
-    if ([headerParams objectForKey:@"Accept"]) {
-        responseContentType = [headerParams[@"Accept"] componentsSeparatedByString:@", "][0];
-    }
-    else {
-        responseContentType = @"";
-    }
-
-    // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
-
-    // Authentication setting
-    NSArray *authSettings = @[@"oauth2"];
-
-    id bodyParam = nil;
-    NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
-    NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
-    
-    
-    
-
-    
-    return [self.apiClient requestWithCompletionBlock: requestUrl
-                                               method: @"GET"
-                                          queryParams: queryParams
-                                           formParams: formParams
-                                                files: files
-                                                 body: bodyParam
-                                         headerParams: headerParams
-                                         authSettings: authSettings
-                                   requestContentType: requestContentType
-                                  responseContentType: responseContentType
-                                         responseType: @"NSArray<SWGVariableCategory>*"
-                                      completionBlock: ^(id data, NSError *error) {
-                  
-                  completionBlock((NSArray<SWGVariableCategory>*)data, error);
-              }
-          ];
-}
-
-///
 /// Update User Settings for a Variable
 /// Users can change things like the display name for a variable. They can also change the parameters used in analysis of that variable such as the expected duration of action for a variable to have an effect, the estimated delay before the onset of action. In order to filter out erroneous data, they are able to set the maximum and minimum reasonable daily values for a variable.
 ///  @param sharingData Variable user settings data
 ///
 ///  @returns void
 ///
--(NSNumber*) variableUserSettingsPostWithCompletionBlock: (SWGVariableUserSettings*) sharingData
+-(NSNumber*) v1UserVariablesPostWithCompletionBlock: (SWGUserVariables*) sharingData
         
         
         completionHandler: (void (^)(NSError* error))completionBlock { 
@@ -462,16 +390,18 @@ static NSString * basePath = @"https://localhost/api";
     
     // verify the required parameter 'sharingData' is set
     if (sharingData == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `sharingData` when calling `variableUserSettingsPost`"];
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `sharingData` when calling `v1UserVariablesPost`"];
     }
     
 
-    NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/variableUserSettings", basePath];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/userVariables"];
 
     // remove format in URL if needed
-    if ([requestUrl rangeOfString:@".{format}"].location != NSNotFound)
-        [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:@".{format}"] withString:@".json"];
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
 
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
@@ -506,27 +436,12 @@ static NSString * basePath = @"https://localhost/api";
     NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
     
     bodyParam = sharingData;
-
-    if(bodyParam != nil && [bodyParam isKindOfClass:[NSArray class]]){
-        NSMutableArray *objs = [[NSMutableArray alloc] init];
-        for (id dict in (NSArray*)bodyParam) {
-            if([dict respondsToSelector:@selector(toDictionary)]) {
-                [objs addObject:[(SWGObject*)dict toDictionary]];
-            }
-            else{
-                [objs addObject:dict];
-            }
-        }
-        bodyParam = objs;
-    }
-    else if([bodyParam respondsToSelector:@selector(toDictionary)]) {
-        bodyParam = [(SWGObject*)bodyParam toDictionary];
-    }
     
 
     
-    return [self.apiClient requestWithCompletionBlock: requestUrl
+    return [self.apiClient requestWithCompletionBlock: resourcePath
                                                method: @"POST"
+                                           pathParams: pathParams
                                           queryParams: queryParams
                                            formParams: formParams
                                                 files: files
@@ -539,6 +454,81 @@ static NSString * basePath = @"https://localhost/api";
                                       completionBlock: ^(id data, NSError *error) {
                   completionBlock(error);
                   
+              }
+          ];
+}
+
+///
+/// Variable categories
+/// The variable categories include Activity, Causes of Illness, Cognitive Performance, Conditions, Environment, Foods, Location, Miscellaneous, Mood, Nutrition, Physical Activity, Physique, Sleep, Social Interactions, Symptoms, Treatments, Vital Signs, and Work.
+///  @returns NSArray<SWGVariableCategory>*
+///
+-(NSNumber*) variableCategoriesGetWithCompletionBlock: 
+        (void (^)(NSArray<SWGVariableCategory>* output, NSError* error))completionBlock { 
+        
+
+    
+
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/variableCategories"];
+
+    // remove format in URL if needed
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
+
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
+    
+
+    NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
+    
+    NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
+
+    
+
+    // HTTP header `Accept`
+    headerParams[@"Accept"] = [SWGApiClient selectHeaderAccept:@[@"application/json"]];
+    if ([headerParams[@"Accept"] length] == 0) {
+        [headerParams removeObjectForKey:@"Accept"];
+    }
+
+    // response content type
+    NSString *responseContentType;
+    if ([headerParams objectForKey:@"Accept"]) {
+        responseContentType = [headerParams[@"Accept"] componentsSeparatedByString:@", "][0];
+    }
+    else {
+        responseContentType = @"";
+    }
+
+    // request content type
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+
+    id bodyParam = nil;
+    NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
+    
+    
+    
+
+    
+    return [self.apiClient requestWithCompletionBlock: resourcePath
+                                               method: @"GET"
+                                           pathParams: pathParams
+                                          queryParams: queryParams
+                                           formParams: formParams
+                                                files: files
+                                                 body: bodyParam
+                                         headerParams: headerParams
+                                         authSettings: authSettings
+                                   requestContentType: requestContentType
+                                  responseContentType: responseContentType
+                                         responseType: @"NSArray<SWGVariableCategory>*"
+                                      completionBlock: ^(id data, NSError *error) {
+                  
+                  completionBlock((NSArray<SWGVariableCategory>*)data, error);
               }
           ];
 }
@@ -569,12 +559,14 @@ static NSString * basePath = @"https://localhost/api";
 
     
 
-    NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/variables", basePath];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/variables"];
 
     // remove format in URL if needed
-    if ([requestUrl rangeOfString:@".{format}"].location != NSNotFound)
-        [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:@".{format}"] withString:@".json"];
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
 
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
@@ -632,8 +624,9 @@ static NSString * basePath = @"https://localhost/api";
     
 
     
-    return [self.apiClient requestWithCompletionBlock: requestUrl
+    return [self.apiClient requestWithCompletionBlock: resourcePath
                                                method: @"GET"
+                                           pathParams: pathParams
                                           queryParams: queryParams
                                            formParams: formParams
                                                 files: files
@@ -669,12 +662,14 @@ static NSString * basePath = @"https://localhost/api";
     }
     
 
-    NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/variables", basePath];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/variables"];
 
     // remove format in URL if needed
-    if ([requestUrl rangeOfString:@".{format}"].location != NSNotFound)
-        [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:@".{format}"] withString:@".json"];
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
 
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
@@ -709,27 +704,12 @@ static NSString * basePath = @"https://localhost/api";
     NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
     
     bodyParam = variableName;
-
-    if(bodyParam != nil && [bodyParam isKindOfClass:[NSArray class]]){
-        NSMutableArray *objs = [[NSMutableArray alloc] init];
-        for (id dict in (NSArray*)bodyParam) {
-            if([dict respondsToSelector:@selector(toDictionary)]) {
-                [objs addObject:[(SWGObject*)dict toDictionary]];
-            }
-            else{
-                [objs addObject:dict];
-            }
-        }
-        bodyParam = objs;
-    }
-    else if([bodyParam respondsToSelector:@selector(toDictionary)]) {
-        bodyParam = [(SWGObject*)bodyParam toDictionary];
-    }
     
 
     
-    return [self.apiClient requestWithCompletionBlock: requestUrl
+    return [self.apiClient requestWithCompletionBlock: resourcePath
                                                method: @"POST"
+                                           pathParams: pathParams
                                           queryParams: queryParams
                                            formParams: formParams
                                                 files: files
@@ -777,13 +757,17 @@ static NSString * basePath = @"https://localhost/api";
     }
     
 
-    NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/variables/search/{search}", basePath];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/variables/search/{search}"];
 
     // remove format in URL if needed
-    if ([requestUrl rangeOfString:@".{format}"].location != NSNotFound)
-        [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:@".{format}"] withString:@".json"];
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
 
-    [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:[NSString stringWithFormat:@"%@%@%@", @"{", @"search", @"}"]] withString: [SWGApiClient escape:search]];
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
+    if (search != nil) {
+        pathParams[@"search"] = search;
+    }
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
@@ -837,8 +821,9 @@ static NSString * basePath = @"https://localhost/api";
     
 
     
-    return [self.apiClient requestWithCompletionBlock: requestUrl
+    return [self.apiClient requestWithCompletionBlock: resourcePath
                                                method: @"GET"
+                                           pathParams: pathParams
                                           queryParams: queryParams
                                            formParams: formParams
                                                 files: files
@@ -874,13 +859,17 @@ static NSString * basePath = @"https://localhost/api";
     }
     
 
-    NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/variables/{variableName}", basePath];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/variables/{variableName}"];
 
     // remove format in URL if needed
-    if ([requestUrl rangeOfString:@".{format}"].location != NSNotFound)
-        [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:@".{format}"] withString:@".json"];
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
 
-    [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:[NSString stringWithFormat:@"%@%@%@", @"{", @"variableName", @"}"]] withString: [SWGApiClient escape:variableName]];
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
+    if (variableName != nil) {
+        pathParams[@"variableName"] = variableName;
+    }
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
@@ -918,8 +907,9 @@ static NSString * basePath = @"https://localhost/api";
     
 
     
-    return [self.apiClient requestWithCompletionBlock: requestUrl
+    return [self.apiClient requestWithCompletionBlock: resourcePath
                                                method: @"GET"
+                                           pathParams: pathParams
                                           queryParams: queryParams
                                            formParams: formParams
                                                 files: files

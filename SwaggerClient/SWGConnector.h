@@ -40,7 +40,7 @@
 @property(nonatomic) NSNumber* lastUpdate;
 /* Number of measurements obtained during latest update 
  */
-@property(nonatomic) NSNumber* latestData;
+@property(nonatomic) NSNumber* totalMeasurementsInLastUpdate;
 /* True if user has no measurements for this connector 
  */
 @property(nonatomic) NSNumber* noDataYet;

@@ -1,6 +1,6 @@
-#import "SWGConnector.h"
+#import "SWGUserVariables.h"
 
-@implementation SWGConnector
+@implementation SWGUserVariables
 
 /**
  * Maps json key to property name.
@@ -8,7 +8,7 @@
  */
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"id": @"_id", @"name": @"name", @"displayName": @"displayName", @"image": @"image", @"getItUrl": @"getItUrl", @"connected": @"connected", @"connectInstructions": @"connectInstructions", @"lastUpdate": @"lastUpdate", @"totalMeasurementsInLastUpdate": @"totalMeasurementsInLastUpdate", @"noDataYet": @"noDataYet" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"user": @"user", @"variable": @"variable", @"durationOfAction": @"durationOfAction", @"fillingValue": @"fillingValue", @"joinWith": @"joinWith", @"maximumValue": @"maximumValue", @"minimumValue": @"minimumValue", @"name": @"name", @"onsetDelay": @"onsetDelay", @"unit": @"unit" }];
 }
 
 /**

@@ -11,14 +11,16 @@
 
 @implementation SWGOrganizationsApi
 
-static NSString * basePath = @"https://localhost/api";
-
 #pragma mark - Initialize methods
 
 - (id) init {
     self = [super init];
     if (self) {
-        self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
+        SWGConfiguration *config = [SWGConfiguration sharedConfig];
+        if (config.apiClient == nil) {
+            config.apiClient = [[SWGApiClient alloc] init];
+        }
+        self.apiClient = config.apiClient;
         self.defaultHeaders = [NSMutableDictionary dictionary];
     }
     return self;
@@ -27,12 +29,7 @@ static NSString * basePath = @"https://localhost/api";
 - (id) initWithApiClient:(SWGApiClient *)apiClient {
     self = [super init];
     if (self) {
-        if (apiClient) {
-            self.apiClient = apiClient;
-        }
-        else {
-            self.apiClient = [SWGApiClient sharedClientFromPool:basePath];
-        }
+        self.apiClient = apiClient;
         self.defaultHeaders = [NSMutableDictionary dictionary];
     }
     return self;
@@ -48,14 +45,6 @@ static NSString * basePath = @"https://localhost/api";
         [singletonAPI addHeader:headerValue forKey:key];
     }
     return singletonAPI;
-}
-
-+(void) setBasePath:(NSString*)path {
-    basePath = path;
-}
-
-+(NSString*) getBasePath {
-    return basePath;
 }
 
 -(void) addHeader:(NSString*)value forKey:(NSString*)key {
@@ -100,13 +89,17 @@ static NSString * basePath = @"https://localhost/api";
     }
     
 
-    NSMutableString* requestUrl = [NSMutableString stringWithFormat:@"%@/v1/organizations/{organizationId}/users", basePath];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/organizations/{organizationId}/users"];
 
     // remove format in URL if needed
-    if ([requestUrl rangeOfString:@".{format}"].location != NSNotFound)
-        [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:@".{format}"] withString:@".json"];
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
 
-    [requestUrl replaceCharactersInRange: [requestUrl rangeOfString:[NSString stringWithFormat:@"%@%@%@", @"{", @"organizationId", @"}"]] withString: [SWGApiClient escape:organizationId]];
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
+    if (organizationId != nil) {
+        pathParams[@"organizationId"] = organizationId;
+    }
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
@@ -141,27 +134,12 @@ static NSString * basePath = @"https://localhost/api";
     NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
     
     bodyParam = body;
-
-    if(bodyParam != nil && [bodyParam isKindOfClass:[NSArray class]]){
-        NSMutableArray *objs = [[NSMutableArray alloc] init];
-        for (id dict in (NSArray*)bodyParam) {
-            if([dict respondsToSelector:@selector(toDictionary)]) {
-                [objs addObject:[(SWGObject*)dict toDictionary]];
-            }
-            else{
-                [objs addObject:dict];
-            }
-        }
-        bodyParam = objs;
-    }
-    else if([bodyParam respondsToSelector:@selector(toDictionary)]) {
-        bodyParam = [(SWGObject*)bodyParam toDictionary];
-    }
     
 
     
-    return [self.apiClient requestWithCompletionBlock: requestUrl
+    return [self.apiClient requestWithCompletionBlock: resourcePath
                                                method: @"POST"
+                                           pathParams: pathParams
                                           queryParams: queryParams
                                            formParams: formParams
                                                 files: files

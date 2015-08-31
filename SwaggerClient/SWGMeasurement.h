@@ -34,6 +34,6 @@
 @property(nonatomic) NSNumber* storedValue;
 /* Unit of measurement as originally submitted [optional]
  */
-@property(nonatomic) NSString* storedUnit;
+@property(nonatomic) NSString* storedAbbreviatedUnitName;
 
 @end

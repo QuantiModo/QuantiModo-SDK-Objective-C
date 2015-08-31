@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
 
     s.summary          = "QuantiModo"
     s.description      = <<-DESC
-                         QuantiModo makes it easy to retrieve normalized user data from a wide array of devices and applications.\n[Learn about QuantiModo](https://app.quantimo.do) or contact us at [help.quantimo.do](https://help.quantimo.do).\n\n\n\n Create an account at [QuantiModo](https://app.quantimo.do), sign in, and\nadd\n\n\nsome data at https://app.quantimo.do/connect to try out the API for yourself.  As long as you&#39;re signed in, it will use your browser&#39;s cookie for authentication.  However, client applications must use OAuth2 tokens to access the API.
+                         QuantiModo makes it easy to retrieve normalized user data from a wide array of devices and applications.\n[Learn about QuantiModo](https://app.quantimo.do) or contact us at [help.quantimo.do](https://help.quantimo.do).\n\n Create an account at [QuantiModo](https://app.quantimo.do), sign in, and add\n\nsome data at https://app.quantimo.do/connect to try out the API for yourself.  As long as you&#39;re signed in, it will use your browser&#39;s cookie for authentication.  However, client applications must use OAuth2 tokens to access the API.
                          DESC
 
     s.platform     = :ios, '7.0'

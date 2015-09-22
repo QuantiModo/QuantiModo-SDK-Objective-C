@@ -8,6 +8,8 @@
 
 @implementation SWGOauthApi
 
+static SWGOauthApi* singletonAPI = nil;
+
 #pragma mark - Initialize methods
 
 - (id) init {
@@ -35,11 +37,18 @@
 #pragma mark -
 
 +(SWGOauthApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key {
-    static SWGOauthApi* singletonAPI = nil;
 
     if (singletonAPI == nil) {
         singletonAPI = [[SWGOauthApi alloc] init];
         [singletonAPI addHeader:headerValue forKey:key];
+    }
+    return singletonAPI;
+}
+
++(SWGOauthApi*) sharedAPI {
+
+    if (singletonAPI == nil) {
+        singletonAPI = [[SWGOauthApi alloc] init];
     }
     return singletonAPI;
 }
@@ -60,34 +69,28 @@
 #pragma mark - Api Methods
 
 ///
-/// Access Token
-/// Client provides authorization token obtained from /api/oauth2/authorize to this endpoint and receives an access token. Access token can then be used to query different API endpoints of QuantiModo.
-///  @param clientId Client id
+/// Authorize
+/// Ask the user if they want to allow a client's application to submit or obtain data from their QM account. It will redirect the user to the url provided by the client application with the code as a query parameter or error in case of an error.
+///  @param clientId This is the unique ID that QuantiModo uses to identify your application. Obtain a client id by emailing info@quantimo.do.
 ///
-///  @param clientSecret Client secret
+///  @param clientSecret This is the secret for your obtained client_id. QuantiModo uses this to validate that only your application uses the client_id.
 ///
-///  @param grantType Grant Type can be 'authorization_code' or 'refresh_token'
+///  @param responseType If the value is code, launches a Basic flow, requiring a POST to the token endpoint to obtain the tokens. If the value is token id_token or id_token token, launches an Implicit flow, requiring the use of Javascript at the redirect URI to retrieve tokens from the URI #fragment.
 ///
-///  @param responseType Response type
+///  @param scope Scopes include basic, readmeasurements, and writemeasurements. The \"basic\" scope allows you to read user info (displayname, email, etc). The \"readmeasurements\" scope allows one to read a user's data. The \"writemeasurements\" scope allows you to write user data. Separate multiple scopes by a space.
 ///
-///  @param scope Scope
+///  @param redirectUri The redirect URI is the URL within your client application that will receive the OAuth2 credentials.
 ///
-///  @param redirectUri Redirect uri
-///
-///  @param state State
-///
-///  @param realm Realm
+///  @param state An opaque string that is round-tripped in the protocol; that is to say, it is returned as a URI parameter in the Basic flow, and in the URI
 ///
 ///  @returns void
 ///
--(NSNumber*) oauth2AccesstokenGetWithCompletionBlock: (NSString*) clientId
+-(NSNumber*) v1Oauth2AuthorizeGetWithCompletionBlock: (NSString*) clientId
          clientSecret: (NSString*) clientSecret
-         grantType: (NSString*) grantType
          responseType: (NSString*) responseType
          scope: (NSString*) scope
          redirectUri: (NSString*) redirectUri
          state: (NSString*) state
-         realm: (NSString*) realm
         
         
         completionHandler: (void (^)(NSError* error))completionBlock { 
@@ -95,21 +98,26 @@
     
     // verify the required parameter 'clientId' is set
     if (clientId == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `clientId` when calling `oauth2AccesstokenGet`"];
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `clientId` when calling `v1Oauth2AuthorizeGet`"];
     }
     
     // verify the required parameter 'clientSecret' is set
     if (clientSecret == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `clientSecret` when calling `oauth2AccesstokenGet`"];
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `clientSecret` when calling `v1Oauth2AuthorizeGet`"];
     }
     
-    // verify the required parameter 'grantType' is set
-    if (grantType == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `grantType` when calling `oauth2AccesstokenGet`"];
+    // verify the required parameter 'responseType' is set
+    if (responseType == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `responseType` when calling `v1Oauth2AuthorizeGet`"];
+    }
+    
+    // verify the required parameter 'scope' is set
+    if (scope == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `scope` when calling `v1Oauth2AuthorizeGet`"];
     }
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/oauth2/accesstoken"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/oauth2/authorize"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -128,10 +136,6 @@
         
         queryParams[@"client_secret"] = clientSecret;
     }
-    if(grantType != nil) {
-        
-        queryParams[@"grant_type"] = grantType;
-    }
     if(responseType != nil) {
         
         queryParams[@"response_type"] = responseType;
@@ -147,10 +151,6 @@
     if(state != nil) {
         
         queryParams[@"state"] = state;
-    }
-    if(realm != nil) {
-        
-        queryParams[@"realm"] = realm;
     }
     
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
@@ -206,11 +206,13 @@
 }
 
 ///
-/// Authorize
-/// Ask the user if they want to allow a client applications to submit or obtain data from their QM account. It will redirect the user to the url provided by the client application with the code as a query parameter or error in case of an error.
+/// Access Token
+/// Client provides authorization token obtained from /api/v1/oauth2/authorize to this endpoint and receives an access token. Access token can then be used to query different API endpoints of QuantiModo.
 ///  @param clientId This is the unique ID that QuantiModo uses to identify your application. Obtain a client id by emailing info@quantimo.do.
 ///
-///  @param clientSecret This is the secret for your obtained clietn_id. QuantiModo uses this to validate that only your application uses the client_id.
+///  @param clientSecret This is the secret for your obtained client_id. QuantiModo uses this to validate that only your application uses the client_id.
+///
+///  @param grantType Grant Type can be 'authorization_code' or 'refresh_token'
 ///
 ///  @param responseType If the value is code, launches a Basic flow, requiring a POST to the token endpoint to obtain the tokens. If the value is token id_token or id_token token, launches an Implicit flow, requiring the use of Javascript at the redirect URI to retrieve tokens from the URI #fragment.
 ///
@@ -220,17 +222,15 @@
 ///
 ///  @param state An opaque string that is round-tripped in the protocol; that is to say, it is returned as a URI parameter in the Basic flow, and in the URI
 ///
-///  @param realm Name of the realm representing the users of your distributed applications and services. A \"realm\" attribute MAY be included to indicate the scope of protection.
-///
 ///  @returns void
 ///
--(NSNumber*) oauth2AuthorizeGetWithCompletionBlock: (NSString*) clientId
+-(NSNumber*) v1Oauth2TokenGetWithCompletionBlock: (NSString*) clientId
          clientSecret: (NSString*) clientSecret
+         grantType: (NSString*) grantType
          responseType: (NSString*) responseType
          scope: (NSString*) scope
          redirectUri: (NSString*) redirectUri
          state: (NSString*) state
-         realm: (NSString*) realm
         
         
         completionHandler: (void (^)(NSError* error))completionBlock { 
@@ -238,26 +238,21 @@
     
     // verify the required parameter 'clientId' is set
     if (clientId == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `clientId` when calling `oauth2AuthorizeGet`"];
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `clientId` when calling `v1Oauth2TokenGet`"];
     }
     
     // verify the required parameter 'clientSecret' is set
     if (clientSecret == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `clientSecret` when calling `oauth2AuthorizeGet`"];
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `clientSecret` when calling `v1Oauth2TokenGet`"];
     }
     
-    // verify the required parameter 'responseType' is set
-    if (responseType == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `responseType` when calling `oauth2AuthorizeGet`"];
-    }
-    
-    // verify the required parameter 'scope' is set
-    if (scope == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `scope` when calling `oauth2AuthorizeGet`"];
+    // verify the required parameter 'grantType' is set
+    if (grantType == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `grantType` when calling `v1Oauth2TokenGet`"];
     }
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/oauth2/authorize"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/oauth2/token"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -276,6 +271,10 @@
         
         queryParams[@"client_secret"] = clientSecret;
     }
+    if(grantType != nil) {
+        
+        queryParams[@"grant_type"] = grantType;
+    }
     if(responseType != nil) {
         
         queryParams[@"response_type"] = responseType;
@@ -291,10 +290,6 @@
     if(state != nil) {
         
         queryParams[@"state"] = state;
-    }
-    if(realm != nil) {
-        
-        queryParams[@"realm"] = realm;
     }
     
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];

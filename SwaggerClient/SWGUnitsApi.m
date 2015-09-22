@@ -10,6 +10,8 @@
 
 @implementation SWGUnitsApi
 
+static SWGUnitsApi* singletonAPI = nil;
+
 #pragma mark - Initialize methods
 
 - (id) init {
@@ -37,11 +39,18 @@
 #pragma mark -
 
 +(SWGUnitsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key {
-    static SWGUnitsApi* singletonAPI = nil;
 
     if (singletonAPI == nil) {
         singletonAPI = [[SWGUnitsApi alloc] init];
         [singletonAPI addHeader:headerValue forKey:key];
+    }
+    return singletonAPI;
+}
+
++(SWGUnitsApi*) sharedAPI {
+
+    if (singletonAPI == nil) {
+        singletonAPI = [[SWGUnitsApi alloc] init];
     }
     return singletonAPI;
 }
@@ -66,13 +75,13 @@
 /// Get a list of the categories of measurement units such as 'Distance', 'Duration', 'Energy', 'Frequency', 'Miscellany', 'Pressure', 'Proportion', 'Rating', 'Temperature', 'Volume', and 'Weight'.
 ///  @returns SWGUnitCategory*
 ///
--(NSNumber*) unitCategoriesGetWithCompletionBlock: 
+-(NSNumber*) v1UnitCategoriesGetWithCompletionBlock: 
         (void (^)(SWGUnitCategory* output, NSError* error))completionBlock { 
         
 
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/unitCategories"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/unitCategories"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -147,7 +156,7 @@
 ///
 ///  @returns NSArray<SWGUnit>*
 ///
--(NSNumber*) unitsGetWithCompletionBlock: (NSString*) unitName
+-(NSNumber*) v1UnitsGetWithCompletionBlock: (NSString*) unitName
          abbreviatedUnitName: (NSString*) abbreviatedUnitName
          categoryName: (NSString*) categoryName
         
@@ -156,7 +165,7 @@
 
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/units"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/units"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -245,7 +254,7 @@
 ///
 ///  @returns NSArray<SWGUnit>*
 ///
--(NSNumber*) unitsVariableGetWithCompletionBlock: (NSString*) unitName
+-(NSNumber*) v1UnitsVariableGetWithCompletionBlock: (NSString*) unitName
          abbreviatedUnitName: (NSString*) abbreviatedUnitName
          categoryName: (NSString*) categoryName
          variable: (NSString*) variable
@@ -255,7 +264,7 @@
 
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/unitsVariable"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/unitsVariable"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {

@@ -9,6 +9,8 @@
 
 @implementation SWGPairsApi
 
+static SWGPairsApi* singletonAPI = nil;
+
 #pragma mark - Initialize methods
 
 - (id) init {
@@ -36,11 +38,18 @@
 #pragma mark -
 
 +(SWGPairsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key {
-    static SWGPairsApi* singletonAPI = nil;
 
     if (singletonAPI == nil) {
         singletonAPI = [[SWGPairsApi alloc] init];
         [singletonAPI addHeader:headerValue forKey:key];
+    }
+    return singletonAPI;
+}
+
++(SWGPairsApi*) sharedAPI {
+
+    if (singletonAPI == nil) {
+        singletonAPI = [[SWGPairsApi alloc] init];
     }
     return singletonAPI;
 }
@@ -91,7 +100,7 @@
 ///
 ///  @returns NSArray<SWGPairs>*
 ///
--(NSNumber*) pairsGetWithCompletionBlock: (NSString*) cause
+-(NSNumber*) v1PairsGetWithCompletionBlock: (NSString*) cause
          effect: (NSString*) effect
          causeSource: (NSString*) causeSource
          causeUnit: (NSString*) causeUnit
@@ -111,16 +120,16 @@
     
     // verify the required parameter 'cause' is set
     if (cause == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `cause` when calling `pairsGet`"];
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `cause` when calling `v1PairsGet`"];
     }
     
     // verify the required parameter 'effect' is set
     if (effect == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `effect` when calling `pairsGet`"];
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `effect` when calling `v1PairsGet`"];
     }
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/pairs"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/pairs"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {

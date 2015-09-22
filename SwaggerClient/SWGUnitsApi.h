@@ -19,6 +19,7 @@
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGUnitsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
++(SWGUnitsApi*) sharedAPI;
 ///
 ///
 /// Get unit categories
@@ -27,7 +28,7 @@
 /// 
 ///
 /// @return SWGUnitCategory*
--(NSNumber*) unitCategoriesGetWithCompletionBlock :
+-(NSNumber*) v1UnitCategoriesGetWithCompletionBlock :
     (void (^)(SWGUnitCategory* output, NSError* error))completionBlock;
     
 
@@ -43,7 +44,7 @@
 /// 
 ///
 /// @return NSArray<SWGUnit>*
--(NSNumber*) unitsGetWithCompletionBlock :(NSString*) unitName 
+-(NSNumber*) v1UnitsGetWithCompletionBlock :(NSString*) unitName 
      abbreviatedUnitName:(NSString*) abbreviatedUnitName 
      categoryName:(NSString*) categoryName 
     
@@ -63,7 +64,7 @@
 /// 
 ///
 /// @return NSArray<SWGUnit>*
--(NSNumber*) unitsVariableGetWithCompletionBlock :(NSString*) unitName 
+-(NSNumber*) v1UnitsVariableGetWithCompletionBlock :(NSString*) unitName 
      abbreviatedUnitName:(NSString*) abbreviatedUnitName 
      categoryName:(NSString*) categoryName 
      variable:(NSString*) variable 

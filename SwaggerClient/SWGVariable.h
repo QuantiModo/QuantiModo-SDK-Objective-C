@@ -29,7 +29,10 @@
 @property(nonatomic) NSString* category;
 /* Abbreviated name of the default unit for the variable 
  */
-@property(nonatomic) NSString* unit;
+@property(nonatomic) NSString* abbreviatedUnitName;
+/* Id of the default unit for the variable 
+ */
+@property(nonatomic) NSNumber* abbreviatedUnitId;
 /* Comma-separated list of source names to limit variables to those sources 
  */
 @property(nonatomic) NSString* sources;
@@ -89,7 +92,7 @@
 @property(nonatomic) NSNumber* numberOfMeasurements;
 /* Last unit 
  */
-@property(nonatomic) NSNumber* lastUnit;
+@property(nonatomic) NSString* lastUnit;
 /* Last value 
  */
 @property(nonatomic) NSNumber* lastValue;
@@ -98,7 +101,7 @@
 @property(nonatomic) NSNumber* mostCommonValue;
 /* Most common unit 
  */
-@property(nonatomic) NSNumber* mostCommonUnit;
+@property(nonatomic) NSString* mostCommonUnit;
 /* Last source 
  */
 @property(nonatomic) NSNumber* lastSource;

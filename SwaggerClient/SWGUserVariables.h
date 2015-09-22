@@ -29,12 +29,12 @@
 /* joinWith 
  */
 @property(nonatomic) NSString* joinWith;
-/* maximumValue 
+/* maximumAllowedValue 
  */
-@property(nonatomic) NSNumber* maximumValue;
-/* minimumValue 
+@property(nonatomic) NSNumber* maximumAllowedValue;
+/* minimumAllowedValue 
  */
-@property(nonatomic) NSNumber* minimumValue;
+@property(nonatomic) NSNumber* minimumAllowedValue;
 /* name 
  */
 @property(nonatomic) NSString* name;

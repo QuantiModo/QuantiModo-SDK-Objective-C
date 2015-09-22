@@ -1,8 +1,8 @@
 #import <Foundation/Foundation.h>
-#import "SWGUser.h"
 #import "SWGUserTokenRequest.h"
 #import "SWGUserTokenFailedResponse.h"
 #import "SWGUserTokenSuccessfulResponse.h"
+#import "SWGUser.h"
 #import "SWGObject.h"
 #import "SWGApiClient.h"
 
@@ -21,19 +21,7 @@
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGUserApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
-///
-///
-/// Get all available units for variableGet authenticated user
-/// Returns user info for the currently authenticated user.
-///
-/// 
-///
-/// @return SWGUser*
--(NSNumber*) userMeGetWithCompletionBlock :
-    (void (^)(SWGUser* output, NSError* error))completionBlock;
-    
-
-
++(SWGUserApi*) sharedAPI;
 ///
 ///
 /// Get user tokens for existing users, create new users
@@ -48,6 +36,19 @@
      body:(SWGUserTokenRequest*) body 
     
     completionHandler: (void (^)(SWGUserTokenSuccessfulResponse* output, NSError* error))completionBlock;
+    
+
+
+///
+///
+/// Get all available units for variableGet authenticated user
+/// Returns user info for the currently authenticated user.
+///
+/// 
+///
+/// @return SWGUser*
+-(NSNumber*) v1UserMeGetWithCompletionBlock :
+    (void (^)(SWGUser* output, NSError* error))completionBlock;
     
 
 

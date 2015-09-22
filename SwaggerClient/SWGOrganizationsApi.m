@@ -11,6 +11,8 @@
 
 @implementation SWGOrganizationsApi
 
+static SWGOrganizationsApi* singletonAPI = nil;
+
 #pragma mark - Initialize methods
 
 - (id) init {
@@ -38,11 +40,18 @@
 #pragma mark -
 
 +(SWGOrganizationsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key {
-    static SWGOrganizationsApi* singletonAPI = nil;
 
     if (singletonAPI == nil) {
         singletonAPI = [[SWGOrganizationsApi alloc] init];
         [singletonAPI addHeader:headerValue forKey:key];
+    }
+    return singletonAPI;
+}
+
++(SWGOrganizationsApi*) sharedAPI {
+
+    if (singletonAPI == nil) {
+        singletonAPI = [[SWGOrganizationsApi alloc] init];
     }
     return singletonAPI;
 }
@@ -98,7 +107,11 @@
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (organizationId != nil) {
-        pathParams[@"organizationId"] = organizationId;
+        if([organizationId isKindOfClass:[NSNumber class]]){
+            pathParams[@"organizationId"] = [((NSNumber *)organizationId) stringValue];
+        }else{
+            pathParams[@"organizationId"] = organizationId;
+        }
     }
     
 

@@ -9,6 +9,13 @@ static bool cacheEnabled = false;
 static AFNetworkReachabilityStatus reachabilityStatus = AFNetworkReachabilityStatusNotReachable;
 static void (^reachabilityChangeBlock)(int);
 
+
+@interface SWGApiClient ()
+
+@property (readwrite, nonatomic) NSDictionary *HTTPResponseHeaders;
+
+@end
+
 @implementation SWGApiClient
 
 - (instancetype)init {
@@ -21,6 +28,7 @@ static void (^reachabilityChangeBlock)(int);
     if (self) {
         self.requestSerializer = [AFJSONRequestSerializer serializer];
         self.responseSerializer = [AFJSONResponseSerializer serializer];
+        self.securityPolicy = [self customSecurityPolicy];
         // configure reachability
         [self configureCacheReachibility];
     }
@@ -271,7 +279,7 @@ static void (^reachabilityChangeBlock)(int);
 
     // pure object
     if ([class isEqualToString:@"NSObject"]) {
-        return [[NSObject alloc] init];
+        return data;
     }
 
     // list of models
@@ -385,6 +393,8 @@ static void (^reachabilityChangeBlock)(int);
                                                                        if([[SWGConfiguration sharedConfig] debug]) {
                                                                            [self logResponse:operation forRequest:request error:nil];
                                                                        }
+                                                                       NSDictionary *responseHeaders = [[operation response] allHeaderFields];
+                                                                       self.HTTPResponseHeaders = responseHeaders;
                                                                        completionBlock(response, nil);
                                                                    }
                                                                } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -398,6 +408,10 @@ static void (^reachabilityChangeBlock)(int);
 
                                                                        if([[SWGConfiguration sharedConfig] debug])
                                                                            [self logResponse:nil forRequest:request error:augmentedError];
+
+                                                                       NSDictionary *responseHeaders = [[operation response] allHeaderFields];
+                                                                       self.HTTPResponseHeaders = responseHeaders;
+
                                                                        completionBlock(nil, augmentedError);
                                                                    }
                                                                }];
@@ -441,6 +455,7 @@ static void (^reachabilityChangeBlock)(int);
                                                                    NSURL *file = [NSURL fileURLWithPath:filepath];
 
                                                                    [operation.responseData writeToURL:file atomically:YES];
+                                                                   self.HTTPResponseHeaders = headers;
                                                                    completionBlock(file, nil);
                                                                } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 
@@ -455,7 +470,8 @@ static void (^reachabilityChangeBlock)(int);
                                                                        if ([[SWGConfiguration sharedConfig] debug]) {
                                                                            [self logResponse:nil forRequest:request error:augmentedError];
                                                                        }
-
+                                                                       NSDictionary *responseHeaders = [[operation response] allHeaderFields];
+                                                                       self.HTTPResponseHeaders = responseHeaders;
                                                                        completionBlock(nil, augmentedError);
                                                                    }
                                                                }];
@@ -725,5 +741,26 @@ static void (^reachabilityChangeBlock)(int);
         @throw e;
     }
 }
-  
+
+- (AFSecurityPolicy *) customSecurityPolicy {
+    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
+
+    SWGConfiguration *config = [SWGConfiguration sharedConfig];
+
+    if (config.sslCaCert) {
+        NSData *certData = [NSData dataWithContentsOfFile:config.sslCaCert];
+        [securityPolicy setPinnedCertificates:@[certData]];
+    }
+
+    if (config.verifySSL) {
+        [securityPolicy setAllowInvalidCertificates:NO];
+    }
+    else {
+        [securityPolicy setAllowInvalidCertificates:YES];
+        [securityPolicy setValidatesDomainName:NO];
+    }
+
+    return securityPolicy;
+}
+
 @end

@@ -1,6 +1,6 @@
-#import "SWGUserVariables.h"
+#import "SWGConnectorInstruction.h"
 
-@implementation SWGUserVariables
+@implementation SWGConnectorInstruction
 
 /**
  * Maps json key to property name.
@@ -8,7 +8,7 @@
  */
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"user": @"user", @"variable": @"variable", @"durationOfAction": @"durationOfAction", @"fillingValue": @"fillingValue", @"joinWith": @"joinWith", @"maximumAllowedValue": @"maximumAllowedValue", @"minimumAllowedValue": @"minimumAllowedValue", @"name": @"name", @"onsetDelay": @"onsetDelay", @"unit": @"unit" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"url": @"url", @"parameters": @"parameters", @"usePopup": @"usePopup" }];
 }
 
 /**
@@ -18,7 +18,7 @@
  */
 + (BOOL)propertyIsOptional:(NSString *)propertyName
 {
-  NSArray *optionalProperties = @[];
+  NSArray *optionalProperties = @[@"url", @"parameters", @"usePopup"];
 
   if ([optionalProperties containsObject:propertyName]) {
     return YES;

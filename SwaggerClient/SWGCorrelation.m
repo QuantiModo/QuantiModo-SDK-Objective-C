@@ -8,7 +8,7 @@
  */
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"correlationCoefficient": @"correlationCoefficient", @"cause": @"cause", @"effect": @"effect", @"onsetDelay": @"onsetDelay", @"durationOfAction": @"durationOfAction", @"numberOfPairs": @"numberOfPairs", @"effectSize": @"effectSize", @"statisticalSignificance": @"statisticalSignificance", @"timestamp": @"timestamp", @"reverseCorrelation": @"reverseCorrelation", @"causalityFactor": @"causalityFactor", @"causeCategory": @"causeCategory", @"effectCategory": @"effectCategory" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"correlationCoefficient": @"correlationCoefficient", @"cause": @"cause", @"originalCause": @"originalCause", @"effect": @"effect", @"originalEffect": @"originalEffect", @"onsetDelay": @"onsetDelay", @"durationOfAction": @"durationOfAction", @"numberOfPairs": @"numberOfPairs", @"effectSize": @"effectSize", @"statisticalSignificance": @"statisticalSignificance", @"timestamp": @"timestamp", @"reverseCorrelation": @"reverseCorrelation", @"causalityFactor": @"causalityFactor", @"causeCategory": @"causeCategory", @"effectCategory": @"effectCategory", @"valuePredictingHighOutcome": @"valuePredictingHighOutcome", @"valuePredictingLowOutcome": @"valuePredictingLowOutcome", @"optimalPearsonProduct": @"optimalPearsonProduct", @"averageVote": @"averageVote", @"userVote": @"userVote", @"causeUnit": @"causeUnit", @"causeUnitId": @"causeUnitId" }];
 }
 
 /**
@@ -18,7 +18,7 @@
  */
 + (BOOL)propertyIsOptional:(NSString *)propertyName
 {
-  NSArray *optionalProperties = @[@"effectSize", @"statisticalSignificance", @"reverseCorrelation", @"causalityFactor", @"causeCategory", @"effectCategory"];
+  NSArray *optionalProperties = @[@"originalCause", @"originalEffect", @"effectSize", @"statisticalSignificance", @"reverseCorrelation", @"causalityFactor", @"causeCategory", @"effectCategory", @"valuePredictingHighOutcome", @"valuePredictingLowOutcome", @"optimalPearsonProduct", @"averageVote", @"userVote", @"causeUnit", @"causeUnitId"];
 
   if ([optionalProperties containsObject:propertyName]) {
     return YES;

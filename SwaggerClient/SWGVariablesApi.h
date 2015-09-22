@@ -21,27 +21,7 @@
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGVariablesApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
-///
-///
-/// Store or Update a Correlation
-/// Store or Update a Correlation
-///
-/// @param cause 
-/// @param effect 
-/// @param correlationcoefficient 
-/// @param vote 
-/// 
-///
-/// @return 
--(NSNumber*) correlationsPostWithCompletionBlock :(NSString*) cause 
-     effect:(NSString*) effect 
-     correlationcoefficient:(NSString*) correlationcoefficient 
-     vote:(NSString*) vote 
-    
-    
-    completionHandler: (void (^)(NSError* error))completionBlock;
-
-
++(SWGVariablesApi*) sharedAPI;
 ///
 ///
 /// Get public variables
@@ -50,7 +30,7 @@
 /// 
 ///
 /// @return SWGVariable*
--(NSNumber*) publicVariablesGetWithCompletionBlock :
+-(NSNumber*) v1PublicVariablesGetWithCompletionBlock :
     (void (^)(SWGVariable* output, NSError* error))completionBlock;
     
 
@@ -68,7 +48,7 @@
 /// 
 ///
 /// @return SWGVariable*
--(NSNumber*) publicVariablesSearchSearchGetWithCompletionBlock :(NSString*) search 
+-(NSNumber*) v1PublicVariablesSearchSearchGetWithCompletionBlock :(NSString*) search 
      effectOrCause:(NSString*) effectOrCause 
      limit:(NSNumber*) limit 
      offset:(NSNumber*) offset 
@@ -101,7 +81,7 @@
 /// 
 ///
 /// @return NSArray<SWGVariableCategory>*
--(NSNumber*) variableCategoriesGetWithCompletionBlock :
+-(NSNumber*) v1VariableCategoriesGetWithCompletionBlock :
     (void (^)(NSArray<SWGVariableCategory>* output, NSError* error))completionBlock;
     
 
@@ -119,7 +99,7 @@
 /// 
 ///
 /// @return SWGVariable*
--(NSNumber*) variablesGetWithCompletionBlock :(NSNumber*) userId 
+-(NSNumber*) v1VariablesGetWithCompletionBlock :(NSNumber*) userId 
      category:(NSString*) category 
      limit:(NSNumber*) limit 
      offset:(NSNumber*) offset 
@@ -138,7 +118,7 @@
 /// 
 ///
 /// @return 
--(NSNumber*) variablesPostWithCompletionBlock :(SWGVariablesNew*) variableName 
+-(NSNumber*) v1VariablesPostWithCompletionBlock :(SWGVariablesNew*) variableName 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -157,7 +137,7 @@
 /// 
 ///
 /// @return NSArray<SWGVariable>*
--(NSNumber*) variablesSearchSearchGetWithCompletionBlock :(NSString*) search 
+-(NSNumber*) v1VariablesSearchSearchGetWithCompletionBlock :(NSString*) search 
      categoryName:(NSString*) categoryName 
      source:(NSString*) source 
      limit:(NSNumber*) limit 
@@ -176,7 +156,7 @@
 /// 
 ///
 /// @return SWGVariable*
--(NSNumber*) variablesVariableNameGetWithCompletionBlock :(NSString*) variableName 
+-(NSNumber*) v1VariablesVariableNameGetWithCompletionBlock :(NSString*) variableName 
     
     completionHandler: (void (^)(SWGVariable* output, NSError* error))completionBlock;
     

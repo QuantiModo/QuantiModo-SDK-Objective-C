@@ -20,9 +20,15 @@
 /* ORIGINAL variable name of the cause variable for which the user desires correlations. 
  */
 @property(nonatomic) NSString* cause;
+/* original name of the cause. [optional]
+ */
+@property(nonatomic) NSString* originalCause;
 /* ORIGINAL variable name of the effect variable for which the user desires correlations. 
  */
 @property(nonatomic) NSString* effect;
+/* effect variable original name. [optional]
+ */
+@property(nonatomic) NSString* originalEffect;
 /* User estimated or default time after cause measurement before a perceivable effect is observed 
  */
 @property(nonatomic) NSNumber* onsetDelay;
@@ -53,5 +59,26 @@
 /* Variable category of the effect variable. [optional]
  */
 @property(nonatomic) NSString* effectCategory;
+/* cause value that predicts an above average effect value (in default unit for cause variable) [optional]
+ */
+@property(nonatomic) NSNumber* valuePredictingHighOutcome;
+/* cause value that predicts a below average effect value (in default unit for cause variable) [optional]
+ */
+@property(nonatomic) NSNumber* valuePredictingLowOutcome;
+/* Optimal Pearson Product [optional]
+ */
+@property(nonatomic) NSNumber* optimalPearsonProduct;
+/* Average Vote [optional]
+ */
+@property(nonatomic) NSNumber* averageVote;
+/* User Vote [optional]
+ */
+@property(nonatomic) NSNumber* userVote;
+/* Unit of Cause [optional]
+ */
+@property(nonatomic) NSString* causeUnit;
+/* Unit Id of Cause [optional]
+ */
+@property(nonatomic) NSNumber* causeUnitId;
 
 @end

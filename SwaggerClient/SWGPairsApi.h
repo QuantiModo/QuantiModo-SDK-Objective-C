@@ -18,6 +18,7 @@
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGPairsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
++(SWGPairsApi*) sharedAPI;
 ///
 ///
 /// Get pairs
@@ -39,7 +40,7 @@
 /// 
 ///
 /// @return NSArray<SWGPairs>*
--(NSNumber*) pairsGetWithCompletionBlock :(NSString*) cause 
+-(NSNumber*) v1PairsGetWithCompletionBlock :(NSString*) cause 
      effect:(NSString*) effect 
      causeSource:(NSString*) causeSource 
      causeUnit:(NSString*) causeUnit 

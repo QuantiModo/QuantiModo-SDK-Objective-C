@@ -9,6 +9,8 @@
 
 @implementation SWGVotesApi
 
+static SWGVotesApi* singletonAPI = nil;
+
 #pragma mark - Initialize methods
 
 - (id) init {
@@ -36,11 +38,18 @@
 #pragma mark -
 
 +(SWGVotesApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key {
-    static SWGVotesApi* singletonAPI = nil;
 
     if (singletonAPI == nil) {
         singletonAPI = [[SWGVotesApi alloc] init];
         [singletonAPI addHeader:headerValue forKey:key];
+    }
+    return singletonAPI;
+}
+
++(SWGVotesApi*) sharedAPI {
+
+    if (singletonAPI == nil) {
+        singletonAPI = [[SWGVotesApi alloc] init];
     }
     return singletonAPI;
 }
@@ -67,12 +76,15 @@
 ///
 ///  @param effect Effect variable name
 ///
+///  @param correlation Correlation value
+///
 ///  @param vote Vote: 0 (for implausible) or 1 (for plausible)
 ///
 ///  @returns SWGCommonResponse*
 ///
 -(NSNumber*) v1VotesPostWithCompletionBlock: (NSString*) cause
          effect: (NSString*) effect
+         correlation: (NSNumber*) correlation
          vote: (NSNumber*) vote
         
         completionHandler: (void (^)(SWGCommonResponse* output, NSError* error))completionBlock { 
@@ -87,6 +99,11 @@
     // verify the required parameter 'effect' is set
     if (effect == nil) {
         [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `effect` when calling `v1VotesPost`"];
+    }
+    
+    // verify the required parameter 'correlation' is set
+    if (correlation == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `correlation` when calling `v1VotesPost`"];
     }
     
 
@@ -108,6 +125,10 @@
     if(effect != nil) {
         
         queryParams[@"effect"] = effect;
+    }
+    if(correlation != nil) {
+        
+        queryParams[@"correlation"] = correlation;
     }
     if(vote != nil) {
         

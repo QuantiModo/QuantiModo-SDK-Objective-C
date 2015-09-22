@@ -12,6 +12,8 @@
 
 @implementation SWGVariablesApi
 
+static SWGVariablesApi* singletonAPI = nil;
+
 #pragma mark - Initialize methods
 
 - (id) init {
@@ -39,11 +41,18 @@
 #pragma mark -
 
 +(SWGVariablesApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key {
-    static SWGVariablesApi* singletonAPI = nil;
 
     if (singletonAPI == nil) {
         singletonAPI = [[SWGVariablesApi alloc] init];
         [singletonAPI addHeader:headerValue forKey:key];
+    }
+    return singletonAPI;
+}
+
++(SWGVariablesApi*) sharedAPI {
+
+    if (singletonAPI == nil) {
+        singletonAPI = [[SWGVariablesApi alloc] init];
     }
     return singletonAPI;
 }
@@ -64,140 +73,17 @@
 #pragma mark - Api Methods
 
 ///
-/// Store or Update a Correlation
-/// Store or Update a Correlation
-///  @param cause 
-///
-///  @param effect 
-///
-///  @param correlationcoefficient 
-///
-///  @param vote 
-///
-///  @returns void
-///
--(NSNumber*) correlationsPostWithCompletionBlock: (NSString*) cause
-         effect: (NSString*) effect
-         correlationcoefficient: (NSString*) correlationcoefficient
-         vote: (NSString*) vote
-        
-        
-        completionHandler: (void (^)(NSError* error))completionBlock { 
-
-    
-    // verify the required parameter 'cause' is set
-    if (cause == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `cause` when calling `correlationsPost`"];
-    }
-    
-    // verify the required parameter 'effect' is set
-    if (effect == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `effect` when calling `correlationsPost`"];
-    }
-    
-    // verify the required parameter 'correlationcoefficient' is set
-    if (correlationcoefficient == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `correlationcoefficient` when calling `correlationsPost`"];
-    }
-    
-    // verify the required parameter 'vote' is set
-    if (vote == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `vote` when calling `correlationsPost`"];
-    }
-    
-
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/correlations"];
-
-    // remove format in URL if needed
-    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
-        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
-    }
-
-    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
-    
-
-    NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(cause != nil) {
-        
-        queryParams[@"cause"] = cause;
-    }
-    if(effect != nil) {
-        
-        queryParams[@"effect"] = effect;
-    }
-    if(correlationcoefficient != nil) {
-        
-        queryParams[@"correlationcoefficient"] = correlationcoefficient;
-    }
-    if(vote != nil) {
-        
-        queryParams[@"vote"] = vote;
-    }
-    
-    NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
-
-    
-
-    // HTTP header `Accept`
-    headerParams[@"Accept"] = [SWGApiClient selectHeaderAccept:@[@"application/json"]];
-    if ([headerParams[@"Accept"] length] == 0) {
-        [headerParams removeObjectForKey:@"Accept"];
-    }
-
-    // response content type
-    NSString *responseContentType;
-    if ([headerParams objectForKey:@"Accept"]) {
-        responseContentType = [headerParams[@"Accept"] componentsSeparatedByString:@", "][0];
-    }
-    else {
-        responseContentType = @"";
-    }
-
-    // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
-
-    // Authentication setting
-    NSArray *authSettings = @[@"oauth2"];
-
-    id bodyParam = nil;
-    NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
-    NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
-    
-    
-    
-
-    
-    return [self.apiClient requestWithCompletionBlock: resourcePath
-                                               method: @"POST"
-                                           pathParams: pathParams
-                                          queryParams: queryParams
-                                           formParams: formParams
-                                                files: files
-                                                 body: bodyParam
-                                         headerParams: headerParams
-                                         authSettings: authSettings
-                                   requestContentType: requestContentType
-                                  responseContentType: responseContentType
-                                         responseType: nil
-                                      completionBlock: ^(id data, NSError *error) {
-                  completionBlock(error);
-                  
-              }
-          ];
-}
-
-///
 /// Get public variables
 /// This endpoint retrieves an array of all public variables. Public variables are things like foods, medications, symptoms, conditions, and anything not unique to a particular user. For instance, a telephone number or name would not be a public variable.
 ///  @returns SWGVariable*
 ///
--(NSNumber*) publicVariablesGetWithCompletionBlock: 
+-(NSNumber*) v1PublicVariablesGetWithCompletionBlock: 
         (void (^)(SWGVariable* output, NSError* error))completionBlock { 
         
 
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/public/variables"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/public/variables"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -276,7 +162,7 @@
 ///
 ///  @returns SWGVariable*
 ///
--(NSNumber*) publicVariablesSearchSearchGetWithCompletionBlock: (NSString*) search
+-(NSNumber*) v1PublicVariablesSearchSearchGetWithCompletionBlock: (NSString*) search
          effectOrCause: (NSString*) effectOrCause
          limit: (NSNumber*) limit
          offset: (NSNumber*) offset
@@ -288,11 +174,11 @@
     
     // verify the required parameter 'search' is set
     if (search == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `search` when calling `publicVariablesSearchSearchGet`"];
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `search` when calling `v1PublicVariablesSearchSearchGet`"];
     }
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/public/variables/search/{search}"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/public/variables/search/{search}"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -301,7 +187,11 @@
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (search != nil) {
-        pathParams[@"search"] = search;
+        if([search isKindOfClass:[NSNumber class]]){
+            pathParams[@"search"] = [((NSNumber *)search) stringValue];
+        }else{
+            pathParams[@"search"] = search;
+        }
     }
     
 
@@ -463,13 +353,13 @@
 /// The variable categories include Activity, Causes of Illness, Cognitive Performance, Conditions, Environment, Foods, Location, Miscellaneous, Mood, Nutrition, Physical Activity, Physique, Sleep, Social Interactions, Symptoms, Treatments, Vital Signs, and Work.
 ///  @returns NSArray<SWGVariableCategory>*
 ///
--(NSNumber*) variableCategoriesGetWithCompletionBlock: 
+-(NSNumber*) v1VariableCategoriesGetWithCompletionBlock: 
         (void (^)(NSArray<SWGVariableCategory>* output, NSError* error))completionBlock { 
         
 
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/variableCategories"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/variableCategories"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -548,7 +438,7 @@
 ///
 ///  @returns SWGVariable*
 ///
--(NSNumber*) variablesGetWithCompletionBlock: (NSNumber*) userId
+-(NSNumber*) v1VariablesGetWithCompletionBlock: (NSNumber*) userId
          category: (NSString*) category
          limit: (NSNumber*) limit
          offset: (NSNumber*) offset
@@ -559,7 +449,7 @@
 
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/variables"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/variables"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -650,7 +540,7 @@
 ///
 ///  @returns void
 ///
--(NSNumber*) variablesPostWithCompletionBlock: (SWGVariablesNew*) variableName
+-(NSNumber*) v1VariablesPostWithCompletionBlock: (SWGVariablesNew*) variableName
         
         
         completionHandler: (void (^)(NSError* error))completionBlock { 
@@ -658,11 +548,11 @@
     
     // verify the required parameter 'variableName' is set
     if (variableName == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `variableName` when calling `variablesPost`"];
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `variableName` when calling `v1VariablesPost`"];
     }
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/variables"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/variables"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -741,7 +631,7 @@
 ///
 ///  @returns NSArray<SWGVariable>*
 ///
--(NSNumber*) variablesSearchSearchGetWithCompletionBlock: (NSString*) search
+-(NSNumber*) v1VariablesSearchSearchGetWithCompletionBlock: (NSString*) search
          categoryName: (NSString*) categoryName
          source: (NSString*) source
          limit: (NSNumber*) limit
@@ -753,11 +643,11 @@
     
     // verify the required parameter 'search' is set
     if (search == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `search` when calling `variablesSearchSearchGet`"];
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `search` when calling `v1VariablesSearchSearchGet`"];
     }
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/variables/search/{search}"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/variables/search/{search}"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -766,7 +656,11 @@
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (search != nil) {
-        pathParams[@"search"] = search;
+        if([search isKindOfClass:[NSNumber class]]){
+            pathParams[@"search"] = [((NSNumber *)search) stringValue];
+        }else{
+            pathParams[@"search"] = search;
+        }
     }
     
 
@@ -847,7 +741,7 @@
 ///
 ///  @returns SWGVariable*
 ///
--(NSNumber*) variablesVariableNameGetWithCompletionBlock: (NSString*) variableName
+-(NSNumber*) v1VariablesVariableNameGetWithCompletionBlock: (NSString*) variableName
         
         completionHandler: (void (^)(SWGVariable* output, NSError* error))completionBlock { 
         
@@ -855,11 +749,11 @@
     
     // verify the required parameter 'variableName' is set
     if (variableName == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `variableName` when calling `variablesVariableNameGet`"];
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `variableName` when calling `v1VariablesVariableNameGet`"];
     }
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/variables/{variableName}"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/variables/{variableName}"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -868,7 +762,11 @@
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (variableName != nil) {
-        pathParams[@"variableName"] = variableName;
+        if([variableName isKindOfClass:[NSNumber class]]){
+            pathParams[@"variableName"] = [((NSNumber *)variableName) stringValue];
+        }else{
+            pathParams[@"variableName"] = variableName;
+        }
     }
     
 

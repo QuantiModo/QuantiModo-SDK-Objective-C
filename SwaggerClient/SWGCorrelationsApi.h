@@ -21,6 +21,7 @@
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGCorrelationsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
++(SWGCorrelationsApi*) sharedAPI;
 ///
 ///
 /// Get correlations
@@ -34,7 +35,7 @@
 /// 
 ///
 /// @return NSArray<SWGCorrelation>*
--(NSNumber*) correlationsGetWithCompletionBlock :(NSString*) effect 
+-(NSNumber*) v1CorrelationsGetWithCompletionBlock :(NSString*) effect 
      cause:(NSString*) cause 
      limit:(NSNumber*) limit 
      offset:(NSNumber*) offset 
@@ -46,25 +47,8 @@
 
 ///
 ///
-/// Get average correlations for variables containing search term
-/// Returns the average correlations from all users for all public variables that contain the characters in the search query. Returns average of all users public variable correlations with a specified cause or effect.
-///
-/// @param search Name of the variable that you want to know the causes or effects of.
-/// @param effectOrCause Specifies whether to return the effects or causes of the searched variable.
-/// 
-///
-/// @return NSArray<SWGCorrelation>*
--(NSNumber*) publicCorrelationsSearchSearchGetWithCompletionBlock :(NSString*) search 
-     effectOrCause:(NSString*) effectOrCause 
-    
-    completionHandler: (void (^)(NSArray<SWGCorrelation>* output, NSError* error))completionBlock;
-    
-
-
-///
-///
-/// Add correlation or/and vote for it
-/// Add correlation or/and vote for it
+/// Store or Update a Correlation
+/// Add correlation
 ///
 /// @param body Provides correlation data
 /// 
@@ -78,8 +62,8 @@
 
 ///
 ///
-/// Search user correlations for a given effect
-/// Returns average of all correlations and votes for all user cause variables for a given effect. If parameter \"include_public\" is used, it also returns public correlations. User correlation overwrites or supersedes public correlation.
+/// Search user correlations for a given cause
+/// Returns average of all correlations and votes for all user cause variables for a given cause. If parameter \"include_public\" is used, it also returns public correlations. User correlation overwrites or supersedes public correlation.
 ///
 /// @param organizationId Organization ID
 /// @param userId User id
@@ -119,6 +103,23 @@
      includePublic:(NSString*) includePublic 
     
     completionHandler: (void (^)(NSArray<SWGCommonResponse>* output, NSError* error))completionBlock;
+    
+
+
+///
+///
+/// Get average correlations for variables containing search term
+/// Returns the average correlations from all users for all public variables that contain the characters in the search query. Returns average of all users public variable correlations with a specified cause or effect.
+///
+/// @param search Name of the variable that you want to know the causes or effects of.
+/// @param effectOrCause Specifies whether to return the effects or causes of the searched variable.
+/// 
+///
+/// @return NSArray<SWGCorrelation>*
+-(NSNumber*) v1PublicCorrelationsSearchSearchGetWithCompletionBlock :(NSString*) search 
+     effectOrCause:(NSString*) effectOrCause 
+    
+    completionHandler: (void (^)(NSArray<SWGCorrelation>* output, NSError* error))completionBlock;
     
 
 
@@ -189,12 +190,14 @@
 ///
 /// @param cause Cause variable name
 /// @param effect Effect variable name
+/// @param correlation Correlation value
 /// @param vote Vote: 0 (for implausible) or 1 (for plausible)
 /// 
 ///
 /// @return SWGCommonResponse*
 -(NSNumber*) v1VotesPostWithCompletionBlock :(NSString*) cause 
      effect:(NSString*) effect 
+     correlation:(NSNumber*) correlation 
      vote:(NSNumber*) vote 
     
     completionHandler: (void (^)(SWGCommonResponse* output, NSError* error))completionBlock;

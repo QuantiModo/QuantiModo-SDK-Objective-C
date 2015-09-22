@@ -21,6 +21,7 @@
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGMeasurementsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
++(SWGMeasurementsApi*) sharedAPI;
 ///
 ///
 /// Get measurement sources
@@ -29,7 +30,7 @@
 /// 
 ///
 /// @return SWGMeasurementSource*
--(NSNumber*) measurementSourcesGetWithCompletionBlock :
+-(NSNumber*) v1MeasurementSourcesGetWithCompletionBlock :
     (void (^)(SWGMeasurementSource* output, NSError* error))completionBlock;
     
 
@@ -43,7 +44,7 @@
 /// 
 ///
 /// @return 
--(NSNumber*) measurementSourcesPostWithCompletionBlock :(SWGMeasurementSource*) name 
+-(NSNumber*) v1MeasurementSourcesPostWithCompletionBlock :(SWGMeasurementSource*) name 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -66,7 +67,7 @@
 /// 
 ///
 /// @return SWGMeasurement*
--(NSNumber*) measurementsGetWithCompletionBlock :(NSString*) variableName 
+-(NSNumber*) v1MeasurementsGetWithCompletionBlock :(NSString*) variableName 
      unit:(NSString*) unit 
      startTime:(NSString*) startTime 
      endTime:(NSString*) endTime 
@@ -89,10 +90,41 @@
 /// 
 ///
 /// @return 
--(NSNumber*) measurementsV2PostWithCompletionBlock :(SWGMeasurementSet*) measurements 
+-(NSNumber*) v1MeasurementsPostWithCompletionBlock :(SWGMeasurementSet*) measurements 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
+
+
+///
+///
+/// Get daily measurements for this user
+/// Measurements are any value that can be recorded like daily steps, a mood rating, or apples eaten. <br>Supported filter parameters:<br><ul><li><b>value</b> - Value of measurement</li><li><b>lastUpdated</b> - The time that this measurement was created or last updated in the UTC format \"YYYY-MM-DDThh:mm:ss\"</li></ul><br>
+///
+/// @param variableName Name of the variable you want measurements for
+/// @param abbreviatedUnitName The unit your want the measurements in
+/// @param startTime The lower limit of measurements returned (Iso8601)
+/// @param endTime The upper limit of measurements returned (Iso8601)
+/// @param groupingWidth The time (in seconds) over which measurements are grouped together
+/// @param groupingTimezone The time (in seconds) over which measurements are grouped together
+/// @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
+/// @param offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10.
+/// @param sort Sort by given field. If the field is prefixed with `-, it will sort in descending order.
+/// 
+///
+/// @return SWGMeasurement*
+-(NSNumber*) v1MeasurementsDailyGetWithCompletionBlock :(NSString*) variableName 
+     abbreviatedUnitName:(NSString*) abbreviatedUnitName 
+     startTime:(NSString*) startTime 
+     endTime:(NSString*) endTime 
+     groupingWidth:(NSNumber*) groupingWidth 
+     groupingTimezone:(NSString*) groupingTimezone 
+     limit:(NSNumber*) limit 
+     offset:(NSNumber*) offset 
+     sort:(NSNumber*) sort 
+    
+    completionHandler: (void (^)(SWGMeasurement* output, NSError* error))completionBlock;
+    
 
 
 ///
@@ -105,7 +137,7 @@
 /// 
 ///
 /// @return SWGMeasurementRange*
--(NSNumber*) measurementsRangeGetWithCompletionBlock :(NSString*) sources 
+-(NSNumber*) v1MeasurementsRangeGetWithCompletionBlock :(NSString*) sources 
      user:(NSNumber*) user 
     
     completionHandler: (void (^)(SWGMeasurementRange* output, NSError* error))completionBlock;

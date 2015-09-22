@@ -13,6 +13,8 @@
  */
 
 #import "SWGCommonResponse.h"
+#import "SWGHumanTime.h"
+#import "SWGConnectorInstruction.h"
 #import "SWGConnector.h"
 #import "SWGConnectorInfo.h"
 #import "SWGConnectorInfoHistoryItem.h"
@@ -57,6 +59,9 @@ extern NSString *const SWGResponseObjectErrorKey;
 @property(nonatomic, assign) NSURLRequestCachePolicy cachePolicy;
 @property(nonatomic, assign) NSTimeInterval timeoutInterval;
 @property(nonatomic, readonly) NSOperationQueue* queue;
+
+/// In order to ensure the HTTPResponseHeaders are correct, it is recommended to initialize one SWGApiClient instance per thread.
+@property(nonatomic, readonly) NSDictionary* HTTPResponseHeaders;
 
 /**
  * Clears Cache
@@ -226,5 +231,12 @@ extern NSString *const SWGResponseObjectErrorKey;
  * @param object The query/path/header/form/body param to be sanitized.
  */
 - (id) sanitizeForSerialization:(id) object;
+
+/**
+ * Custom security policy
+ *
+ * @return AFSecurityPolicy
+ */
+- (AFSecurityPolicy *) customSecurityPolicy;
 
 @end

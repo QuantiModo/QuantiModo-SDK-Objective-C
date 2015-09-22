@@ -18,6 +18,7 @@
 -(void) addHeader:(NSString*)value forKey:(NSString*)key;
 -(unsigned long) requestQueueSize;
 +(SWGVotesApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key;
++(SWGVotesApi*) sharedAPI;
 ///
 ///
 /// Post or update vote
@@ -25,12 +26,14 @@
 ///
 /// @param cause Cause variable name
 /// @param effect Effect variable name
+/// @param correlation Correlation value
 /// @param vote Vote: 0 (for implausible) or 1 (for plausible)
 /// 
 ///
 /// @return SWGCommonResponse*
 -(NSNumber*) v1VotesPostWithCompletionBlock :(NSString*) cause 
      effect:(NSString*) effect 
+     correlation:(NSNumber*) correlation 
      vote:(NSNumber*) vote 
     
     completionHandler: (void (^)(SWGCommonResponse* output, NSError* error))completionBlock;

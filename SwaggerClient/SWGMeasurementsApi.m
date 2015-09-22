@@ -12,6 +12,8 @@
 
 @implementation SWGMeasurementsApi
 
+static SWGMeasurementsApi* singletonAPI = nil;
+
 #pragma mark - Initialize methods
 
 - (id) init {
@@ -39,11 +41,18 @@
 #pragma mark -
 
 +(SWGMeasurementsApi*) apiWithHeader:(NSString*)headerValue key:(NSString*)key {
-    static SWGMeasurementsApi* singletonAPI = nil;
 
     if (singletonAPI == nil) {
         singletonAPI = [[SWGMeasurementsApi alloc] init];
         [singletonAPI addHeader:headerValue forKey:key];
+    }
+    return singletonAPI;
+}
+
++(SWGMeasurementsApi*) sharedAPI {
+
+    if (singletonAPI == nil) {
+        singletonAPI = [[SWGMeasurementsApi alloc] init];
     }
     return singletonAPI;
 }
@@ -68,13 +77,13 @@
 /// Returns a list of all the apps from which measurement data is obtained.
 ///  @returns SWGMeasurementSource*
 ///
--(NSNumber*) measurementSourcesGetWithCompletionBlock: 
+-(NSNumber*) v1MeasurementSourcesGetWithCompletionBlock: 
         (void (^)(SWGMeasurementSource* output, NSError* error))completionBlock { 
         
 
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/measurementSources"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/measurementSources"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -145,7 +154,7 @@
 ///
 ///  @returns void
 ///
--(NSNumber*) measurementSourcesPostWithCompletionBlock: (SWGMeasurementSource*) name
+-(NSNumber*) v1MeasurementSourcesPostWithCompletionBlock: (SWGMeasurementSource*) name
         
         
         completionHandler: (void (^)(NSError* error))completionBlock { 
@@ -153,11 +162,11 @@
     
     // verify the required parameter 'name' is set
     if (name == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `name` when calling `measurementSourcesPost`"];
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `name` when calling `v1MeasurementSourcesPost`"];
     }
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/measurementSources"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/measurementSources"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -244,7 +253,7 @@
 ///
 ///  @returns SWGMeasurement*
 ///
--(NSNumber*) measurementsGetWithCompletionBlock: (NSString*) variableName
+-(NSNumber*) v1MeasurementsGetWithCompletionBlock: (NSString*) variableName
          unit: (NSString*) unit
          startTime: (NSString*) startTime
          endTime: (NSString*) endTime
@@ -258,13 +267,8 @@
         
 
     
-    // verify the required parameter 'variableName' is set
-    if (variableName == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `variableName` when calling `measurementsGet`"];
-    }
-    
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/measurements"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/measurements"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -371,7 +375,7 @@
 ///
 ///  @returns void
 ///
--(NSNumber*) measurementsV2PostWithCompletionBlock: (SWGMeasurementSet*) measurements
+-(NSNumber*) v1MeasurementsPostWithCompletionBlock: (SWGMeasurementSet*) measurements
         
         
         completionHandler: (void (^)(NSError* error))completionBlock { 
@@ -379,11 +383,11 @@
     
     // verify the required parameter 'measurements' is set
     if (measurements == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `measurements` when calling `measurementsV2Post`"];
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `measurements` when calling `v1MeasurementsPost`"];
     }
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/measurements/v2"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/measurements"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
@@ -448,6 +452,149 @@
 }
 
 ///
+/// Get daily measurements for this user
+/// Measurements are any value that can be recorded like daily steps, a mood rating, or apples eaten. <br>Supported filter parameters:<br><ul><li><b>value</b> - Value of measurement</li><li><b>lastUpdated</b> - The time that this measurement was created or last updated in the UTC format \"YYYY-MM-DDThh:mm:ss\"</li></ul><br>
+///  @param variableName Name of the variable you want measurements for
+///
+///  @param abbreviatedUnitName The unit your want the measurements in
+///
+///  @param startTime The lower limit of measurements returned (Iso8601)
+///
+///  @param endTime The upper limit of measurements returned (Iso8601)
+///
+///  @param groupingWidth The time (in seconds) over which measurements are grouped together
+///
+///  @param groupingTimezone The time (in seconds) over which measurements are grouped together
+///
+///  @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
+///
+///  @param offset Now suppose you wanted to show results 11-20. You'd set the offset to 10 and the limit to 10.
+///
+///  @param sort Sort by given field. If the field is prefixed with `-, it will sort in descending order.
+///
+///  @returns SWGMeasurement*
+///
+-(NSNumber*) v1MeasurementsDailyGetWithCompletionBlock: (NSString*) variableName
+         abbreviatedUnitName: (NSString*) abbreviatedUnitName
+         startTime: (NSString*) startTime
+         endTime: (NSString*) endTime
+         groupingWidth: (NSNumber*) groupingWidth
+         groupingTimezone: (NSString*) groupingTimezone
+         limit: (NSNumber*) limit
+         offset: (NSNumber*) offset
+         sort: (NSNumber*) sort
+        
+        completionHandler: (void (^)(SWGMeasurement* output, NSError* error))completionBlock { 
+        
+
+    
+    // verify the required parameter 'variableName' is set
+    if (variableName == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `variableName` when calling `v1MeasurementsDailyGet`"];
+    }
+    
+
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/measurements/daily"];
+
+    // remove format in URL if needed
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
+
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
+    
+
+    NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
+    if(variableName != nil) {
+        
+        queryParams[@"variableName"] = variableName;
+    }
+    if(abbreviatedUnitName != nil) {
+        
+        queryParams[@"abbreviatedUnitName"] = abbreviatedUnitName;
+    }
+    if(startTime != nil) {
+        
+        queryParams[@"startTime"] = startTime;
+    }
+    if(endTime != nil) {
+        
+        queryParams[@"endTime"] = endTime;
+    }
+    if(groupingWidth != nil) {
+        
+        queryParams[@"groupingWidth"] = groupingWidth;
+    }
+    if(groupingTimezone != nil) {
+        
+        queryParams[@"groupingTimezone"] = groupingTimezone;
+    }
+    if(limit != nil) {
+        
+        queryParams[@"limit"] = limit;
+    }
+    if(offset != nil) {
+        
+        queryParams[@"offset"] = offset;
+    }
+    if(sort != nil) {
+        
+        queryParams[@"sort"] = sort;
+    }
+    
+    NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
+
+    
+
+    // HTTP header `Accept`
+    headerParams[@"Accept"] = [SWGApiClient selectHeaderAccept:@[@"application/json"]];
+    if ([headerParams[@"Accept"] length] == 0) {
+        [headerParams removeObjectForKey:@"Accept"];
+    }
+
+    // response content type
+    NSString *responseContentType;
+    if ([headerParams objectForKey:@"Accept"]) {
+        responseContentType = [headerParams[@"Accept"] componentsSeparatedByString:@", "][0];
+    }
+    else {
+        responseContentType = @"";
+    }
+
+    // request content type
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+
+    id bodyParam = nil;
+    NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
+    
+    
+    
+
+    
+    return [self.apiClient requestWithCompletionBlock: resourcePath
+                                               method: @"GET"
+                                           pathParams: pathParams
+                                          queryParams: queryParams
+                                           formParams: formParams
+                                                files: files
+                                                 body: bodyParam
+                                         headerParams: headerParams
+                                         authSettings: authSettings
+                                   requestContentType: requestContentType
+                                  responseContentType: responseContentType
+                                         responseType: @"SWGMeasurement*"
+                                      completionBlock: ^(id data, NSError *error) {
+                  
+                  completionBlock((SWGMeasurement*)data, error);
+              }
+          ];
+}
+
+///
 /// Get measurements range for this user
 /// Get Unix time-stamp (epoch time) of the user's first and last measurements taken.
 ///  @param sources Enter source name to limit to specific source (varchar)
@@ -456,7 +603,7 @@
 ///
 ///  @returns SWGMeasurementRange*
 ///
--(NSNumber*) measurementsRangeGetWithCompletionBlock: (NSString*) sources
+-(NSNumber*) v1MeasurementsRangeGetWithCompletionBlock: (NSString*) sources
          user: (NSNumber*) user
         
         completionHandler: (void (^)(SWGMeasurementRange* output, NSError* error))completionBlock { 
@@ -464,7 +611,7 @@
 
     
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/measurementsRange"];
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/measurementsRange"];
 
     // remove format in URL if needed
     if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {

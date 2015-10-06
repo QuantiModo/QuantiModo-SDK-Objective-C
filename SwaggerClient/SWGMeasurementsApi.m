@@ -235,7 +235,13 @@ static SWGMeasurementsApi* singletonAPI = nil;
 /// Measurements are any value that can be recorded like daily steps, a mood rating, or apples eaten. <br>Supported filter parameters:<br><ul><li><b>value</b> - Value of measurement</li><li><b>lastUpdated</b> - The time that this measurement was created or last updated in the UTC format \"YYYY-MM-DDThh:mm:ss\"</li></ul><br>
 ///  @param variableName Name of the variable you want measurements for
 ///
-///  @param unit The unit your want the measurements in
+///  @param source Name of the source you want measurements for (supports exact name match only)
+///
+///  @param value Value of measurement
+///
+///  @param lastUpdated The time that this measurement was created or last updated in the UTC format \"YYYY-MM-DDThh:mm:ss\"
+///
+///  @param unit The unit you want the measurements in
 ///
 ///  @param startTime The lower limit of measurements returned (Epoch)
 ///
@@ -254,6 +260,9 @@ static SWGMeasurementsApi* singletonAPI = nil;
 ///  @returns SWGMeasurement*
 ///
 -(NSNumber*) v1MeasurementsGetWithCompletionBlock: (NSString*) variableName
+         source: (NSString*) source
+         value: (NSString*) value
+         lastUpdated: (NSString*) lastUpdated
          unit: (NSString*) unit
          startTime: (NSString*) startTime
          endTime: (NSString*) endTime
@@ -282,6 +291,18 @@ static SWGMeasurementsApi* singletonAPI = nil;
     if(variableName != nil) {
         
         queryParams[@"variableName"] = variableName;
+    }
+    if(source != nil) {
+        
+        queryParams[@"source"] = source;
+    }
+    if(value != nil) {
+        
+        queryParams[@"value"] = value;
+    }
+    if(lastUpdated != nil) {
+        
+        queryParams[@"lastUpdated"] = lastUpdated;
     }
     if(unit != nil) {
         
@@ -370,7 +391,7 @@ static SWGMeasurementsApi* singletonAPI = nil;
 
 ///
 /// Post a new set or update existing measurements to the database
-/// You can submit or update multiple measurements in a \"measurements\" sub-array.  If the variable these measurements correspond to does not already exist in the database, it will be automatically added.  The request body should look something like [{\"measurements\":[{\"timestamp\":1406419860,\"value\":\"1\",\"note\":\"I am a note about back pain.\"},{\"timestamp\":1406519865,\"value\":\"3\",\"note\":\"I am another note about back pain.\"}],\"name\":\"Back Pain\",\"source\":\"QuantiModo\",\"category\":\"Symptoms\",\"combinationOperation\":\"MEAN\",\"unit\":\"/5\"}]
+/// You can submit or update multiple measurements in a \"measurements\" sub-array.  If the variable these measurements correspond to does not already exist in the database, it will be automatically added.  The request body should look something like [{\"measurements\":[{\"startTime\":1439389320,\"value\":\"3\"}],\"name\":\"Acne (out of 5)\",\"source\":\"QuantiModo\",\"category\":\"Symptoms\",\"combinationOperation\":\"MEAN\",\"unit\":\"/5\"}]
 ///  @param measurements An array of measurements you want to insert.
 ///
 ///  @returns void

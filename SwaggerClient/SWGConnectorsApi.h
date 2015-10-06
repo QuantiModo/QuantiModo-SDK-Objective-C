@@ -24,13 +24,15 @@
 ///
 ///
 /// Get embeddable connect javascript
-/// Get embeddable connect javascript. Usage:\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Use `qmSetupInPopup` function after connecting `connect.js`.\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Requires a selector to block. It will be embedded in this block.\n\n    Use `qmSetupOnPage` function after connecting `connect.js`.\n\n  - Embedding in mobile applications without popups for 3rd-party\nauthentication.\n\n    Use `qmSetupOnMobile` function after connecting `connect.js`.
+/// Get embeddable connect javascript. Usage:\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Use `qmSetupInPopup` function after connecting `connect.js`.\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Requires a selector to block. It will be embedded in this block.\n\n    Use `qmSetupOnPage` function after connecting `connect.js`.\n\n  - Embedding in mobile applications without popups for 3rd-party\nauthentication.\n\n    Use `qmSetupOnMobile` function after connecting `connect.js`.\n\n    if using the MoodiModo Clones, Use `qmSetupOnIonic` function after connecting `connect.js`.
 ///
-/// @param t User token
+/// @param accessToken User&#39;s access token
+/// @param mashapeKey Mashape API key
 /// 
 ///
 /// @return 
--(NSNumber*) v1ConnectJsGetWithCompletionBlock :(NSString*) t 
+-(NSNumber*) v1ConnectJsGetWithCompletionBlock :(NSString*) accessToken 
+     mashapeKey:(NSString*) mashapeKey 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;

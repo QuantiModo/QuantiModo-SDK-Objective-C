@@ -29,6 +29,10 @@
 ///
 /// @param effect ORIGINAL variable name of the effect variable for which the user desires correlations
 /// @param cause ORIGINAL variable name of the cause variable for which the user desires correlations
+/// @param correlationCoefficient Pearson correlation coefficient between cause and effect after lagging by onset delay and grouping by duration of action
+/// @param onsetDelay The number of seconds which pass following a cause measurement before an effect would likely be observed.
+/// @param durationOfAction The time in seconds over which the cause would be expected to exert a measurable effect. We have selected a default value for each variable. This default value may be replaced by a user specified by adjusting their variable user settings.
+/// @param lastUpdated The time that this measurement was last updated in the UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot;
 /// @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
 /// @param offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10.
 /// @param sort Sort by given field. If the field is prefixed with `-, it will sort in descending order.
@@ -37,6 +41,10 @@
 /// @return NSArray<SWGCorrelation>*
 -(NSNumber*) v1CorrelationsGetWithCompletionBlock :(NSString*) effect 
      cause:(NSString*) cause 
+     correlationCoefficient:(NSString*) correlationCoefficient 
+     onsetDelay:(NSString*) onsetDelay 
+     durationOfAction:(NSString*) durationOfAction 
+     lastUpdated:(NSString*) lastUpdated 
      limit:(NSNumber*) limit 
      offset:(NSNumber*) offset 
      sort:(NSNumber*) sort 

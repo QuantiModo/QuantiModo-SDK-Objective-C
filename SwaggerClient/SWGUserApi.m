@@ -108,11 +108,7 @@ static SWGUserApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (organizationId != nil) {
-        if([organizationId isKindOfClass:[NSNumber class]]){
-            pathParams[@"organizationId"] = [((NSNumber *)organizationId) stringValue];
-        }else{
-            pathParams[@"organizationId"] = organizationId;
-        }
+        pathParams[@"organizationId"] = organizationId;
     }
     
 

@@ -41,7 +41,6 @@
 /// Get top 5 PUBLIC variables with the most correlations containing the entered search characters. For example, search for 'mood' as an effect. Since 'Overall Mood' has a lot of correlations with other variables, it should be in the autocomplete list.<br>Supported filter parameters:<br><ul><li><b>category</b> - Category of Variable</li></ul><br>
 ///
 /// @param search Search query can be some fraction of a variable name.
-/// @param effectOrCause Allows us to specify which column in the `correlations` table will be searched. Choices are effect or cause.
 /// @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
 /// @param offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10.
 /// @param sort Sort by given field. If the field is prefixed with `-, it will sort in descending order.
@@ -49,7 +48,6 @@
 ///
 /// @return SWGVariable*
 -(NSNumber*) v1PublicVariablesSearchSearchGetWithCompletionBlock :(NSString*) search 
-     effectOrCause:(NSString*) effectOrCause 
      limit:(NSNumber*) limit 
      offset:(NSNumber*) offset 
      sort:(NSNumber*) sort 
@@ -93,6 +91,12 @@
 ///
 /// @param userId User id
 /// @param category Filter data by category
+/// @param name Original name of the variable (supports exact name match only)
+/// @param lastUpdated Filter by the last time any of the properties of the variable were changed. Uses UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot;
+/// @param source The name of the data source that created the variable (supports exact name match only). So if you have a client application and you only want variables that were last updated by your app, you can include the name of your app here
+/// @param latestMeasurementTime Filter variables based on the last time a measurement for them was created or updated in the UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot;
+/// @param numberOfMeasurements Filter variables by the total number of measurements that they have. This could be used of you want to filter or sort by popularity.
+/// @param lastSource Limit variables to those which measurements were last submitted by a specific source. So if you have a client application and you only want variables that were last updated by your app, you can include the name of your app here. (supports exact name match only)
 /// @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
 /// @param offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10.
 /// @param sort Sort by given field. If the field is prefixed with `-, it will sort in descending order.
@@ -101,6 +105,12 @@
 /// @return SWGVariable*
 -(NSNumber*) v1VariablesGetWithCompletionBlock :(NSNumber*) userId 
      category:(NSString*) category 
+     name:(NSString*) name 
+     lastUpdated:(NSString*) lastUpdated 
+     source:(NSString*) source 
+     latestMeasurementTime:(NSString*) latestMeasurementTime 
+     numberOfMeasurements:(NSString*) numberOfMeasurements 
+     lastSource:(NSString*) lastSource 
      limit:(NSNumber*) limit 
      offset:(NSNumber*) offset 
      sort:(NSNumber*) sort 

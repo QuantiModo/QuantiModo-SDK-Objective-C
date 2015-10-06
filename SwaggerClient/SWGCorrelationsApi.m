@@ -79,6 +79,14 @@ static SWGCorrelationsApi* singletonAPI = nil;
 ///
 ///  @param cause ORIGINAL variable name of the cause variable for which the user desires correlations
 ///
+///  @param correlationCoefficient Pearson correlation coefficient between cause and effect after lagging by onset delay and grouping by duration of action
+///
+///  @param onsetDelay The number of seconds which pass following a cause measurement before an effect would likely be observed.
+///
+///  @param durationOfAction The time in seconds over which the cause would be expected to exert a measurable effect. We have selected a default value for each variable. This default value may be replaced by a user specified by adjusting their variable user settings.
+///
+///  @param lastUpdated The time that this measurement was last updated in the UTC format \"YYYY-MM-DDThh:mm:ss\"
+///
 ///  @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
 ///
 ///  @param offset Now suppose you wanted to show results 11-20. You'd set the offset to 10 and the limit to 10.
@@ -89,6 +97,10 @@ static SWGCorrelationsApi* singletonAPI = nil;
 ///
 -(NSNumber*) v1CorrelationsGetWithCompletionBlock: (NSString*) effect
          cause: (NSString*) cause
+         correlationCoefficient: (NSString*) correlationCoefficient
+         onsetDelay: (NSString*) onsetDelay
+         durationOfAction: (NSString*) durationOfAction
+         lastUpdated: (NSString*) lastUpdated
          limit: (NSNumber*) limit
          offset: (NSNumber*) offset
          sort: (NSNumber*) sort
@@ -116,6 +128,22 @@ static SWGCorrelationsApi* singletonAPI = nil;
     if(cause != nil) {
         
         queryParams[@"cause"] = cause;
+    }
+    if(correlationCoefficient != nil) {
+        
+        queryParams[@"correlationCoefficient"] = correlationCoefficient;
+    }
+    if(onsetDelay != nil) {
+        
+        queryParams[@"onsetDelay"] = onsetDelay;
+    }
+    if(durationOfAction != nil) {
+        
+        queryParams[@"durationOfAction"] = durationOfAction;
+    }
+    if(lastUpdated != nil) {
+        
+        queryParams[@"lastUpdated"] = lastUpdated;
     }
     if(limit != nil) {
         
@@ -320,25 +348,13 @@ static SWGCorrelationsApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (organizationId != nil) {
-        if([organizationId isKindOfClass:[NSNumber class]]){
-            pathParams[@"organizationId"] = [((NSNumber *)organizationId) stringValue];
-        }else{
-            pathParams[@"organizationId"] = organizationId;
-        }
+        pathParams[@"organizationId"] = organizationId;
     }
     if (userId != nil) {
-        if([userId isKindOfClass:[NSNumber class]]){
-            pathParams[@"userId"] = [((NSNumber *)userId) stringValue];
-        }else{
-            pathParams[@"userId"] = userId;
-        }
+        pathParams[@"userId"] = userId;
     }
     if (variableName != nil) {
-        if([variableName isKindOfClass:[NSNumber class]]){
-            pathParams[@"variableName"] = [((NSNumber *)variableName) stringValue];
-        }else{
-            pathParams[@"variableName"] = variableName;
-        }
+        pathParams[@"variableName"] = variableName;
     }
     
 
@@ -459,25 +475,13 @@ static SWGCorrelationsApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (organizationId != nil) {
-        if([organizationId isKindOfClass:[NSNumber class]]){
-            pathParams[@"organizationId"] = [((NSNumber *)organizationId) stringValue];
-        }else{
-            pathParams[@"organizationId"] = organizationId;
-        }
+        pathParams[@"organizationId"] = organizationId;
     }
     if (userId != nil) {
-        if([userId isKindOfClass:[NSNumber class]]){
-            pathParams[@"userId"] = [((NSNumber *)userId) stringValue];
-        }else{
-            pathParams[@"userId"] = userId;
-        }
+        pathParams[@"userId"] = userId;
     }
     if (variableName != nil) {
-        if([variableName isKindOfClass:[NSNumber class]]){
-            pathParams[@"variableName"] = [((NSNumber *)variableName) stringValue];
-        }else{
-            pathParams[@"variableName"] = variableName;
-        }
+        pathParams[@"variableName"] = variableName;
     }
     
 
@@ -579,11 +583,7 @@ static SWGCorrelationsApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (search != nil) {
-        if([search isKindOfClass:[NSNumber class]]){
-            pathParams[@"search"] = [((NSNumber *)search) stringValue];
-        }else{
-            pathParams[@"search"] = search;
-        }
+        pathParams[@"search"] = search;
     }
     
 
@@ -673,11 +673,7 @@ static SWGCorrelationsApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (variableName != nil) {
-        if([variableName isKindOfClass:[NSNumber class]]){
-            pathParams[@"variableName"] = [((NSNumber *)variableName) stringValue];
-        }else{
-            pathParams[@"variableName"] = variableName;
-        }
+        pathParams[@"variableName"] = variableName;
     }
     
 
@@ -763,11 +759,7 @@ static SWGCorrelationsApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (variableName != nil) {
-        if([variableName isKindOfClass:[NSNumber class]]){
-            pathParams[@"variableName"] = [((NSNumber *)variableName) stringValue];
-        }else{
-            pathParams[@"variableName"] = variableName;
-        }
+        pathParams[@"variableName"] = variableName;
     }
     
 
@@ -853,11 +845,7 @@ static SWGCorrelationsApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (variableName != nil) {
-        if([variableName isKindOfClass:[NSNumber class]]){
-            pathParams[@"variableName"] = [((NSNumber *)variableName) stringValue];
-        }else{
-            pathParams[@"variableName"] = variableName;
-        }
+        pathParams[@"variableName"] = variableName;
     }
     
 
@@ -943,11 +931,7 @@ static SWGCorrelationsApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (variableName != nil) {
-        if([variableName isKindOfClass:[NSNumber class]]){
-            pathParams[@"variableName"] = [((NSNumber *)variableName) stringValue];
-        }else{
-            pathParams[@"variableName"] = variableName;
-        }
+        pathParams[@"variableName"] = variableName;
     }
     
 

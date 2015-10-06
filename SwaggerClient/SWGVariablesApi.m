@@ -152,8 +152,6 @@ static SWGVariablesApi* singletonAPI = nil;
 /// Get top 5 PUBLIC variables with the most correlations containing the entered search characters. For example, search for 'mood' as an effect. Since 'Overall Mood' has a lot of correlations with other variables, it should be in the autocomplete list.<br>Supported filter parameters:<br><ul><li><b>category</b> - Category of Variable</li></ul><br>
 ///  @param search Search query can be some fraction of a variable name.
 ///
-///  @param effectOrCause Allows us to specify which column in the `correlations` table will be searched. Choices are effect or cause.
-///
 ///  @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
 ///
 ///  @param offset Now suppose you wanted to show results 11-20. You'd set the offset to 10 and the limit to 10.
@@ -163,7 +161,6 @@ static SWGVariablesApi* singletonAPI = nil;
 ///  @returns SWGVariable*
 ///
 -(NSNumber*) v1PublicVariablesSearchSearchGetWithCompletionBlock: (NSString*) search
-         effectOrCause: (NSString*) effectOrCause
          limit: (NSNumber*) limit
          offset: (NSNumber*) offset
          sort: (NSNumber*) sort
@@ -187,19 +184,11 @@ static SWGVariablesApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (search != nil) {
-        if([search isKindOfClass:[NSNumber class]]){
-            pathParams[@"search"] = [((NSNumber *)search) stringValue];
-        }else{
-            pathParams[@"search"] = search;
-        }
+        pathParams[@"search"] = search;
     }
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(effectOrCause != nil) {
-        
-        queryParams[@"effectOrCause"] = effectOrCause;
-    }
     if(limit != nil) {
         
         queryParams[@"limit"] = limit;
@@ -430,6 +419,18 @@ static SWGVariablesApi* singletonAPI = nil;
 ///
 ///  @param category Filter data by category
 ///
+///  @param name Original name of the variable (supports exact name match only)
+///
+///  @param lastUpdated Filter by the last time any of the properties of the variable were changed. Uses UTC format \"YYYY-MM-DDThh:mm:ss\"
+///
+///  @param source The name of the data source that created the variable (supports exact name match only). So if you have a client application and you only want variables that were last updated by your app, you can include the name of your app here
+///
+///  @param latestMeasurementTime Filter variables based on the last time a measurement for them was created or updated in the UTC format \"YYYY-MM-DDThh:mm:ss\"
+///
+///  @param numberOfMeasurements Filter variables by the total number of measurements that they have. This could be used of you want to filter or sort by popularity.
+///
+///  @param lastSource Limit variables to those which measurements were last submitted by a specific source. So if you have a client application and you only want variables that were last updated by your app, you can include the name of your app here. (supports exact name match only)
+///
 ///  @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
 ///
 ///  @param offset Now suppose you wanted to show results 11-20. You'd set the offset to 10 and the limit to 10.
@@ -440,6 +441,12 @@ static SWGVariablesApi* singletonAPI = nil;
 ///
 -(NSNumber*) v1VariablesGetWithCompletionBlock: (NSNumber*) userId
          category: (NSString*) category
+         name: (NSString*) name
+         lastUpdated: (NSString*) lastUpdated
+         source: (NSString*) source
+         latestMeasurementTime: (NSString*) latestMeasurementTime
+         numberOfMeasurements: (NSString*) numberOfMeasurements
+         lastSource: (NSString*) lastSource
          limit: (NSNumber*) limit
          offset: (NSNumber*) offset
          sort: (NSNumber*) sort
@@ -467,6 +474,30 @@ static SWGVariablesApi* singletonAPI = nil;
     if(category != nil) {
         
         queryParams[@"category"] = category;
+    }
+    if(name != nil) {
+        
+        queryParams[@"name"] = name;
+    }
+    if(lastUpdated != nil) {
+        
+        queryParams[@"lastUpdated"] = lastUpdated;
+    }
+    if(source != nil) {
+        
+        queryParams[@"source"] = source;
+    }
+    if(latestMeasurementTime != nil) {
+        
+        queryParams[@"latestMeasurementTime"] = latestMeasurementTime;
+    }
+    if(numberOfMeasurements != nil) {
+        
+        queryParams[@"numberOfMeasurements"] = numberOfMeasurements;
+    }
+    if(lastSource != nil) {
+        
+        queryParams[@"lastSource"] = lastSource;
     }
     if(limit != nil) {
         
@@ -656,11 +687,7 @@ static SWGVariablesApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (search != nil) {
-        if([search isKindOfClass:[NSNumber class]]){
-            pathParams[@"search"] = [((NSNumber *)search) stringValue];
-        }else{
-            pathParams[@"search"] = search;
-        }
+        pathParams[@"search"] = search;
     }
     
 
@@ -762,11 +789,7 @@ static SWGVariablesApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (variableName != nil) {
-        if([variableName isKindOfClass:[NSNumber class]]){
-            pathParams[@"variableName"] = [((NSNumber *)variableName) stringValue];
-        }else{
-            pathParams[@"variableName"] = variableName;
-        }
+        pathParams[@"variableName"] = variableName;
     }
     
 

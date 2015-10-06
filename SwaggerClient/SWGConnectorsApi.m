@@ -73,16 +73,24 @@ static SWGConnectorsApi* singletonAPI = nil;
 
 ///
 /// Get embeddable connect javascript
-/// Get embeddable connect javascript. Usage:\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Use `qmSetupInPopup` function after connecting `connect.js`.\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Requires a selector to block. It will be embedded in this block.\n\n    Use `qmSetupOnPage` function after connecting `connect.js`.\n\n  - Embedding in mobile applications without popups for 3rd-party\nauthentication.\n\n    Use `qmSetupOnMobile` function after connecting `connect.js`.
-///  @param t User token
+/// Get embeddable connect javascript. Usage:\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Use `qmSetupInPopup` function after connecting `connect.js`.\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Requires a selector to block. It will be embedded in this block.\n\n    Use `qmSetupOnPage` function after connecting `connect.js`.\n\n  - Embedding in mobile applications without popups for 3rd-party\nauthentication.\n\n    Use `qmSetupOnMobile` function after connecting `connect.js`.\n\n    if using the MoodiModo Clones, Use `qmSetupOnIonic` function after connecting `connect.js`.
+///  @param accessToken User's access token
+///
+///  @param mashapeKey Mashape API key
 ///
 ///  @returns void
 ///
--(NSNumber*) v1ConnectJsGetWithCompletionBlock: (NSString*) t
+-(NSNumber*) v1ConnectJsGetWithCompletionBlock: (NSString*) accessToken
+         mashapeKey: (NSString*) mashapeKey
         
         
         completionHandler: (void (^)(NSError* error))completionBlock { 
 
+    
+    // verify the required parameter 'accessToken' is set
+    if (accessToken == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `accessToken` when calling `v1ConnectJsGet`"];
+    }
     
 
     NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/connect.js"];
@@ -96,9 +104,13 @@ static SWGConnectorsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(t != nil) {
+    if(accessToken != nil) {
         
-        queryParams[@"t"] = t;
+        queryParams[@"access token"] = accessToken;
+    }
+    if(mashapeKey != nil) {
+        
+        queryParams[@"mashape key"] = mashapeKey;
     }
     
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
@@ -343,11 +355,7 @@ static SWGConnectorsApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (connector != nil) {
-        if([connector isKindOfClass:[NSNumber class]]){
-            pathParams[@"connector"] = [((NSNumber *)connector) stringValue];
-        }else{
-            pathParams[@"connector"] = connector;
-        }
+        pathParams[@"connector"] = connector;
     }
     
 
@@ -457,11 +465,7 @@ static SWGConnectorsApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (connector != nil) {
-        if([connector isKindOfClass:[NSNumber class]]){
-            pathParams[@"connector"] = [((NSNumber *)connector) stringValue];
-        }else{
-            pathParams[@"connector"] = connector;
-        }
+        pathParams[@"connector"] = connector;
     }
     
 
@@ -602,11 +606,7 @@ static SWGConnectorsApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (connector != nil) {
-        if([connector isKindOfClass:[NSNumber class]]){
-            pathParams[@"connector"] = [((NSNumber *)connector) stringValue];
-        }else{
-            pathParams[@"connector"] = connector;
-        }
+        pathParams[@"connector"] = connector;
     }
     
 
@@ -716,11 +716,7 @@ static SWGConnectorsApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (connector != nil) {
-        if([connector isKindOfClass:[NSNumber class]]){
-            pathParams[@"connector"] = [((NSNumber *)connector) stringValue];
-        }else{
-            pathParams[@"connector"] = connector;
-        }
+        pathParams[@"connector"] = connector;
     }
     
 
@@ -806,11 +802,7 @@ static SWGConnectorsApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (connector != nil) {
-        if([connector isKindOfClass:[NSNumber class]]){
-            pathParams[@"connector"] = [((NSNumber *)connector) stringValue];
-        }else{
-            pathParams[@"connector"] = connector;
-        }
+        pathParams[@"connector"] = connector;
     }
     
 
@@ -896,11 +888,7 @@ static SWGConnectorsApi* singletonAPI = nil;
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
     if (connector != nil) {
-        if([connector isKindOfClass:[NSNumber class]]){
-            pathParams[@"connector"] = [((NSNumber *)connector) stringValue];
-        }else{
-            pathParams[@"connector"] = connector;
-        }
+        pathParams[@"connector"] = connector;
     }
     
 

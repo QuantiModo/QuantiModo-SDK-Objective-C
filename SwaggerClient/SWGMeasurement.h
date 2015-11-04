@@ -7,7 +7,6 @@
  * Do not edit the class manually.
  */
 
-#import "SWGHumanTime.h"
 
 
 @protocol SWGMeasurement
@@ -15,44 +14,62 @@
 
 @interface SWGMeasurement : SWGObject
 
-/* ORIGINAL Name of the variable for which we are creating the measurement records 
+/* id [optional]
  */
-@property(nonatomic) NSString* variable;
+@property(nonatomic) NSNumber* _id;
+/* ID of user that owns this measurement [optional]
+ */
+@property(nonatomic) NSNumber* userId;
+/* client_id [optional]
+ */
+@property(nonatomic) NSString* clientId;
+/* Connector ID [optional]
+ */
+@property(nonatomic) NSNumber* connectorId;
+/* ID of the variable for which we are creating the measurement records 
+ */
+@property(nonatomic) NSNumber* variableId;
 /* Application or device used to record the measurement values 
  */
-@property(nonatomic) NSString* source;
-/* Timestamp for the measurement event in epoch time 
+@property(nonatomic) NSNumber* sourceId;
+/* Start Time for the measurement event in ISO 8601 
  */
-@property(nonatomic) NSNumber* timestamp;
-/* Start Time for the measurement event in ISO 8601 [optional]
- */
-@property(nonatomic) NSString* startTime;
-/* Start Time for the measurement event in ISO 8601 [optional]
- */
-@property(nonatomic) SWGHumanTime* humanTime;
+@property(nonatomic) NSNumber* startTime;
 /* Converted measurement value in requested unit 
  */
 @property(nonatomic) NSNumber* value;
-/* Unit of measurement as requested in GET request 
+/* Unit ID of measurement as requested in GET request 
  */
-@property(nonatomic) NSString* unit;
+@property(nonatomic) NSNumber* unitId;
 /* Original value [optional]
  */
 @property(nonatomic) NSNumber* originalValue;
-/* Measurement value in the unit as orignally submitted [optional]
+/* Unit ID of measurement as originally submitted [optional]
  */
-@property(nonatomic) NSNumber* storedValue;
-/* Unit of measurement as originally submitted [optional]
+@property(nonatomic) NSNumber* originalUnitId;
+/* duration of measurement in seconds [optional]
  */
-@property(nonatomic) NSString* storedAbbreviatedUnitName;
-/* Original Unit of measurement as originally submitted [optional]
- */
-@property(nonatomic) NSString* originalAbbreviatedUnitName;
-/* Unit of measurement as originally submitted [optional]
- */
-@property(nonatomic) NSString* abbreviatedUnitName;
+@property(nonatomic) NSNumber* duration;
 /* Note of measurement [optional]
  */
 @property(nonatomic) NSString* note;
+/* latitude [optional]
+ */
+@property(nonatomic) NSNumber* latitude;
+/* longitude [optional]
+ */
+@property(nonatomic) NSNumber* longitude;
+/* location [optional]
+ */
+@property(nonatomic) NSString* location;
+/* created_at [optional]
+ */
+@property(nonatomic) NSDate* createdAt;
+/* updated_at [optional]
+ */
+@property(nonatomic) NSDate* updatedAt;
+/* error [optional]
+ */
+@property(nonatomic) NSString* error;
 
 @end

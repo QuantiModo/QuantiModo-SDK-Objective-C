@@ -8,7 +8,7 @@
  */
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"name": @"name", @"abbreviatedName": @"abbreviatedName", @"category": @"category", @"minimum": @"minimum", @"maximum": @"maximum", @"conversionSteps": @"conversionSteps" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"id": @"_id", @"client_id": @"clientId", @"name": @"name", @"abbreviated_name": @"abbreviatedName", @"category_id": @"categoryId", @"minimum_value": @"minimumValue", @"maximum_value": @"maximumValue", @"updated": @"updated", @"default_unit_id": @"defaultUnitId", @"multiply": @"multiply", @"add": @"add", @"created_at": @"createdAt", @"updated_at": @"updatedAt" }];
 }
 
 /**
@@ -18,7 +18,7 @@
  */
 + (BOOL)propertyIsOptional:(NSString *)propertyName
 {
-  NSArray *optionalProperties = @[];
+  NSArray *optionalProperties = @[@"_id", @"clientId", @"minimumValue", @"maximumValue", @"updated", @"defaultUnitId", @"multiply", @"add", @"createdAt", @"updatedAt"];
 
   if ([optionalProperties containsObject:propertyName]) {
     return YES;

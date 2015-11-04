@@ -8,7 +8,7 @@
  */
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"variable": @"variable", @"source": @"source", @"timestamp": @"timestamp", @"startTime": @"startTime", @"humanTime": @"humanTime", @"value": @"value", @"unit": @"unit", @"originalValue": @"originalValue", @"storedValue": @"storedValue", @"storedAbbreviatedUnitName": @"storedAbbreviatedUnitName", @"originalAbbreviatedUnitName": @"originalAbbreviatedUnitName", @"abbreviatedUnitName": @"abbreviatedUnitName", @"note": @"note" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"id": @"_id", @"user_id": @"userId", @"client_id": @"clientId", @"connector_id": @"connectorId", @"variable_id": @"variableId", @"source_id": @"sourceId", @"start_time": @"startTime", @"value": @"value", @"unit_id": @"unitId", @"original_value": @"originalValue", @"original_unit_id": @"originalUnitId", @"duration": @"duration", @"note": @"note", @"latitude": @"latitude", @"longitude": @"longitude", @"location": @"location", @"created_at": @"createdAt", @"updated_at": @"updatedAt", @"error": @"error" }];
 }
 
 /**
@@ -18,7 +18,7 @@
  */
 + (BOOL)propertyIsOptional:(NSString *)propertyName
 {
-  NSArray *optionalProperties = @[@"startTime", @"humanTime", @"originalValue", @"storedValue", @"storedAbbreviatedUnitName", @"originalAbbreviatedUnitName", @"abbreviatedUnitName", @"note"];
+  NSArray *optionalProperties = @[@"_id", @"userId", @"clientId", @"connectorId", @"originalValue", @"originalUnitId", @"duration", @"note", @"latitude", @"longitude", @"location", @"createdAt", @"updatedAt", @"error"];
 
   if ([optionalProperties containsObject:propertyName]) {
     return YES;

@@ -14,8 +14,17 @@
 
 @interface SWGUnitCategory : SWGObject
 
-/* Category name 
+/* id [optional]
+ */
+@property(nonatomic) NSNumber* _id;
+/* Unit category name 
  */
 @property(nonatomic) NSString* name;
+/* created_at [optional]
+ */
+@property(nonatomic) NSDate* createdAt;
+/* updated_at [optional]
+ */
+@property(nonatomic) NSDate* updatedAt;
 
 @end

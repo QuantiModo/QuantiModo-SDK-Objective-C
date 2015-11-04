@@ -8,7 +8,7 @@
  */
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"correlationCoefficient": @"correlationCoefficient", @"cause": @"cause", @"originalCause": @"originalCause", @"effect": @"effect", @"originalEffect": @"originalEffect", @"onsetDelay": @"onsetDelay", @"durationOfAction": @"durationOfAction", @"numberOfPairs": @"numberOfPairs", @"effectSize": @"effectSize", @"statisticalSignificance": @"statisticalSignificance", @"timestamp": @"timestamp", @"reverseCorrelation": @"reverseCorrelation", @"causalityFactor": @"causalityFactor", @"causeCategory": @"causeCategory", @"effectCategory": @"effectCategory", @"valuePredictingHighOutcome": @"valuePredictingHighOutcome", @"valuePredictingLowOutcome": @"valuePredictingLowOutcome", @"optimalPearsonProduct": @"optimalPearsonProduct", @"averageVote": @"averageVote", @"userVote": @"userVote", @"causeUnit": @"causeUnit", @"causeUnitId": @"causeUnitId" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"id": @"_id", @"timestamp": @"timestamp", @"user_id": @"userId", @"correlation": @"correlation", @"cause_id": @"causeId", @"effect_id": @"effectId", @"onset_delay": @"onsetDelay", @"duration_of_action": @"durationOfAction", @"number_of_pairs": @"numberOfPairs", @"value_predicting_high_outcome": @"valuePredictingHighOutcome", @"value_predicting_low_outcome": @"valuePredictingLowOutcome", @"optimal_pearson_product": @"optimalPearsonProduct", @"vote": @"vote", @"statistical_significance": @"statisticalSignificance", @"cause_unit": @"causeUnit", @"cause_unit_id": @"causeUnitId", @"cause_changes": @"causeChanges", @"effect_changes": @"effectChanges", @"qm_score": @"qmScore", @"error": @"error", @"created_at": @"createdAt", @"updated_at": @"updatedAt", @"reverse_pearson_correlation_coefficient": @"reversePearsonCorrelationCoefficient", @"predictive_pearson_correlation_coefficient": @"predictivePearsonCorrelationCoefficient" }];
 }
 
 /**
@@ -18,7 +18,7 @@
  */
 + (BOOL)propertyIsOptional:(NSString *)propertyName
 {
-  NSArray *optionalProperties = @[@"originalCause", @"originalEffect", @"effectSize", @"statisticalSignificance", @"reverseCorrelation", @"causalityFactor", @"causeCategory", @"effectCategory", @"valuePredictingHighOutcome", @"valuePredictingLowOutcome", @"optimalPearsonProduct", @"averageVote", @"userVote", @"causeUnit", @"causeUnitId"];
+  NSArray *optionalProperties = @[@"_id", @"createdAt", @"updatedAt", ];
 
   if ([optionalProperties containsObject:propertyName]) {
     return YES;

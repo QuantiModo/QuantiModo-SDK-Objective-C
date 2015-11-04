@@ -14,21 +14,24 @@
 
 @interface SWGCorrelation : SWGObject
 
+/* id [optional]
+ */
+@property(nonatomic) NSNumber* _id;
+/* Time at which correlation was calculated 
+ */
+@property(nonatomic) NSNumber* timestamp;
+/* ID of user that owns this correlation 
+ */
+@property(nonatomic) NSNumber* userId;
 /* Pearson correlation coefficient between cause and effect measurements 
  */
-@property(nonatomic) NSNumber* correlationCoefficient;
-/* ORIGINAL variable name of the cause variable for which the user desires correlations. 
+@property(nonatomic) NSNumber* correlation;
+/* variable ID of the cause variable for which the user desires correlations 
  */
-@property(nonatomic) NSString* cause;
-/* original name of the cause. [optional]
+@property(nonatomic) NSNumber* causeId;
+/* variable ID of the effect variable for which the user desires correlations 
  */
-@property(nonatomic) NSString* originalCause;
-/* ORIGINAL variable name of the effect variable for which the user desires correlations. 
- */
-@property(nonatomic) NSString* effect;
-/* effect variable original name. [optional]
- */
-@property(nonatomic) NSString* originalEffect;
+@property(nonatomic) NSNumber* effectId;
 /* User estimated or default time after cause measurement before a perceivable effect is observed 
  */
 @property(nonatomic) NSNumber* onsetDelay;
@@ -38,47 +41,50 @@
 /* Number of points that went into the correlation calculation 
  */
 @property(nonatomic) NSNumber* numberOfPairs;
-/* Magnitude of the effects of a cause indicating whether it's practically meaningful. [optional]
- */
-@property(nonatomic) NSString* effectSize;
-/* A function of the effect size and sample size [optional]
- */
-@property(nonatomic) NSString* statisticalSignificance;
-/* Time at which correlation was calculated 
- */
-@property(nonatomic) NSNumber* timestamp;
-/* Correlation when cause and effect are reversed. For any causal relationship, the forward correlation should exceed the reverse correlation. [optional]
- */
-@property(nonatomic) NSNumber* reverseCorrelation;
-/*  [optional]
- */
-@property(nonatomic) NSNumber* causalityFactor;
-/* Variable category of the cause variable. [optional]
- */
-@property(nonatomic) NSString* causeCategory;
-/* Variable category of the effect variable. [optional]
- */
-@property(nonatomic) NSString* effectCategory;
-/* cause value that predicts an above average effect value (in default unit for cause variable) [optional]
+/* cause value that predicts an above average effect value (in default unit for cause variable) 
  */
 @property(nonatomic) NSNumber* valuePredictingHighOutcome;
-/* cause value that predicts a below average effect value (in default unit for cause variable) [optional]
+/* cause value that predicts a below average effect value (in default unit for cause variable) 
  */
 @property(nonatomic) NSNumber* valuePredictingLowOutcome;
-/* Optimal Pearson Product [optional]
+/* Optimal Pearson Product 
  */
 @property(nonatomic) NSNumber* optimalPearsonProduct;
-/* Average Vote [optional]
+/* Vote 
  */
-@property(nonatomic) NSNumber* averageVote;
-/* User Vote [optional]
+@property(nonatomic) NSNumber* vote;
+/* A function of the effect size and sample size 
  */
-@property(nonatomic) NSNumber* userVote;
-/* Unit of Cause [optional]
+@property(nonatomic) NSNumber* statisticalSignificance;
+/* Unit of Cause 
  */
 @property(nonatomic) NSString* causeUnit;
-/* Unit Id of Cause [optional]
+/* Unit ID of Cause 
  */
 @property(nonatomic) NSNumber* causeUnitId;
+/* Cause changes 
+ */
+@property(nonatomic) NSNumber* causeChanges;
+/* Effect changes 
+ */
+@property(nonatomic) NSNumber* effectChanges;
+/* QM Score 
+ */
+@property(nonatomic) NSNumber* qmScore;
+/* error 
+ */
+@property(nonatomic) NSString* error;
+/* created_at [optional]
+ */
+@property(nonatomic) NSDate* createdAt;
+/* updated_at [optional]
+ */
+@property(nonatomic) NSDate* updatedAt;
+/* Correlation when cause and effect are reversed. For any causal relationship, the forward correlation should exceed the reverse correlation 
+ */
+@property(nonatomic) NSNumber* reversePearsonCorrelationCoefficient;
+/* Predictive Pearson Correlation Coefficient 
+ */
+@property(nonatomic) NSNumber* predictivePearsonCorrelationCoefficient;
 
 @end

@@ -90,7 +90,7 @@
 ///
 ///
 /// Get Measurements CSV
-/// Get Measurements CSV
+/// Download a CSV containing all user measurements
 ///
 /// 
 ///
@@ -103,7 +103,7 @@
 ///
 ///
 /// Post Request for Measurements CSV
-/// Post Request for Measurements CSV
+/// Use this endpoint to schedule a CSV export containing all user measurements to be emailed to the user within 24 hours.
 ///
 /// 
 ///

@@ -354,7 +354,7 @@ static SWGMeasurementApi* singletonAPI = nil;
 
 ///
 /// Get Measurements CSV
-/// Get Measurements CSV
+/// Download a CSV containing all user measurements
 ///  @returns NSURL*
 ///
 -(NSNumber*) measurementsCsvGetWithCompletionBlock: 
@@ -429,7 +429,7 @@ static SWGMeasurementApi* singletonAPI = nil;
 
 ///
 /// Post Request for Measurements CSV
-/// Post Request for Measurements CSV
+/// Use this endpoint to schedule a CSV export containing all user measurements to be emailed to the user within 24 hours.
 ///  @returns NSNumber*
 ///
 -(NSNumber*) measurementsRequestCsvPostWithCompletionBlock: 

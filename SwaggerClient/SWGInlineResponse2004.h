@@ -7,7 +7,6 @@
  * Do not edit the class manually.
  */
 
-#import "SWGConnection.h"
 
 
 @protocol SWGInlineResponse2004
@@ -16,7 +15,7 @@
 @interface SWGInlineResponse2004 : SWGObject
 
 
-@property(nonatomic) SWGConnection* data;
+@property(nonatomic) NSString* data;
 
 @property(nonatomic) NSNumber* success;
 

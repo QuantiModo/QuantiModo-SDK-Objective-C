@@ -2,13 +2,24 @@
 
 @implementation SWGVariableCategory
 
+- (instancetype)init {
+  self = [super init];
+
+  if (self) {
+    // initalise property's default value, if any
+    
+  }
+
+  return self;
+}
+
 /**
  * Maps json key to property name.
  * This method is used by `JSONModel`.
  */
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"id": @"_id", @"name": @"name", @"filling_value": @"fillingValue", @"maximum_allowed_value": @"maximumAllowedValue", @"minimum_allowed_value": @"minimumAllowedValue", @"duration_of_action": @"durationOfAction", @"onset_delay": @"onsetDelay", @"combination_operation": @"combinationOperation", @"updated": @"updated", @"cause_only": @"causeOnly", @"public": @"public", @"outcome": @"outcome", @"created_at": @"createdAt", @"updated_at": @"updatedAt", @"image_url": @"imageUrl", @"default_unit_id": @"defaultUnitId" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"name": @"name" }];
 }
 
 /**
@@ -18,7 +29,7 @@
  */
 + (BOOL)propertyIsOptional:(NSString *)propertyName
 {
-  NSArray *optionalProperties = @[@"_id", @"fillingValue", @"maximumAllowedValue", @"minimumAllowedValue", @"durationOfAction", @"onsetDelay", @"combinationOperation", @"updated", @"causeOnly", @"public", @"outcome", @"createdAt", @"updatedAt", @"imageUrl", @"defaultUnitId"];
+  NSArray *optionalProperties = @[];
 
   if ([optionalProperties containsObject:propertyName]) {
     return YES;

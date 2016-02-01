@@ -3,7 +3,11 @@
 #import "SWGMeasurementSource.h"
 #import "SWGMeasurement.h"
 #import "SWGMeasurementSet.h"
+#import "SWGCommonResponse.h"
+#import "SWGMeasurementDelete.h"
 #import "SWGMeasurementRange.h"
+#import "SWGInlineResponse2003.h"
+#import "SWGInlineResponse2004.h"
 
 
 @interface SWGMeasurementsApi ()
@@ -115,7 +119,7 @@ static SWGMeasurementsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -150,19 +154,22 @@ static SWGMeasurementsApi* singletonAPI = nil;
 ///
 /// Add a data source
 /// Add a life-tracking app or device to the QuantiModo list of data sources.
-///  @param name An array of names of data sources you want to add.
+///  @param body An array of names of data sources you want to add.
+///
+///  @param accessToken User's OAuth2 access token
 ///
 ///  @returns void
 ///
--(NSNumber*) v1MeasurementSourcesPostWithCompletionBlock: (SWGMeasurementSource*) name
+-(NSNumber*) v1MeasurementSourcesPostWithCompletionBlock: (SWGMeasurementSource*) body
+         accessToken: (NSString*) accessToken
         
         
         completionHandler: (void (^)(NSError* error))completionBlock { 
 
     
-    // verify the required parameter 'name' is set
-    if (name == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `name` when calling `v1MeasurementSourcesPost`"];
+    // verify the required parameter 'body' is set
+    if (body == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `body` when calling `v1MeasurementSourcesPost`"];
     }
     
 
@@ -177,6 +184,10 @@ static SWGMeasurementsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
     
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
 
@@ -198,7 +209,7 @@ static SWGMeasurementsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -207,7 +218,7 @@ static SWGMeasurementsApi* singletonAPI = nil;
     NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
     
-    bodyParam = name;
+    bodyParam = body;
     
 
     
@@ -233,17 +244,23 @@ static SWGMeasurementsApi* singletonAPI = nil;
 ///
 /// Get measurements for this user
 /// Measurements are any value that can be recorded like daily steps, a mood rating, or apples eaten. <br>Supported filter parameters:<br><ul><li><b>value</b> - Value of measurement</li><li><b>lastUpdated</b> - The time that this measurement was created or last updated in the UTC format \"YYYY-MM-DDThh:mm:ss\"</li></ul><br>
+///  @param accessToken User's OAuth2 access token
+///
 ///  @param variableName Name of the variable you want measurements for
 ///
 ///  @param source Name of the source you want measurements for (supports exact name match only)
 ///
 ///  @param value Value of measurement
 ///
-///  @param lastUpdated The time that this measurement was created or last updated in the UTC format \"YYYY-MM-DDThh:mm:ss\"
+///  @param lastUpdated The time that this measurement was created or last updated in the format \"YYYY-MM-DDThh:mm:ss\"
 ///
-///  @param unit The unit you want the measurements in
+///  @param unit The unit you want the measurements returned in
 ///
 ///  @param startTime The lower limit of measurements returned (Epoch)
+///
+///  @param createdAt The time the measurement record was first created in the format YYYY-MM-DDThh:mm:ss. Time zone should be UTC and not local.
+///
+///  @param updatedAt The time the measurement record was last changed in the format YYYY-MM-DDThh:mm:ss. Time zone should be UTC and not local.
 ///
 ///  @param endTime The upper limit of measurements returned (Epoch)
 ///
@@ -259,12 +276,15 @@ static SWGMeasurementsApi* singletonAPI = nil;
 ///
 ///  @returns SWGMeasurement*
 ///
--(NSNumber*) v1MeasurementsGetWithCompletionBlock: (NSString*) variableName
+-(NSNumber*) v1MeasurementsGetWithCompletionBlock: (NSString*) accessToken
+         variableName: (NSString*) variableName
          source: (NSString*) source
          value: (NSString*) value
          lastUpdated: (NSString*) lastUpdated
          unit: (NSString*) unit
          startTime: (NSString*) startTime
+         createdAt: (NSString*) createdAt
+         updatedAt: (NSString*) updatedAt
          endTime: (NSString*) endTime
          groupingWidth: (NSNumber*) groupingWidth
          groupingTimezone: (NSString*) groupingTimezone
@@ -288,51 +308,63 @@ static SWGMeasurementsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(variableName != nil) {
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
+    if (variableName != nil) {
         
         queryParams[@"variableName"] = variableName;
     }
-    if(source != nil) {
+    if (source != nil) {
         
         queryParams[@"source"] = source;
     }
-    if(value != nil) {
+    if (value != nil) {
         
         queryParams[@"value"] = value;
     }
-    if(lastUpdated != nil) {
+    if (lastUpdated != nil) {
         
         queryParams[@"lastUpdated"] = lastUpdated;
     }
-    if(unit != nil) {
+    if (unit != nil) {
         
         queryParams[@"unit"] = unit;
     }
-    if(startTime != nil) {
+    if (startTime != nil) {
         
         queryParams[@"startTime"] = startTime;
     }
-    if(endTime != nil) {
+    if (createdAt != nil) {
+        
+        queryParams[@"createdAt"] = createdAt;
+    }
+    if (updatedAt != nil) {
+        
+        queryParams[@"updatedAt"] = updatedAt;
+    }
+    if (endTime != nil) {
         
         queryParams[@"endTime"] = endTime;
     }
-    if(groupingWidth != nil) {
+    if (groupingWidth != nil) {
         
         queryParams[@"groupingWidth"] = groupingWidth;
     }
-    if(groupingTimezone != nil) {
+    if (groupingTimezone != nil) {
         
         queryParams[@"groupingTimezone"] = groupingTimezone;
     }
-    if(limit != nil) {
+    if (limit != nil) {
         
         queryParams[@"limit"] = limit;
     }
-    if(offset != nil) {
+    if (offset != nil) {
         
         queryParams[@"offset"] = offset;
     }
-    if(sort != nil) {
+    if (sort != nil) {
         
         queryParams[@"sort"] = sort;
     }
@@ -357,7 +389,7 @@ static SWGMeasurementsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -391,20 +423,23 @@ static SWGMeasurementsApi* singletonAPI = nil;
 
 ///
 /// Post a new set or update existing measurements to the database
-/// You can submit or update multiple measurements in a \"measurements\" sub-array.  If the variable these measurements correspond to does not already exist in the database, it will be automatically added.  The request body should look something like [{\"measurements\":[{\"startTime\":1439389320,\"value\":\"3\"}],\"name\":\"Acne (out of 5)\",\"source\":\"QuantiModo\",\"category\":\"Symptoms\",\"combinationOperation\":\"MEAN\",\"unit\":\"/5\"}]
-///  @param measurements An array of measurements you want to insert.
+/// You can submit or update multiple measurements in a \"measurements\" sub-array.  If the variable these measurements correspond to does not already exist in the database, it will be automatically added.  The request body should look something like [{\"measurements\":[{\"startTime\":1439389320,\"value\":\"3\"}, {\"startTime\":1439389319,\"value\":\"2\"}],\"name\":\"Acne (out of 5)\",\"source\":\"QuantiModo\",\"category\":\"Symptoms\",\"combinationOperation\":\"MEAN\",\"unit\":\"/5\"}]
+///  @param body An array of measurements you want to insert.
+///
+///  @param accessToken User's OAuth2 access token
 ///
 ///  @returns void
 ///
--(NSNumber*) v1MeasurementsPostWithCompletionBlock: (SWGMeasurementSet*) measurements
+-(NSNumber*) v1MeasurementsPostWithCompletionBlock: (SWGMeasurementSet*) body
+         accessToken: (NSString*) accessToken
         
         
         completionHandler: (void (^)(NSError* error))completionBlock { 
 
     
-    // verify the required parameter 'measurements' is set
-    if (measurements == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `measurements` when calling `v1MeasurementsPost`"];
+    // verify the required parameter 'body' is set
+    if (body == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `body` when calling `v1MeasurementsPost`"];
     }
     
 
@@ -419,6 +454,10 @@ static SWGMeasurementsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
     
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
 
@@ -440,7 +479,7 @@ static SWGMeasurementsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -449,7 +488,7 @@ static SWGMeasurementsApi* singletonAPI = nil;
     NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
     
-    bodyParam = measurements;
+    bodyParam = body;
     
 
     
@@ -477,6 +516,8 @@ static SWGMeasurementsApi* singletonAPI = nil;
 /// Measurements are any value that can be recorded like daily steps, a mood rating, or apples eaten. <br>Supported filter parameters:<br><ul><li><b>value</b> - Value of measurement</li><li><b>lastUpdated</b> - The time that this measurement was created or last updated in the UTC format \"YYYY-MM-DDThh:mm:ss\"</li></ul><br>
 ///  @param variableName Name of the variable you want measurements for
 ///
+///  @param accessToken User's OAuth2 access token
+///
 ///  @param abbreviatedUnitName The unit your want the measurements in
 ///
 ///  @param startTime The lower limit of measurements returned (Iso8601)
@@ -496,6 +537,7 @@ static SWGMeasurementsApi* singletonAPI = nil;
 ///  @returns SWGMeasurement*
 ///
 -(NSNumber*) v1MeasurementsDailyGetWithCompletionBlock: (NSString*) variableName
+         accessToken: (NSString*) accessToken
          abbreviatedUnitName: (NSString*) abbreviatedUnitName
          startTime: (NSString*) startTime
          endTime: (NSString*) endTime
@@ -526,39 +568,43 @@ static SWGMeasurementsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(variableName != nil) {
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
+    if (variableName != nil) {
         
         queryParams[@"variableName"] = variableName;
     }
-    if(abbreviatedUnitName != nil) {
+    if (abbreviatedUnitName != nil) {
         
         queryParams[@"abbreviatedUnitName"] = abbreviatedUnitName;
     }
-    if(startTime != nil) {
+    if (startTime != nil) {
         
         queryParams[@"startTime"] = startTime;
     }
-    if(endTime != nil) {
+    if (endTime != nil) {
         
         queryParams[@"endTime"] = endTime;
     }
-    if(groupingWidth != nil) {
+    if (groupingWidth != nil) {
         
         queryParams[@"groupingWidth"] = groupingWidth;
     }
-    if(groupingTimezone != nil) {
+    if (groupingTimezone != nil) {
         
         queryParams[@"groupingTimezone"] = groupingTimezone;
     }
-    if(limit != nil) {
+    if (limit != nil) {
         
         queryParams[@"limit"] = limit;
     }
-    if(offset != nil) {
+    if (offset != nil) {
         
         queryParams[@"offset"] = offset;
     }
-    if(sort != nil) {
+    if (sort != nil) {
         
         queryParams[@"sort"] = sort;
     }
@@ -583,7 +629,7 @@ static SWGMeasurementsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -616,6 +662,89 @@ static SWGMeasurementsApi* singletonAPI = nil;
 }
 
 ///
+/// Delete a measurement
+/// Delete a previously submitted measurement
+///  @param body The startTime and variableId of the measurement to be deleted.
+///
+///  @returns SWGCommonResponse*
+///
+-(NSNumber*) v1MeasurementsDeletePostWithCompletionBlock: (SWGMeasurementDelete*) body
+        
+        completionHandler: (void (^)(SWGCommonResponse* output, NSError* error))completionBlock { 
+        
+
+    
+    // verify the required parameter 'body' is set
+    if (body == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `body` when calling `v1MeasurementsDeletePost`"];
+    }
+    
+
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/measurements/delete"];
+
+    // remove format in URL if needed
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
+
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
+    
+
+    NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
+    
+    NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
+
+    
+
+    // HTTP header `Accept`
+    headerParams[@"Accept"] = [SWGApiClient selectHeaderAccept:@[@"application/json"]];
+    if ([headerParams[@"Accept"] length] == 0) {
+        [headerParams removeObjectForKey:@"Accept"];
+    }
+
+    // response content type
+    NSString *responseContentType;
+    if ([headerParams objectForKey:@"Accept"]) {
+        responseContentType = [headerParams[@"Accept"] componentsSeparatedByString:@", "][0];
+    }
+    else {
+        responseContentType = @"";
+    }
+
+    // request content type
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
+
+    // Authentication setting
+    NSArray *authSettings = @[@"oauth2"];
+
+    id bodyParam = nil;
+    NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
+    
+    bodyParam = body;
+    
+
+    
+    return [self.apiClient requestWithCompletionBlock: resourcePath
+                                               method: @"POST"
+                                           pathParams: pathParams
+                                          queryParams: queryParams
+                                           formParams: formParams
+                                                files: files
+                                                 body: bodyParam
+                                         headerParams: headerParams
+                                         authSettings: authSettings
+                                   requestContentType: requestContentType
+                                  responseContentType: responseContentType
+                                         responseType: @"SWGCommonResponse*"
+                                      completionBlock: ^(id data, NSError *error) {
+                  
+                  completionBlock((SWGCommonResponse*)data, error);
+              }
+          ];
+}
+
+///
 /// Get measurements range for this user
 /// Get Unix time-stamp (epoch time) of the user's first and last measurements taken.
 ///  @param sources Enter source name to limit to specific source (varchar)
@@ -643,11 +772,11 @@ static SWGMeasurementsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(sources != nil) {
+    if (sources != nil) {
         
         queryParams[@"sources"] = sources;
     }
-    if(user != nil) {
+    if (user != nil) {
         
         queryParams[@"user"] = user;
     }
@@ -672,7 +801,7 @@ static SWGMeasurementsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -700,6 +829,288 @@ static SWGMeasurementsApi* singletonAPI = nil;
                                       completionBlock: ^(id data, NSError *error) {
                   
                   completionBlock((SWGMeasurementRange*)data, error);
+              }
+          ];
+}
+
+///
+/// Get Measurement
+/// Get Measurement
+///  @param _id id of Measurement
+///
+///  @param accessToken User's OAuth2 access token
+///
+///  @returns SWGInlineResponse2003*
+///
+-(NSNumber*) v2MeasurementsIdGetWithCompletionBlock: (NSNumber*) _id
+         accessToken: (NSString*) accessToken
+        
+        completionHandler: (void (^)(SWGInlineResponse2003* output, NSError* error))completionBlock { 
+        
+
+    
+    // verify the required parameter '_id' is set
+    if (_id == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `_id` when calling `v2MeasurementsIdGet`"];
+    }
+    
+
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v2/measurements/{id}"];
+
+    // remove format in URL if needed
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
+
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
+    if (_id != nil) {
+        pathParams[@"id"] = _id;
+    }
+    
+
+    NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
+    
+    NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
+
+    
+
+    // HTTP header `Accept`
+    headerParams[@"Accept"] = [SWGApiClient selectHeaderAccept:@[@"application/json"]];
+    if ([headerParams[@"Accept"] length] == 0) {
+        [headerParams removeObjectForKey:@"Accept"];
+    }
+
+    // response content type
+    NSString *responseContentType;
+    if ([headerParams objectForKey:@"Accept"]) {
+        responseContentType = [headerParams[@"Accept"] componentsSeparatedByString:@", "][0];
+    }
+    else {
+        responseContentType = @"";
+    }
+
+    // request content type
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
+
+    // Authentication setting
+    NSArray *authSettings = @[@"quantimodo_oauth2"];
+
+    id bodyParam = nil;
+    NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
+    
+    
+    
+
+    
+    return [self.apiClient requestWithCompletionBlock: resourcePath
+                                               method: @"GET"
+                                           pathParams: pathParams
+                                          queryParams: queryParams
+                                           formParams: formParams
+                                                files: files
+                                                 body: bodyParam
+                                         headerParams: headerParams
+                                         authSettings: authSettings
+                                   requestContentType: requestContentType
+                                  responseContentType: responseContentType
+                                         responseType: @"SWGInlineResponse2003*"
+                                      completionBlock: ^(id data, NSError *error) {
+                  
+                  completionBlock((SWGInlineResponse2003*)data, error);
+              }
+          ];
+}
+
+///
+/// Update Measurement
+/// Update Measurement
+///  @param _id id of Measurement
+///
+///  @param accessToken User's OAuth2 access token
+///
+///  @param body Measurement that should be updated
+///
+///  @returns SWGInlineResponse2004*
+///
+-(NSNumber*) v2MeasurementsIdPutWithCompletionBlock: (NSNumber*) _id
+         accessToken: (NSString*) accessToken
+         body: (SWGMeasurement*) body
+        
+        completionHandler: (void (^)(SWGInlineResponse2004* output, NSError* error))completionBlock { 
+        
+
+    
+    // verify the required parameter '_id' is set
+    if (_id == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `_id` when calling `v2MeasurementsIdPut`"];
+    }
+    
+
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v2/measurements/{id}"];
+
+    // remove format in URL if needed
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
+
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
+    if (_id != nil) {
+        pathParams[@"id"] = _id;
+    }
+    
+
+    NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
+    
+    NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
+
+    
+
+    // HTTP header `Accept`
+    headerParams[@"Accept"] = [SWGApiClient selectHeaderAccept:@[@"application/json"]];
+    if ([headerParams[@"Accept"] length] == 0) {
+        [headerParams removeObjectForKey:@"Accept"];
+    }
+
+    // response content type
+    NSString *responseContentType;
+    if ([headerParams objectForKey:@"Accept"]) {
+        responseContentType = [headerParams[@"Accept"] componentsSeparatedByString:@", "][0];
+    }
+    else {
+        responseContentType = @"";
+    }
+
+    // request content type
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
+
+    // Authentication setting
+    NSArray *authSettings = @[@"quantimodo_oauth2"];
+
+    id bodyParam = nil;
+    NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
+    
+    bodyParam = body;
+    
+
+    
+    return [self.apiClient requestWithCompletionBlock: resourcePath
+                                               method: @"PUT"
+                                           pathParams: pathParams
+                                          queryParams: queryParams
+                                           formParams: formParams
+                                                files: files
+                                                 body: bodyParam
+                                         headerParams: headerParams
+                                         authSettings: authSettings
+                                   requestContentType: requestContentType
+                                  responseContentType: responseContentType
+                                         responseType: @"SWGInlineResponse2004*"
+                                      completionBlock: ^(id data, NSError *error) {
+                  
+                  completionBlock((SWGInlineResponse2004*)data, error);
+              }
+          ];
+}
+
+///
+/// Delete Measurement
+/// Delete Measurement
+///  @param _id id of Measurement
+///
+///  @param accessToken User's OAuth2 access token
+///
+///  @returns SWGInlineResponse2004*
+///
+-(NSNumber*) v2MeasurementsIdDeleteWithCompletionBlock: (NSNumber*) _id
+         accessToken: (NSString*) accessToken
+        
+        completionHandler: (void (^)(SWGInlineResponse2004* output, NSError* error))completionBlock { 
+        
+
+    
+    // verify the required parameter '_id' is set
+    if (_id == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `_id` when calling `v2MeasurementsIdDelete`"];
+    }
+    
+
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v2/measurements/{id}"];
+
+    // remove format in URL if needed
+    if ([resourcePath rangeOfString:@".{format}"].location != NSNotFound) {
+        [resourcePath replaceCharactersInRange: [resourcePath rangeOfString:@".{format}"] withString:@".json"];
+    }
+
+    NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
+    if (_id != nil) {
+        pathParams[@"id"] = _id;
+    }
+    
+
+    NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
+    
+    NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
+
+    
+
+    // HTTP header `Accept`
+    headerParams[@"Accept"] = [SWGApiClient selectHeaderAccept:@[@"application/json"]];
+    if ([headerParams[@"Accept"] length] == 0) {
+        [headerParams removeObjectForKey:@"Accept"];
+    }
+
+    // response content type
+    NSString *responseContentType;
+    if ([headerParams objectForKey:@"Accept"]) {
+        responseContentType = [headerParams[@"Accept"] componentsSeparatedByString:@", "][0];
+    }
+    else {
+        responseContentType = @"";
+    }
+
+    // request content type
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
+
+    // Authentication setting
+    NSArray *authSettings = @[@"quantimodo_oauth2"];
+
+    id bodyParam = nil;
+    NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
+    
+    
+    
+
+    
+    return [self.apiClient requestWithCompletionBlock: resourcePath
+                                               method: @"DELETE"
+                                           pathParams: pathParams
+                                          queryParams: queryParams
+                                           formParams: formParams
+                                                files: files
+                                                 body: bodyParam
+                                         headerParams: headerParams
+                                         authSettings: authSettings
+                                   requestContentType: requestContentType
+                                  responseContentType: responseContentType
+                                         responseType: @"SWGInlineResponse2004*"
+                                      completionBlock: ^(id data, NSError *error) {
+                  
+                  completionBlock((SWGInlineResponse2004*)data, error);
               }
           ];
 }

@@ -7,7 +7,7 @@
  * Do not edit the class manually.
  */
 
-#import "SWGConnection.h"
+#import "SWGMeasurement.h"
 
 
 @protocol SWGInlineResponse2003
@@ -16,7 +16,7 @@
 @interface SWGInlineResponse2003 : SWGObject
 
 
-@property(nonatomic) NSArray<SWGConnection>* data;
+@property(nonatomic) SWGMeasurement* data;
 
 @property(nonatomic) NSNumber* success;
 

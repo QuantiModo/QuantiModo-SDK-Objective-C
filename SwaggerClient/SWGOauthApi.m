@@ -73,7 +73,7 @@ static SWGOauthApi* singletonAPI = nil;
 /// Ask the user if they want to allow a client's application to submit or obtain data from their QM account. It will redirect the user to the url provided by the client application with the code as a query parameter or error in case of an error.
 ///  @param clientId This is the unique ID that QuantiModo uses to identify your application. Obtain a client id by emailing info@quantimo.do.
 ///
-///  @param clientSecret This is the secret for your obtained client_id. QuantiModo uses this to validate that only your application uses the client_id.
+///  @param clientSecret This is the secret for your obtained clientId. QuantiModo uses this to validate that only your application uses the clientId.
 ///
 ///  @param responseType If the value is code, launches a Basic flow, requiring a POST to the token endpoint to obtain the tokens. If the value is token id_token or id_token token, launches an Implicit flow, requiring the use of Javascript at the redirect URI to retrieve tokens from the URI #fragment.
 ///
@@ -128,27 +128,27 @@ static SWGOauthApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(clientId != nil) {
+    if (clientId != nil) {
         
-        queryParams[@"client_id"] = clientId;
+        queryParams[@"clientId"] = clientId;
     }
-    if(clientSecret != nil) {
+    if (clientSecret != nil) {
         
         queryParams[@"client_secret"] = clientSecret;
     }
-    if(responseType != nil) {
+    if (responseType != nil) {
         
         queryParams[@"response_type"] = responseType;
     }
-    if(scope != nil) {
+    if (scope != nil) {
         
         queryParams[@"scope"] = scope;
     }
-    if(redirectUri != nil) {
+    if (redirectUri != nil) {
         
         queryParams[@"redirect_uri"] = redirectUri;
     }
-    if(state != nil) {
+    if (state != nil) {
         
         queryParams[@"state"] = state;
     }
@@ -173,7 +173,7 @@ static SWGOauthApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -210,7 +210,7 @@ static SWGOauthApi* singletonAPI = nil;
 /// Client provides authorization token obtained from /api/v1/oauth2/authorize to this endpoint and receives an access token. Access token can then be used to query different API endpoints of QuantiModo.
 ///  @param clientId This is the unique ID that QuantiModo uses to identify your application. Obtain a client id by emailing info@quantimo.do.
 ///
-///  @param clientSecret This is the secret for your obtained client_id. QuantiModo uses this to validate that only your application uses the client_id.
+///  @param clientSecret This is the secret for your obtained clientId. QuantiModo uses this to validate that only your application uses the clientId.
 ///
 ///  @param grantType Grant Type can be 'authorization_code' or 'refresh_token'
 ///
@@ -263,31 +263,31 @@ static SWGOauthApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(clientId != nil) {
+    if (clientId != nil) {
         
-        queryParams[@"client_id"] = clientId;
+        queryParams[@"clientId"] = clientId;
     }
-    if(clientSecret != nil) {
+    if (clientSecret != nil) {
         
         queryParams[@"client_secret"] = clientSecret;
     }
-    if(grantType != nil) {
+    if (grantType != nil) {
         
         queryParams[@"grant_type"] = grantType;
     }
-    if(responseType != nil) {
+    if (responseType != nil) {
         
         queryParams[@"response_type"] = responseType;
     }
-    if(scope != nil) {
+    if (scope != nil) {
         
         queryParams[@"scope"] = scope;
     }
-    if(redirectUri != nil) {
+    if (redirectUri != nil) {
         
         queryParams[@"redirect_uri"] = redirectUri;
     }
-    if(state != nil) {
+    if (state != nil) {
         
         queryParams[@"state"] = state;
     }
@@ -312,7 +312,7 @@ static SWGOauthApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];

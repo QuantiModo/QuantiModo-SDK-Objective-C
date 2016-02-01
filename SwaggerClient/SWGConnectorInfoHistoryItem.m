@@ -2,13 +2,24 @@
 
 @implementation SWGConnectorInfoHistoryItem
 
+- (instancetype)init {
+  self = [super init];
+
+  if (self) {
+    // initalise property's default value, if any
+    
+  }
+
+  return self;
+}
+
 /**
  * Maps json key to property name.
  * This method is used by `JSONModel`.
  */
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"number_of_measurements": @"numberOfMeasurements", @"success": @"success", @"message": @"message", @"created_at": @"createdAt" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"numberOfMeasurements": @"numberOfMeasurements", @"success": @"success", @"message": @"message", @"createdAt": @"createdAt" }];
 }
 
 /**

@@ -26,7 +26,7 @@
     self = [super init];
     if (self) {
         self.apiClient = nil;
-        self.host = @"https://app.quantimo.do/api/v2";
+        self.host = @"https://localhost/api";
         self.username = @"";
         self.password = @"";
         self.tempFolderPath = nil;
@@ -107,6 +107,20 @@
 
 - (NSDictionary *) authSettings {
     return @{
+               @"basicAuth":
+                   @{
+                       @"type": @"basic",
+                       @"in": @"header",
+                       @"key": @"Authorization",
+                       @"value": [self getBasicAuthToken]
+                   },
+               @"internalApiKey":
+                   @{
+                       @"type": @"api_key",
+                       @"in": @"header",
+                       @"key": @"api_key",
+                       @"value": [self getApiKeyWithPrefix:@"api_key"]
+                   },
                };
 }
 

@@ -23,7 +23,7 @@
 /* Abbreviated name of the default unit for the variable 
  */
 @property(nonatomic) NSString* unit;
-/* How to aggregate measurements over time. 
+/* Way to aggregate measurements over time. Options are \"MEAN\" or \"SUM\".  SUM should be used for things like minutes of exercise.  If you use MEAN for exercise, then a person might exercise more minutes in one day but add separate measurements that were smaller.  So when we are doing correlational analysis, we would think that the person exercised less that day even though they exercised more.  Conversely, we must use MEAN for things such as ratings which cannot be SUMMED. 
  */
 @property(nonatomic) NSString* combinationOperation;
 /* Parent 

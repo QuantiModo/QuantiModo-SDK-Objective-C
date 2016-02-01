@@ -2,7 +2,11 @@
 #import "SWGMeasurementSource.h"
 #import "SWGMeasurement.h"
 #import "SWGMeasurementSet.h"
+#import "SWGCommonResponse.h"
+#import "SWGMeasurementDelete.h"
 #import "SWGMeasurementRange.h"
+#import "SWGInlineResponse2003.h"
+#import "SWGInlineResponse2004.h"
 #import "SWGObject.h"
 #import "SWGApiClient.h"
 
@@ -40,11 +44,13 @@
 /// Add a data source
 /// Add a life-tracking app or device to the QuantiModo list of data sources.
 ///
-/// @param name An array of names of data sources you want to add.
+/// @param body An array of names of data sources you want to add.
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return 
--(NSNumber*) v1MeasurementSourcesPostWithCompletionBlock :(SWGMeasurementSource*) name 
+-(NSNumber*) v1MeasurementSourcesPostWithCompletionBlock :(SWGMeasurementSource*) body 
+     accessToken:(NSString*) accessToken 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -55,12 +61,15 @@
 /// Get measurements for this user
 /// Measurements are any value that can be recorded like daily steps, a mood rating, or apples eaten. <br>Supported filter parameters:<br><ul><li><b>value</b> - Value of measurement</li><li><b>lastUpdated</b> - The time that this measurement was created or last updated in the UTC format \"YYYY-MM-DDThh:mm:ss\"</li></ul><br>
 ///
+/// @param accessToken User&#39;s OAuth2 access token
 /// @param variableName Name of the variable you want measurements for
 /// @param source Name of the source you want measurements for (supports exact name match only)
 /// @param value Value of measurement
-/// @param lastUpdated The time that this measurement was created or last updated in the UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot;
-/// @param unit The unit you want the measurements in
+/// @param lastUpdated The time that this measurement was created or last updated in the format \&quot;YYYY-MM-DDThh:mm:ss\&quot;
+/// @param unit The unit you want the measurements returned in
 /// @param startTime The lower limit of measurements returned (Epoch)
+/// @param createdAt The time the measurement record was first created in the format YYYY-MM-DDThh:mm:ss. Time zone should be UTC and not local.
+/// @param updatedAt The time the measurement record was last changed in the format YYYY-MM-DDThh:mm:ss. Time zone should be UTC and not local.
 /// @param endTime The upper limit of measurements returned (Epoch)
 /// @param groupingWidth The time (in seconds) over which measurements are grouped together
 /// @param groupingTimezone The time (in seconds) over which measurements are grouped together
@@ -70,12 +79,15 @@
 /// 
 ///
 /// @return SWGMeasurement*
--(NSNumber*) v1MeasurementsGetWithCompletionBlock :(NSString*) variableName 
+-(NSNumber*) v1MeasurementsGetWithCompletionBlock :(NSString*) accessToken 
+     variableName:(NSString*) variableName 
      source:(NSString*) source 
      value:(NSString*) value 
      lastUpdated:(NSString*) lastUpdated 
      unit:(NSString*) unit 
      startTime:(NSString*) startTime 
+     createdAt:(NSString*) createdAt 
+     updatedAt:(NSString*) updatedAt 
      endTime:(NSString*) endTime 
      groupingWidth:(NSNumber*) groupingWidth 
      groupingTimezone:(NSString*) groupingTimezone 
@@ -90,13 +102,15 @@
 ///
 ///
 /// Post a new set or update existing measurements to the database
-/// You can submit or update multiple measurements in a \"measurements\" sub-array.  If the variable these measurements correspond to does not already exist in the database, it will be automatically added.  The request body should look something like [{\"measurements\":[{\"startTime\":1439389320,\"value\":\"3\"}],\"name\":\"Acne (out of 5)\",\"source\":\"QuantiModo\",\"category\":\"Symptoms\",\"combinationOperation\":\"MEAN\",\"unit\":\"/5\"}]
+/// You can submit or update multiple measurements in a \"measurements\" sub-array.  If the variable these measurements correspond to does not already exist in the database, it will be automatically added.  The request body should look something like [{\"measurements\":[{\"startTime\":1439389320,\"value\":\"3\"}, {\"startTime\":1439389319,\"value\":\"2\"}],\"name\":\"Acne (out of 5)\",\"source\":\"QuantiModo\",\"category\":\"Symptoms\",\"combinationOperation\":\"MEAN\",\"unit\":\"/5\"}]
 ///
-/// @param measurements An array of measurements you want to insert.
+/// @param body An array of measurements you want to insert.
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return 
--(NSNumber*) v1MeasurementsPostWithCompletionBlock :(SWGMeasurementSet*) measurements 
+-(NSNumber*) v1MeasurementsPostWithCompletionBlock :(SWGMeasurementSet*) body 
+     accessToken:(NSString*) accessToken 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -108,6 +122,7 @@
 /// Measurements are any value that can be recorded like daily steps, a mood rating, or apples eaten. <br>Supported filter parameters:<br><ul><li><b>value</b> - Value of measurement</li><li><b>lastUpdated</b> - The time that this measurement was created or last updated in the UTC format \"YYYY-MM-DDThh:mm:ss\"</li></ul><br>
 ///
 /// @param variableName Name of the variable you want measurements for
+/// @param accessToken User&#39;s OAuth2 access token
 /// @param abbreviatedUnitName The unit your want the measurements in
 /// @param startTime The lower limit of measurements returned (Iso8601)
 /// @param endTime The upper limit of measurements returned (Iso8601)
@@ -120,6 +135,7 @@
 ///
 /// @return SWGMeasurement*
 -(NSNumber*) v1MeasurementsDailyGetWithCompletionBlock :(NSString*) variableName 
+     accessToken:(NSString*) accessToken 
      abbreviatedUnitName:(NSString*) abbreviatedUnitName 
      startTime:(NSString*) startTime 
      endTime:(NSString*) endTime 
@@ -130,6 +146,21 @@
      sort:(NSNumber*) sort 
     
     completionHandler: (void (^)(SWGMeasurement* output, NSError* error))completionBlock;
+    
+
+
+///
+///
+/// Delete a measurement
+/// Delete a previously submitted measurement
+///
+/// @param body The startTime and variableId of the measurement to be deleted.
+/// 
+///
+/// @return SWGCommonResponse*
+-(NSNumber*) v1MeasurementsDeletePostWithCompletionBlock :(SWGMeasurementDelete*) body 
+    
+    completionHandler: (void (^)(SWGCommonResponse* output, NSError* error))completionBlock;
     
 
 
@@ -147,6 +178,59 @@
      user:(NSNumber*) user 
     
     completionHandler: (void (^)(SWGMeasurementRange* output, NSError* error))completionBlock;
+    
+
+
+///
+///
+/// Get Measurement
+/// Get Measurement
+///
+/// @param _id id of Measurement
+/// @param accessToken User&#39;s OAuth2 access token
+/// 
+///
+/// @return SWGInlineResponse2003*
+-(NSNumber*) v2MeasurementsIdGetWithCompletionBlock :(NSNumber*) _id 
+     accessToken:(NSString*) accessToken 
+    
+    completionHandler: (void (^)(SWGInlineResponse2003* output, NSError* error))completionBlock;
+    
+
+
+///
+///
+/// Update Measurement
+/// Update Measurement
+///
+/// @param _id id of Measurement
+/// @param accessToken User&#39;s OAuth2 access token
+/// @param body Measurement that should be updated
+/// 
+///
+/// @return SWGInlineResponse2004*
+-(NSNumber*) v2MeasurementsIdPutWithCompletionBlock :(NSNumber*) _id 
+     accessToken:(NSString*) accessToken 
+     body:(SWGMeasurement*) body 
+    
+    completionHandler: (void (^)(SWGInlineResponse2004* output, NSError* error))completionBlock;
+    
+
+
+///
+///
+/// Delete Measurement
+/// Delete Measurement
+///
+/// @param _id id of Measurement
+/// @param accessToken User&#39;s OAuth2 access token
+/// 
+///
+/// @return SWGInlineResponse2004*
+-(NSNumber*) v2MeasurementsIdDeleteWithCompletionBlock :(NSNumber*) _id 
+     accessToken:(NSString*) accessToken 
+    
+    completionHandler: (void (^)(SWGInlineResponse2004* output, NSError* error))completionBlock;
     
 
 

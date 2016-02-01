@@ -26,13 +26,11 @@
 /// Get embeddable connect javascript
 /// Get embeddable connect javascript. Usage:\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Use `qmSetupInPopup` function after connecting `connect.js`.\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Requires a selector to block. It will be embedded in this block.\n\n    Use `qmSetupOnPage` function after connecting `connect.js`.\n\n  - Embedding in mobile applications without popups for 3rd-party\nauthentication.\n\n    Use `qmSetupOnMobile` function after connecting `connect.js`.\n\n    if using the MoodiModo Clones, Use `qmSetupOnIonic` function after connecting `connect.js`.
 ///
-/// @param accessToken User&#39;s access token
-/// @param mashapeKey Mashape API key
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return 
 -(NSNumber*) v1ConnectJsGetWithCompletionBlock :(NSString*) accessToken 
-     mashapeKey:(NSString*) mashapeKey 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -41,13 +39,13 @@
 ///
 ///
 /// Mobile connect page
-/// Mobile connect page
+/// This page is designed to be opened in a webview.  Instead of using popup authentication boxes, it uses redirection. You can include the user's access_token as a URL parameter like https://app.quantimo.do/api/v1/connect/mobile?access_token=123
 ///
-/// @param t User token
+/// @param accessToken User OAuth access token
 /// 
 ///
 /// @return 
--(NSNumber*) v1ConnectMobileGetWithCompletionBlock :(NSString*) t 
+-(NSNumber*) v1ConnectMobileGetWithCompletionBlock :(NSString*) accessToken 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -72,10 +70,12 @@
 /// Attempt to obtain a token from the data provider, store it in the database. With this, the connector to continue to obtain new user data until the token is revoked.
 ///
 /// @param connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint.
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return 
 -(NSNumber*) v1ConnectorsConnectorConnectGetWithCompletionBlock :(NSString*) connector 
+     accessToken:(NSString*) accessToken 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -90,6 +90,7 @@
 /// @param parameters JSON Array of Parameters for the request to enable connector.
 /// @param url URL which should be used to enable the connector.
 /// @param usePopup Should use popup when enabling connector
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return 
@@ -97,6 +98,7 @@
      parameters:(NSString*) parameters 
      url:(NSString*) url 
      usePopup:(NSNumber*) usePopup 
+     accessToken:(NSString*) accessToken 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -113,6 +115,7 @@
 /// @param placeholder Placeholder hint value for the parameter input tag.
 /// @param type Type of input field such as those found here http://www.w3schools.com/tags/tag_input.asp
 /// @param usePopup Should use popup when enabling connector
+/// @param accessToken User&#39;s OAuth2 access token
 /// @param defaultValue Default parameter value
 /// 
 ///
@@ -123,6 +126,7 @@
      placeholder:(NSString*) placeholder 
      type:(NSString*) type 
      usePopup:(NSNumber*) usePopup 
+     accessToken:(NSString*) accessToken 
      defaultValue:(NSString*) defaultValue 
     
     completionHandler: (void (^)(SWGConnectorInstruction* output, NSError* error))completionBlock;
@@ -150,10 +154,12 @@
 /// Returns information about the connector such as the connector id, whether or not is connected for this user (i.e. we have a token or credentials), and its update history for the user.
 ///
 /// @param connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint.
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return SWGConnectorInfo*
 -(NSNumber*) v1ConnectorsConnectorInfoGetWithCompletionBlock :(NSString*) connector 
+     accessToken:(NSString*) accessToken 
     
     completionHandler: (void (^)(SWGConnectorInfo* output, NSError* error))completionBlock;
     
@@ -165,10 +171,12 @@
 /// The update method tells the QM Connector Framework to check with the data provider (such as Fitbit or MyFitnessPal) and retrieve any new measurements available.
 ///
 /// @param connector Lowercase system name of the source application or device
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return 
 -(NSNumber*) v1ConnectorsConnectorUpdateGetWithCompletionBlock :(NSString*) connector 
+     accessToken:(NSString*) accessToken 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;

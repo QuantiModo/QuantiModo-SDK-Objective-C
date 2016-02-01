@@ -17,32 +17,32 @@
 /* User ID 
  */
 @property(nonatomic) NSNumber* user;
-/* Variable DISPLAY name 
+/* Common variable id 
  */
-@property(nonatomic) NSString* variable;
-/* Estimated duration of time following the onset delay in which a stimulus produces a perceivable effect 
+@property(nonatomic) NSNumber* variableId;
+/* Estimated duration of time following the onset delay in which a stimulus produces a perceivable effect [optional]
  */
 @property(nonatomic) NSNumber* durationOfAction;
-/* fillingValue 
+/* fillingValue [optional]
  */
 @property(nonatomic) NSNumber* fillingValue;
-/* joinWith 
+/* joinWith [optional]
  */
 @property(nonatomic) NSString* joinWith;
-/* maximumAllowedValue 
+/* maximumAllowedValue [optional]
  */
 @property(nonatomic) NSNumber* maximumAllowedValue;
-/* minimumAllowedValue 
+/* minimumAllowedValue [optional]
  */
 @property(nonatomic) NSNumber* minimumAllowedValue;
-/* name 
- */
-@property(nonatomic) NSString* name;
-/* onsetDelay 
+/* onsetDelay [optional]
  */
 @property(nonatomic) NSNumber* onsetDelay;
-/* unit 
+/* Earliest measurement startTime that should be used in analysis in ISO format [optional]
  */
-@property(nonatomic) NSString* unit;
+@property(nonatomic) NSString* experimentStartTime;
+/* Latest measurement startTime that should be used in analysis in ISO format [optional]
+ */
+@property(nonatomic) NSString* experimentEndTime;
 
 @end

@@ -2,13 +2,24 @@
 
 @implementation SWGPermission
 
+- (instancetype)init {
+  self = [super init];
+
+  if (self) {
+    // initalise property's default value, if any
+    
+  }
+
+  return self;
+}
+
 /**
  * Maps json key to property name.
  * This method is used by `JSONModel`.
  */
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"target": @"target", @"variableName": @"variableName", @"min_timestamp": @"minTimestamp", @"max_timestamp": @"maxTimestamp", @"min_time_of_day": @"minTimeOfDay", @"max_time_of_day": @"maxTimeOfDay", @"week": @"week" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"target": @"target", @"variableName": @"variableName", @"minTimestamp": @"minTimestamp", @"maxTimestamp": @"maxTimestamp", @"minTimeOfDay": @"minTimeOfDay", @"maxTimeOfDay": @"maxTimeOfDay", @"week": @"week" }];
 }
 
 /**

@@ -2,13 +2,24 @@
 
 @implementation SWGUserVariables
 
+- (instancetype)init {
+  self = [super init];
+
+  if (self) {
+    // initalise property's default value, if any
+    
+  }
+
+  return self;
+}
+
 /**
  * Maps json key to property name.
  * This method is used by `JSONModel`.
  */
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"user": @"user", @"variable": @"variable", @"durationOfAction": @"durationOfAction", @"fillingValue": @"fillingValue", @"joinWith": @"joinWith", @"maximumAllowedValue": @"maximumAllowedValue", @"minimumAllowedValue": @"minimumAllowedValue", @"name": @"name", @"onsetDelay": @"onsetDelay", @"unit": @"unit" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"user": @"user", @"variableId": @"variableId", @"durationOfAction": @"durationOfAction", @"fillingValue": @"fillingValue", @"joinWith": @"joinWith", @"maximumAllowedValue": @"maximumAllowedValue", @"minimumAllowedValue": @"minimumAllowedValue", @"onsetDelay": @"onsetDelay", @"experimentStartTime": @"experimentStartTime", @"experimentEndTime": @"experimentEndTime" }];
 }
 
 /**
@@ -18,7 +29,7 @@
  */
 + (BOOL)propertyIsOptional:(NSString *)propertyName
 {
-  NSArray *optionalProperties = @[];
+  NSArray *optionalProperties = @[@"durationOfAction", @"fillingValue", @"joinWith", @"maximumAllowedValue", @"minimumAllowedValue", @"onsetDelay", @"experimentStartTime", @"experimentEndTime"];
 
   if ([optionalProperties containsObject:propertyName]) {
     return YES;

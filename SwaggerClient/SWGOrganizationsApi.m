@@ -1,8 +1,8 @@
 #import "SWGOrganizationsApi.h"
 #import "SWGQueryParamCollection.h"
-#import "SWGUserTokenRequest.h"
 #import "SWGUserTokenFailedResponse.h"
 #import "SWGUserTokenSuccessfulResponse.h"
+#import "SWGUserTokenRequest.h"
 
 
 @interface SWGOrganizationsApi ()
@@ -78,10 +78,13 @@ static SWGOrganizationsApi* singletonAPI = nil;
 ///
 ///  @param body Provides organization token and user ID
 ///
+///  @param accessToken User's OAuth2 access token
+///
 ///  @returns SWGUserTokenSuccessfulResponse*
 ///
 -(NSNumber*) v1OrganizationsOrganizationIdUsersPostWithCompletionBlock: (NSNumber*) organizationId
          body: (SWGUserTokenRequest*) body
+         accessToken: (NSString*) accessToken
         
         completionHandler: (void (^)(SWGUserTokenSuccessfulResponse* output, NSError* error))completionBlock { 
         
@@ -112,6 +115,10 @@ static SWGOrganizationsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
     
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
 
@@ -133,10 +140,10 @@ static SWGOrganizationsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
-    NSArray *authSettings = @[];
+    NSArray *authSettings = @[@"oauth2"];
 
     id bodyParam = nil;
     NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];

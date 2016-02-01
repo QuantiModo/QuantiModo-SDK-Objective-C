@@ -74,23 +74,15 @@ static SWGConnectorsApi* singletonAPI = nil;
 ///
 /// Get embeddable connect javascript
 /// Get embeddable connect javascript. Usage:\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Use `qmSetupInPopup` function after connecting `connect.js`.\n\n  - Embedding in applications with popups for 3rd-party authentication\nwindows.\n\n    Requires a selector to block. It will be embedded in this block.\n\n    Use `qmSetupOnPage` function after connecting `connect.js`.\n\n  - Embedding in mobile applications without popups for 3rd-party\nauthentication.\n\n    Use `qmSetupOnMobile` function after connecting `connect.js`.\n\n    if using the MoodiModo Clones, Use `qmSetupOnIonic` function after connecting `connect.js`.
-///  @param accessToken User's access token
-///
-///  @param mashapeKey Mashape API key
+///  @param accessToken User's OAuth2 access token
 ///
 ///  @returns void
 ///
 -(NSNumber*) v1ConnectJsGetWithCompletionBlock: (NSString*) accessToken
-         mashapeKey: (NSString*) mashapeKey
         
         
         completionHandler: (void (^)(NSError* error))completionBlock { 
 
-    
-    // verify the required parameter 'accessToken' is set
-    if (accessToken == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `accessToken` when calling `v1ConnectJsGet`"];
-    }
     
 
     NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/v1/connect.js"];
@@ -104,13 +96,9 @@ static SWGConnectorsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(accessToken != nil) {
+    if (accessToken != nil) {
         
-        queryParams[@"access token"] = accessToken;
-    }
-    if(mashapeKey != nil) {
-        
-        queryParams[@"mashape key"] = mashapeKey;
+        queryParams[@"access_token"] = accessToken;
     }
     
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
@@ -133,10 +121,10 @@ static SWGConnectorsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
-    NSArray *authSettings = @[];
+    NSArray *authSettings = @[@"oauth2"];
 
     id bodyParam = nil;
     NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
@@ -167,20 +155,20 @@ static SWGConnectorsApi* singletonAPI = nil;
 
 ///
 /// Mobile connect page
-/// Mobile connect page
-///  @param t User token
+/// This page is designed to be opened in a webview.  Instead of using popup authentication boxes, it uses redirection. You can include the user's access_token as a URL parameter like https://app.quantimo.do/api/v1/connect/mobile?access_token=123
+///  @param accessToken User OAuth access token
 ///
 ///  @returns void
 ///
--(NSNumber*) v1ConnectMobileGetWithCompletionBlock: (NSString*) t
+-(NSNumber*) v1ConnectMobileGetWithCompletionBlock: (NSString*) accessToken
         
         
         completionHandler: (void (^)(NSError* error))completionBlock { 
 
     
-    // verify the required parameter 't' is set
-    if (t == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `t` when calling `v1ConnectMobileGet`"];
+    // verify the required parameter 'accessToken' is set
+    if (accessToken == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `accessToken` when calling `v1ConnectMobileGet`"];
     }
     
 
@@ -195,9 +183,9 @@ static SWGConnectorsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(t != nil) {
+    if (accessToken != nil) {
         
-        queryParams[@"t"] = t;
+        queryParams[@"access_token"] = accessToken;
     }
     
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
@@ -220,10 +208,10 @@ static SWGConnectorsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
-    NSArray *authSettings = @[];
+    NSArray *authSettings = @[@"oauth2"];
 
     id bodyParam = nil;
     NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
@@ -295,7 +283,7 @@ static SWGConnectorsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -332,9 +320,12 @@ static SWGConnectorsApi* singletonAPI = nil;
 /// Attempt to obtain a token from the data provider, store it in the database. With this, the connector to continue to obtain new user data until the token is revoked.
 ///  @param connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint.
 ///
+///  @param accessToken User's OAuth2 access token
+///
 ///  @returns void
 ///
 -(NSNumber*) v1ConnectorsConnectorConnectGetWithCompletionBlock: (NSString*) connector
+         accessToken: (NSString*) accessToken
         
         
         completionHandler: (void (^)(NSError* error))completionBlock { 
@@ -360,6 +351,10 @@ static SWGConnectorsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
     
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
 
@@ -381,7 +376,7 @@ static SWGConnectorsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -424,12 +419,15 @@ static SWGConnectorsApi* singletonAPI = nil;
 ///
 ///  @param usePopup Should use popup when enabling connector
 ///
+///  @param accessToken User's OAuth2 access token
+///
 ///  @returns void
 ///
 -(NSNumber*) v1ConnectorsConnectorConnectInstructionsGetWithCompletionBlock: (NSString*) connector
          parameters: (NSString*) parameters
          url: (NSString*) url
          usePopup: (NSNumber*) usePopup
+         accessToken: (NSString*) accessToken
         
         
         completionHandler: (void (^)(NSError* error))completionBlock { 
@@ -470,15 +468,19 @@ static SWGConnectorsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(parameters != nil) {
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
+    if (parameters != nil) {
         
         queryParams[@"parameters"] = parameters;
     }
-    if(url != nil) {
+    if (url != nil) {
         
         queryParams[@"url"] = url;
     }
-    if(usePopup != nil) {
+    if (usePopup != nil) {
         
         queryParams[@"usePopup"] = usePopup;
     }
@@ -503,7 +505,7 @@ static SWGConnectorsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -550,6 +552,8 @@ static SWGConnectorsApi* singletonAPI = nil;
 ///
 ///  @param usePopup Should use popup when enabling connector
 ///
+///  @param accessToken User's OAuth2 access token
+///
 ///  @param defaultValue Default parameter value
 ///
 ///  @returns SWGConnectorInstruction*
@@ -560,6 +564,7 @@ static SWGConnectorsApi* singletonAPI = nil;
          placeholder: (NSString*) placeholder
          type: (NSString*) type
          usePopup: (NSNumber*) usePopup
+         accessToken: (NSString*) accessToken
          defaultValue: (NSString*) defaultValue
         
         completionHandler: (void (^)(SWGConnectorInstruction* output, NSError* error))completionBlock { 
@@ -611,27 +616,31 @@ static SWGConnectorsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(defaultValue != nil) {
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
+    if (defaultValue != nil) {
         
         queryParams[@"defaultValue"] = defaultValue;
     }
-    if(displayName != nil) {
+    if (displayName != nil) {
         
         queryParams[@"displayName"] = displayName;
     }
-    if(key != nil) {
+    if (key != nil) {
         
         queryParams[@"key"] = key;
     }
-    if(placeholder != nil) {
+    if (placeholder != nil) {
         
         queryParams[@"placeholder"] = placeholder;
     }
-    if(type != nil) {
+    if (type != nil) {
         
         queryParams[@"type"] = type;
     }
-    if(usePopup != nil) {
+    if (usePopup != nil) {
         
         queryParams[@"usePopup"] = usePopup;
     }
@@ -656,7 +665,7 @@ static SWGConnectorsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -742,7 +751,7 @@ static SWGConnectorsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -779,9 +788,12 @@ static SWGConnectorsApi* singletonAPI = nil;
 /// Returns information about the connector such as the connector id, whether or not is connected for this user (i.e. we have a token or credentials), and its update history for the user.
 ///  @param connector Lowercase system name of the source application or device. Get a list of available connectors from the /connectors/list endpoint.
 ///
+///  @param accessToken User's OAuth2 access token
+///
 ///  @returns SWGConnectorInfo*
 ///
 -(NSNumber*) v1ConnectorsConnectorInfoGetWithCompletionBlock: (NSString*) connector
+         accessToken: (NSString*) accessToken
         
         completionHandler: (void (^)(SWGConnectorInfo* output, NSError* error))completionBlock { 
         
@@ -807,6 +819,10 @@ static SWGConnectorsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
     
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
 
@@ -828,7 +844,7 @@ static SWGConnectorsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -865,9 +881,12 @@ static SWGConnectorsApi* singletonAPI = nil;
 /// The update method tells the QM Connector Framework to check with the data provider (such as Fitbit or MyFitnessPal) and retrieve any new measurements available.
 ///  @param connector Lowercase system name of the source application or device
 ///
+///  @param accessToken User's OAuth2 access token
+///
 ///  @returns void
 ///
 -(NSNumber*) v1ConnectorsConnectorUpdateGetWithCompletionBlock: (NSString*) connector
+         accessToken: (NSString*) accessToken
         
         
         completionHandler: (void (^)(NSError* error))completionBlock { 
@@ -893,6 +912,10 @@ static SWGConnectorsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
     
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
 
@@ -914,7 +937,7 @@ static SWGConnectorsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];

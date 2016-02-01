@@ -3,6 +3,8 @@
 #import "SWGJsonErrorResponse.h"
 #import "SWGPostCorrelation.h"
 #import "SWGCommonResponse.h"
+#import "SWGPostVote.h"
+#import "SWGVoteDelete.h"
 #import "SWGObject.h"
 #import "SWGApiClient.h"
 
@@ -24,9 +26,10 @@
 +(SWGCorrelationsApi*) sharedAPI;
 ///
 ///
-/// Get correlations
-/// Get correlations.<br>Supported filter parameters:<br><ul><li><b>correlationCoefficient</b> - Pearson correlation coefficient between cause and effect after lagging by onset delay and grouping by duration of action</li><li><b>onsetDelay</b> - The number of seconds which pass following a cause measurement before an effect would likely be observed.</li><li><b>durationOfAction</b> - The time in seconds over which the cause would be expected to exert a measurable effect. We have selected a default value for each variable. This default value may be replaced by a user specified by adjusting their variable user settings.</li><li><b>lastUpdated</b> - The time that this measurement was last updated in the UTC format \"YYYY-MM-DDThh:mm:ss\"</li></ul><br>
+/// Get aggregated correlations
+/// Get correlations based on the anonymized aggregate data from all QuantiModo users.
 ///
+/// @param accessToken User&#39;s OAuth2 access token
 /// @param effect ORIGINAL variable name of the effect variable for which the user desires correlations
 /// @param cause ORIGINAL variable name of the cause variable for which the user desires correlations
 /// @param correlationCoefficient Pearson correlation coefficient between cause and effect after lagging by onset delay and grouping by duration of action
@@ -39,7 +42,8 @@
 /// 
 ///
 /// @return NSArray<SWGCorrelation>*
--(NSNumber*) v1CorrelationsGetWithCompletionBlock :(NSString*) effect 
+-(NSNumber*) v1AggregatedCorrelationsGetWithCompletionBlock :(NSString*) accessToken 
+     effect:(NSString*) effect 
      cause:(NSString*) cause 
      correlationCoefficient:(NSString*) correlationCoefficient 
      onsetDelay:(NSString*) onsetDelay 
@@ -59,13 +63,48 @@
 /// Add correlation
 ///
 /// @param body Provides correlation data
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return 
--(NSNumber*) v1CorrelationsPostWithCompletionBlock :(SWGPostCorrelation*) body 
+-(NSNumber*) v1AggregatedCorrelationsPostWithCompletionBlock :(SWGPostCorrelation*) body 
+     accessToken:(NSString*) accessToken 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
+
+
+///
+///
+/// Get correlations
+/// Get correlations.<br>Supported filter parameters:<br><ul><li><b>correlationCoefficient</b> - Pearson correlation coefficient between cause and effect after lagging by onset delay and grouping by duration of action</li><li><b>onsetDelay</b> - The number of seconds which pass following a cause measurement before an effect would likely be observed.</li><li><b>durationOfAction</b> - The time in seconds over which the cause would be expected to exert a measurable effect. We have selected a default value for each variable. This default value may be replaced by a user specified by adjusting their variable user settings.</li><li><b>lastUpdated</b> - The time that this measurement was last updated in the UTC format \"YYYY-MM-DDThh:mm:ss\"</li></ul><br>
+///
+/// @param accessToken User&#39;s OAuth2 access token
+/// @param effect ORIGINAL variable name of the effect variable for which the user desires correlations
+/// @param cause ORIGINAL variable name of the cause variable for which the user desires correlations
+/// @param correlationCoefficient Pearson correlation coefficient between cause and effect after lagging by onset delay and grouping by duration of action
+/// @param onsetDelay The number of seconds which pass following a cause measurement before an effect would likely be observed.
+/// @param durationOfAction The time in seconds over which the cause would be expected to exert a measurable effect. We have selected a default value for each variable. This default value may be replaced by a user specified by adjusting their variable user settings.
+/// @param lastUpdated The time that this measurement was last updated in the UTC format \&quot;YYYY-MM-DDThh:mm:ss\&quot;
+/// @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
+/// @param offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10.
+/// @param sort Sort by given field. If the field is prefixed with `-, it will sort in descending order.
+/// 
+///
+/// @return NSArray<SWGCorrelation>*
+-(NSNumber*) v1CorrelationsGetWithCompletionBlock :(NSString*) accessToken 
+     effect:(NSString*) effect 
+     cause:(NSString*) cause 
+     correlationCoefficient:(NSString*) correlationCoefficient 
+     onsetDelay:(NSString*) onsetDelay 
+     durationOfAction:(NSString*) durationOfAction 
+     lastUpdated:(NSString*) lastUpdated 
+     limit:(NSNumber*) limit 
+     offset:(NSNumber*) offset 
+     sort:(NSNumber*) sort 
+    
+    completionHandler: (void (^)(NSArray<SWGCorrelation>* output, NSError* error))completionBlock;
+    
 
 
 ///
@@ -77,7 +116,8 @@
 /// @param userId User id
 /// @param variableName Effect variable name
 /// @param organizationToken Organization access token
-/// @param includePublic Include bublic correlations, Can be \&quot;1\&quot; or empty.
+/// @param accessToken User&#39;s OAuth2 access token
+/// @param includePublic Include public correlations, Can be \&quot;1\&quot; or empty.
 /// 
 ///
 /// @return NSArray<SWGCorrelation>*
@@ -85,6 +125,7 @@
      userId:(NSNumber*) userId 
      variableName:(NSString*) variableName 
      organizationToken:(NSString*) organizationToken 
+     accessToken:(NSString*) accessToken 
      includePublic:(NSString*) includePublic 
     
     completionHandler: (void (^)(NSArray<SWGCorrelation>* output, NSError* error))completionBlock;
@@ -100,7 +141,8 @@
 /// @param userId User id
 /// @param variableName Cause variable name
 /// @param organizationToken Organization access token
-/// @param includePublic Include bublic correlations, Can be \&quot;1\&quot; or empty.
+/// @param accessToken User&#39;s OAuth2 access token
+/// @param includePublic Include public correlations, Can be \&quot;1\&quot; or empty.
 /// 
 ///
 /// @return NSArray<SWGCommonResponse>*
@@ -108,6 +150,7 @@
      userId:(NSNumber*) userId 
      variableName:(NSString*) variableName 
      organizationToken:(NSString*) organizationToken 
+     accessToken:(NSString*) accessToken 
      includePublic:(NSString*) includePublic 
     
     completionHandler: (void (^)(NSArray<SWGCommonResponse>* output, NSError* error))completionBlock;
@@ -120,12 +163,14 @@
 /// Returns the average correlations from all users for all public variables that contain the characters in the search query. Returns average of all users public variable correlations with a specified cause or effect.
 ///
 /// @param search Name of the variable that you want to know the causes or effects of.
-/// @param effectOrCause Specifies whether to return the effects or causes of the searched variable.
+/// @param effectOrCause Setting this to effect indicates that the searched variable is the effect and that the causes of this variable should be returned.  cause indicates that the searched variable is the cause and the effects should be returned.
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return NSArray<SWGCorrelation>*
 -(NSNumber*) v1PublicCorrelationsSearchSearchGetWithCompletionBlock :(NSString*) search 
      effectOrCause:(NSString*) effectOrCause 
+     accessToken:(NSString*) accessToken 
     
     completionHandler: (void (^)(NSArray<SWGCorrelation>* output, NSError* error))completionBlock;
     
@@ -152,10 +197,12 @@
 /// Returns average of all correlations and votes for all user effect variables for a given cause
 ///
 /// @param variableName Cause variable name
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return NSArray<SWGCorrelation>*
 -(NSNumber*) v1VariablesVariableNameEffectsGetWithCompletionBlock :(NSString*) variableName 
+     accessToken:(NSString*) accessToken 
     
     completionHandler: (void (^)(NSArray<SWGCorrelation>* output, NSError* error))completionBlock;
     
@@ -167,10 +214,12 @@
 /// Returns average of all correlations and votes for all public cause variables for a given effect
 ///
 /// @param variableName Effect variable name
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return NSArray<SWGCorrelation>*
 -(NSNumber*) v1VariablesVariableNamePublicCausesGetWithCompletionBlock :(NSString*) variableName 
+     accessToken:(NSString*) accessToken 
     
     completionHandler: (void (^)(NSArray<SWGCorrelation>* output, NSError* error))completionBlock;
     
@@ -182,10 +231,12 @@
 /// Returns average of all correlations and votes for all public cause variables for a given cause
 ///
 /// @param variableName Cause variable name
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return NSArray<SWGCorrelation>*
 -(NSNumber*) v1VariablesVariableNamePublicEffectsGetWithCompletionBlock :(NSString*) variableName 
+     accessToken:(NSString*) accessToken 
     
     completionHandler: (void (^)(NSArray<SWGCorrelation>* output, NSError* error))completionBlock;
     
@@ -196,17 +247,13 @@
 /// Post or update vote
 /// This is to enable users to indicate their opinion on the plausibility of a causal relationship between a treatment and outcome. QuantiModo incorporates crowd-sourced plausibility estimations into their algorithm. This is done allowing user to indicate their view of the plausibility of each relationship with thumbs up/down buttons placed next to each prediction.
 ///
-/// @param cause Cause variable name
-/// @param effect Effect variable name
-/// @param correlation Correlation value
-/// @param vote Vote: 0 (for implausible) or 1 (for plausible)
+/// @param body Contains the cause variable, effect variable, and vote value.
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return SWGCommonResponse*
--(NSNumber*) v1VotesPostWithCompletionBlock :(NSString*) cause 
-     effect:(NSString*) effect 
-     correlation:(NSNumber*) correlation 
-     vote:(NSNumber*) vote 
+-(NSNumber*) v1VotesPostWithCompletionBlock :(SWGPostVote*) body 
+     accessToken:(NSString*) accessToken 
     
     completionHandler: (void (^)(SWGCommonResponse* output, NSError* error))completionBlock;
     
@@ -217,13 +264,11 @@
 /// Delete vote
 /// Delete previously posted vote
 ///
-/// @param cause Cause variable name
-/// @param effect Effect variable name
+/// @param body The cause and effect variable names for the predictor vote to be deleted.
 /// 
 ///
 /// @return SWGCommonResponse*
--(NSNumber*) v1VotesDeletePostWithCompletionBlock :(NSString*) cause 
-     effect:(NSString*) effect 
+-(NSNumber*) v1VotesDeletePostWithCompletionBlock :(SWGVoteDelete*) body 
     
     completionHandler: (void (^)(SWGCommonResponse* output, NSError* error))completionBlock;
     

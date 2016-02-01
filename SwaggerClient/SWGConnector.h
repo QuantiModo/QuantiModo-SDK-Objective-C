@@ -14,7 +14,7 @@
 
 @interface SWGConnector : SWGObject
 
-/* Connector ID number [optional]
+/* Connector ID number 
  */
 @property(nonatomic) NSNumber* _id;
 /* Connector lowercase system name 
@@ -29,17 +29,20 @@
 /* URL to a site where one can get this device or application 
  */
 @property(nonatomic) NSString* getItUrl;
-/* Short description 
+/* True if the authenticated user has this connector enabled 
  */
-@property(nonatomic) NSString* shortDescription;
-/* Long description 
+@property(nonatomic) NSString* connected;
+/* URL and parameters used when connecting to a service 
  */
-@property(nonatomic) NSString* longDescription;
-/* enabled 
+@property(nonatomic) NSString* connectInstructions;
+/* Epoch timestamp of last sync 
  */
-@property(nonatomic) NSNumber* enabled;
-/* oauth 
+@property(nonatomic) NSNumber* lastUpdate;
+/* Number of measurements obtained during latest update 
  */
-@property(nonatomic) NSNumber* oauth;
+@property(nonatomic) NSNumber* totalMeasurementsInLastUpdate;
+/* True if user has no measurements for this connector 
+ */
+@property(nonatomic) NSNumber* noDataYet;
 
 @end

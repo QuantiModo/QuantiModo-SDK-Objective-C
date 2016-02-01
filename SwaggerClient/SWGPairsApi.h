@@ -26,6 +26,7 @@
 ///
 /// @param cause Original variable name for the explanatory or independent variable
 /// @param effect Original variable name for the outcome or dependent variable
+/// @param accessToken User&#39;s OAuth2 access token
 /// @param causeSource Name of data source that the cause measurements should come from
 /// @param causeUnit Abbreviated name for the unit cause measurements to be returned in
 /// @param delay Delay before onset of action (in seconds) from the cause variable settings.
@@ -42,6 +43,48 @@
 /// @return NSArray<SWGPairs>*
 -(NSNumber*) v1PairsGetWithCompletionBlock :(NSString*) cause 
      effect:(NSString*) effect 
+     accessToken:(NSString*) accessToken 
+     causeSource:(NSString*) causeSource 
+     causeUnit:(NSString*) causeUnit 
+     delay:(NSString*) delay 
+     duration:(NSString*) duration 
+     effectSource:(NSString*) effectSource 
+     effectUnit:(NSString*) effectUnit 
+     endTime:(NSString*) endTime 
+     startTime:(NSString*) startTime 
+     limit:(NSNumber*) limit 
+     offset:(NSNumber*) offset 
+     sort:(NSNumber*) sort 
+    
+    completionHandler: (void (^)(NSArray<SWGPairs>* output, NSError* error))completionBlock;
+    
+
+
+///
+///
+/// Get pairs
+/// Pairs cause measurements with effect measurements grouped over the duration of action after the onset delay.
+///
+/// @param cause Original variable name for the explanatory or independent variable
+/// @param effect Original variable name for the outcome or dependent variable
+/// @param accessToken User&#39;s OAuth2 access token
+/// @param causeSource Name of data source that the cause measurements should come from
+/// @param causeUnit Abbreviated name for the unit cause measurements to be returned in
+/// @param delay Delay before onset of action (in seconds) from the cause variable settings.
+/// @param duration Duration of action (in seconds) from the cause variable settings.
+/// @param effectSource Name of data source that the effectmeasurements should come from
+/// @param effectUnit Abbreviated name for the unit effect measurements to be returned in
+/// @param endTime The most recent date (in epoch time) for which we should return measurements
+/// @param startTime The earliest date (in epoch time) for which we should return measurements
+/// @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
+/// @param offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10.
+/// @param sort Sort by given field. If the field is prefixed with `-, it will sort in descending order.
+/// 
+///
+/// @return NSArray<SWGPairs>*
+-(NSNumber*) v1PairsCsvGetWithCompletionBlock :(NSString*) cause 
+     effect:(NSString*) effect 
+     accessToken:(NSString*) accessToken 
      causeSource:(NSString*) causeSource 
      causeUnit:(NSString*) causeUnit 
      delay:(NSString*) delay 

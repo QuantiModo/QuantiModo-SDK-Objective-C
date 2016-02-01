@@ -7,7 +7,7 @@
  * Do not edit the class manually.
  */
 
-#import "SWGAggregatedCorrelation.h"
+#import "SWGTrackingReminder.h"
 
 
 @protocol SWGInlineResponse2001
@@ -16,7 +16,7 @@
 @interface SWGInlineResponse2001 : SWGObject
 
 
-@property(nonatomic) SWGAggregatedCorrelation* data;
+@property(nonatomic) SWGTrackingReminder* data;
 
 @property(nonatomic) NSNumber* success;
 

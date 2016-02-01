@@ -38,13 +38,17 @@
 /// Get all available units
 /// Get all available units
 ///
+/// @param accessToken User&#39;s OAuth2 access token
+/// @param _id Unit id
 /// @param unitName Unit name
 /// @param abbreviatedUnitName Restrict the results to a specific unit by providing the unit abbreviation.
 /// @param categoryName Restrict the results to a specific unit category by providing the unit category name.
 /// 
 ///
 /// @return NSArray<SWGUnit>*
--(NSNumber*) v1UnitsGetWithCompletionBlock :(NSString*) unitName 
+-(NSNumber*) v1UnitsGetWithCompletionBlock :(NSString*) accessToken 
+     _id:(NSNumber*) _id 
+     unitName:(NSString*) unitName 
      abbreviatedUnitName:(NSString*) abbreviatedUnitName 
      categoryName:(NSString*) categoryName 
     
@@ -57,6 +61,7 @@
 /// Units for Variable
 /// Get a list of all possible units to use for a given variable
 ///
+/// @param accessToken User&#39;s OAuth2 access token
 /// @param unitName Name of Unit you want to retrieve
 /// @param abbreviatedUnitName Abbreviated Unit Name of the unit you want
 /// @param categoryName Name of the category you want units for
@@ -64,7 +69,8 @@
 /// 
 ///
 /// @return NSArray<SWGUnit>*
--(NSNumber*) v1UnitsVariableGetWithCompletionBlock :(NSString*) unitName 
+-(NSNumber*) v1UnitsVariableGetWithCompletionBlock :(NSString*) accessToken 
+     unitName:(NSString*) unitName 
      abbreviatedUnitName:(NSString*) abbreviatedUnitName 
      categoryName:(NSString*) categoryName 
      variable:(NSString*) variable 

@@ -1,5 +1,7 @@
 #import <Foundation/Foundation.h>
+#import "SWGPostVote.h"
 #import "SWGCommonResponse.h"
+#import "SWGVoteDelete.h"
 #import "SWGObject.h"
 #import "SWGApiClient.h"
 
@@ -24,17 +26,13 @@
 /// Post or update vote
 /// This is to enable users to indicate their opinion on the plausibility of a causal relationship between a treatment and outcome. QuantiModo incorporates crowd-sourced plausibility estimations into their algorithm. This is done allowing user to indicate their view of the plausibility of each relationship with thumbs up/down buttons placed next to each prediction.
 ///
-/// @param cause Cause variable name
-/// @param effect Effect variable name
-/// @param correlation Correlation value
-/// @param vote Vote: 0 (for implausible) or 1 (for plausible)
+/// @param body Contains the cause variable, effect variable, and vote value.
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return SWGCommonResponse*
--(NSNumber*) v1VotesPostWithCompletionBlock :(NSString*) cause 
-     effect:(NSString*) effect 
-     correlation:(NSNumber*) correlation 
-     vote:(NSNumber*) vote 
+-(NSNumber*) v1VotesPostWithCompletionBlock :(SWGPostVote*) body 
+     accessToken:(NSString*) accessToken 
     
     completionHandler: (void (^)(SWGCommonResponse* output, NSError* error))completionBlock;
     
@@ -45,13 +43,11 @@
 /// Delete vote
 /// Delete previously posted vote
 ///
-/// @param cause Cause variable name
-/// @param effect Effect variable name
+/// @param body The cause and effect variable names for the predictor vote to be deleted.
 /// 
 ///
 /// @return SWGCommonResponse*
--(NSNumber*) v1VotesDeletePostWithCompletionBlock :(NSString*) cause 
-     effect:(NSString*) effect 
+-(NSNumber*) v1VotesDeletePostWithCompletionBlock :(SWGVoteDelete*) body 
     
     completionHandler: (void (^)(SWGCommonResponse* output, NSError* error))completionBlock;
     

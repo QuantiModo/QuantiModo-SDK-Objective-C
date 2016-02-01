@@ -13,7 +13,7 @@
 @protocol SWGVariablesNew
 @end
 
-@interface SWGVariablesNew : SWGObject
+@interface SWGVariablesNew : NSMutableArray
 
 
 @end

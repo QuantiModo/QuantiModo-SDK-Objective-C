@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
-#import "SWGUserTokenRequest.h"
 #import "SWGUserTokenFailedResponse.h"
 #import "SWGUserTokenSuccessfulResponse.h"
+#import "SWGUserTokenRequest.h"
 #import "SWGUser.h"
 #import "SWGObject.h"
 #import "SWGApiClient.h"
@@ -29,11 +29,13 @@
 ///
 /// @param organizationId Organization ID
 /// @param body Provides organization token and user ID
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return SWGUserTokenSuccessfulResponse*
 -(NSNumber*) v1OrganizationsOrganizationIdUsersPostWithCompletionBlock :(NSNumber*) organizationId 
      body:(SWGUserTokenRequest*) body 
+     accessToken:(NSString*) accessToken 
     
     completionHandler: (void (^)(SWGUserTokenSuccessfulResponse* output, NSError* error))completionBlock;
     

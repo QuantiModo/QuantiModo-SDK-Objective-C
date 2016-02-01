@@ -7,6 +7,7 @@
  * Do not edit the class manually.
  */
 
+#import "SWGConversionStep.h"
 
 
 @protocol SWGUnit
@@ -14,44 +15,23 @@
 
 @interface SWGUnit : SWGObject
 
-/* id [optional]
- */
-@property(nonatomic) NSNumber* _id;
-/* client_id [optional]
- */
-@property(nonatomic) NSString* clientId;
 /* Unit name 
  */
 @property(nonatomic) NSString* name;
 /* Unit abbreviation 
  */
 @property(nonatomic) NSString* abbreviatedName;
-/* Unit category ID 
+/* Unit category 
  */
-@property(nonatomic) NSNumber* categoryId;
-/* Unit minimum value [optional]
+@property(nonatomic) NSString* category;
+/* The smallest acceptable value for measurements using this unit [optional]
  */
 @property(nonatomic) NSNumber* minimumValue;
-/* Unit maximum value [optional]
+/* The largest acceptable value for measurements using this unit [optional]
  */
 @property(nonatomic) NSNumber* maximumValue;
-/* updated [optional]
+/* Conversion steps list 
  */
-@property(nonatomic) NSNumber* updated;
-/* ID of default unit [optional]
- */
-@property(nonatomic) NSNumber* defaultUnitId;
-/* Value multiplied to [optional]
- */
-@property(nonatomic) NSNumber* multiply;
-/* Value which should be added to convert to default unit [optional]
- */
-@property(nonatomic) NSNumber* add;
-/* created_at [optional]
- */
-@property(nonatomic) NSDate* createdAt;
-/* updated_at [optional]
- */
-@property(nonatomic) NSDate* updatedAt;
+@property(nonatomic) NSArray<SWGConversionStep>* conversionSteps;
 
 @end

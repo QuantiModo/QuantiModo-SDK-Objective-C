@@ -14,53 +14,8 @@
 
 @interface SWGVariableCategory : SWGObject
 
-/* id [optional]
- */
-@property(nonatomic) NSNumber* _id;
-/* Name of the category 
+/* Category name 
  */
 @property(nonatomic) NSString* name;
-/* Value for replacing null measurements [optional]
- */
-@property(nonatomic) NSNumber* fillingValue;
-/* Maximum recorded value of this category [optional]
- */
-@property(nonatomic) NSNumber* maximumAllowedValue;
-/* Minimum recorded value of this category [optional]
- */
-@property(nonatomic) NSNumber* minimumAllowedValue;
-/* How long the effect of a measurement in this variable lasts [optional]
- */
-@property(nonatomic) NSNumber* durationOfAction;
-/* How long it takes for a measurement in this variable to take effect [optional]
- */
-@property(nonatomic) NSNumber* onsetDelay;
-/* How to combine values of this variable (for instance, to see a summary of the values over a month) 0 for sum OR 1 for mean [optional]
- */
-@property(nonatomic) NSString* combinationOperation;
-/* updated [optional]
- */
-@property(nonatomic) NSNumber* updated;
-/* A value of 1 indicates that this category is generally a cause in a causal relationship.  An example of a causeOnly category would be a category such as Work which would generally not be influenced by the behaviour of the user [optional]
- */
-@property(nonatomic) NSNumber* causeOnly;
-/* Is category public [optional]
- */
-@property(nonatomic) NSNumber* public;
-/* outcome [optional]
- */
-@property(nonatomic) NSNumber* outcome;
-/* created_at [optional]
- */
-@property(nonatomic) NSDate* createdAt;
-/* updated_at [optional]
- */
-@property(nonatomic) NSDate* updatedAt;
-/* Image URL [optional]
- */
-@property(nonatomic) NSString* imageUrl;
-/* ID of the default unit for the category [optional]
- */
-@property(nonatomic) NSNumber* defaultUnitId;
 
 @end

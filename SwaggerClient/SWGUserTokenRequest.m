@@ -2,13 +2,24 @@
 
 @implementation SWGUserTokenRequest
 
+- (instancetype)init {
+  self = [super init];
+
+  if (self) {
+    // initalise property's default value, if any
+    
+  }
+
+  return self;
+}
+
 /**
  * Maps json key to property name.
  * This method is used by `JSONModel`.
  */
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"user": @"user", @"organization_access_token": @"organizationAccessToken" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"user": @"user", @"organizationAccessToken": @"organizationAccessToken" }];
 }
 
 /**

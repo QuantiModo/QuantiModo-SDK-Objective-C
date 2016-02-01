@@ -41,6 +41,9 @@
 /// Get top 5 PUBLIC variables with the most correlations containing the entered search characters. For example, search for 'mood' as an effect. Since 'Overall Mood' has a lot of correlations with other variables, it should be in the autocomplete list.<br>Supported filter parameters:<br><ul><li><b>category</b> - Category of Variable</li></ul><br>
 ///
 /// @param search Search query can be some fraction of a variable name.
+/// @param accessToken User&#39;s OAuth2 access token
+/// @param categoryName Filter variables by category name. The variable categories include Activity, Causes of Illness, Cognitive Performance, Conditions, Environment, Foods, Location, Miscellaneous, Mood, Nutrition, Physical Activity, Physique, Sleep, Social Interactions, Symptoms, Treatments, Vital Signs, and Work.
+/// @param source Specify a data source name to only return variables from a specific data source.
 /// @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
 /// @param offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10.
 /// @param sort Sort by given field. If the field is prefixed with `-, it will sort in descending order.
@@ -48,6 +51,9 @@
 ///
 /// @return SWGVariable*
 -(NSNumber*) v1PublicVariablesSearchSearchGetWithCompletionBlock :(NSString*) search 
+     accessToken:(NSString*) accessToken 
+     categoryName:(NSString*) categoryName 
+     source:(NSString*) source 
      limit:(NSNumber*) limit 
      offset:(NSNumber*) offset 
      sort:(NSNumber*) sort 
@@ -59,13 +65,13 @@
 ///
 ///
 /// Update User Settings for a Variable
-/// Users can change things like the display name for a variable. They can also change the parameters used in analysis of that variable such as the expected duration of action for a variable to have an effect, the estimated delay before the onset of action. In order to filter out erroneous data, they are able to set the maximum and minimum reasonable daily values for a variable.
+/// Users can change the parameters used in analysis of that variable such as the expected duration of action for a variable to have an effect, the estimated delay before the onset of action. In order to filter out erroneous data, they are able to set the maximum and minimum reasonable daily values for a variable.
 ///
-/// @param sharingData Variable user settings data
+/// @param userVariables Variable user settings data
 /// 
 ///
 /// @return 
--(NSNumber*) v1UserVariablesPostWithCompletionBlock :(SWGUserVariables*) sharingData 
+-(NSNumber*) v1UserVariablesPostWithCompletionBlock :(SWGUserVariables*) userVariables 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -89,6 +95,8 @@
 /// Get variables by the category name
 /// Get variables by the category name. <br>Supported filter parameters:<br><ul><li><b>name</b> - Original name of the variable (supports exact name match only)</li><li><b>lastUpdated</b> - Filter by the last time any of the properties of the variable were changed. Uses UTC format \"YYYY-MM-DDThh:mm:ss\"</li><li><b>source</b> - The name of the data source that created the variable (supports exact name match only). So if you have a client application and you only want variables that were last updated by your app, you can include the name of your app here</li><li><b>latestMeasurementTime</b> - Filter variables based on the last time a measurement for them was created or updated in the UTC format \"YYYY-MM-DDThh:mm:ss\"</li><li><b>numberOfMeasurements</b> - Filter variables by the total number of measurements that they have. This could be used of you want to filter or sort by popularity.</li><li><b>lastSource</b> - Limit variables to those which measurements were last submitted by a specific source. So if you have a client application and you only want variables that were last updated by your app, you can include the name of your app here. (supports exact name match only)</li></ul><br>
 ///
+/// @param accessToken User&#39;s OAuth2 access token
+/// @param _id Common variable id
 /// @param userId User id
 /// @param category Filter data by category
 /// @param name Original name of the variable (supports exact name match only)
@@ -103,7 +111,9 @@
 /// 
 ///
 /// @return SWGVariable*
--(NSNumber*) v1VariablesGetWithCompletionBlock :(NSNumber*) userId 
+-(NSNumber*) v1VariablesGetWithCompletionBlock :(NSString*) accessToken 
+     _id:(NSNumber*) _id 
+     userId:(NSNumber*) userId 
      category:(NSString*) category 
      name:(NSString*) name 
      lastUpdated:(NSString*) lastUpdated 
@@ -124,11 +134,13 @@
 /// Create Variables
 /// Allows the client to create a new variable in the `variables` table.
 ///
-/// @param variableName Original name for the variable.
+/// @param body Original name for the variable.
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return 
--(NSNumber*) v1VariablesPostWithCompletionBlock :(SWGVariablesNew*) variableName 
+-(NSNumber*) v1VariablesPostWithCompletionBlock :(SWGVariablesNew*) body 
+     accessToken:(NSString*) accessToken 
     
     
     completionHandler: (void (^)(NSError* error))completionBlock;
@@ -140,7 +152,10 @@
 /// Get variables containing the search characters for which the currently logged in user has measurements. Used to provide auto-complete function in variable search boxes.
 ///
 /// @param search Search query which may be an entire variable name or a fragment of one.
+/// @param accessToken User&#39;s OAuth2 access token
 /// @param categoryName Filter variables by category name. The variable categories include Activity, Causes of Illness, Cognitive Performance, Conditions, Environment, Foods, Location, Miscellaneous, Mood, Nutrition, Physical Activity, Physique, Sleep, Social Interactions, Symptoms, Treatments, Vital Signs, and Work.
+/// @param includePublic Set to true if you would like to include public variables when no user variables are found.
+/// @param manualTracking Set to true if you would like to exlude variables like apps and website names.
 /// @param source Specify a data source name to only return variables from a specific data source.
 /// @param limit The LIMIT is used to limit the number of results returned. So if you have 1000 results, but only want to the first 10, you would set this to 10 and offset to 0.
 /// @param offset Now suppose you wanted to show results 11-20. You&#39;d set the offset to 10 and the limit to 10.
@@ -148,7 +163,10 @@
 ///
 /// @return NSArray<SWGVariable>*
 -(NSNumber*) v1VariablesSearchSearchGetWithCompletionBlock :(NSString*) search 
+     accessToken:(NSString*) accessToken 
      categoryName:(NSString*) categoryName 
+     includePublic:(NSNumber*) includePublic 
+     manualTracking:(NSNumber*) manualTracking 
      source:(NSString*) source 
      limit:(NSNumber*) limit 
      offset:(NSNumber*) offset 
@@ -163,10 +181,12 @@
 /// Get all of the settings and information about a variable by its name. If the logged in user has modified the settings for the variable, these will be provided instead of the default settings for that variable.
 ///
 /// @param variableName Variable name
+/// @param accessToken User&#39;s OAuth2 access token
 /// 
 ///
 /// @return SWGVariable*
 -(NSNumber*) v1VariablesVariableNameGetWithCompletionBlock :(NSString*) variableName 
+     accessToken:(NSString*) accessToken 
     
     completionHandler: (void (^)(SWGVariable* output, NSError* error))completionBlock;
     

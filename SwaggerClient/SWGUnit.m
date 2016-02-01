@@ -2,13 +2,24 @@
 
 @implementation SWGUnit
 
+- (instancetype)init {
+  self = [super init];
+
+  if (self) {
+    // initalise property's default value, if any
+    
+  }
+
+  return self;
+}
+
 /**
  * Maps json key to property name.
  * This method is used by `JSONModel`.
  */
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"id": @"_id", @"client_id": @"clientId", @"name": @"name", @"abbreviated_name": @"abbreviatedName", @"category_id": @"categoryId", @"minimum_value": @"minimumValue", @"maximum_value": @"maximumValue", @"updated": @"updated", @"default_unit_id": @"defaultUnitId", @"multiply": @"multiply", @"add": @"add", @"created_at": @"createdAt", @"updated_at": @"updatedAt" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"name": @"name", @"abbreviatedName": @"abbreviatedName", @"category": @"category", @"minimumValue": @"minimumValue", @"maximumValue": @"maximumValue", @"conversionSteps": @"conversionSteps" }];
 }
 
 /**
@@ -18,7 +29,7 @@
  */
 + (BOOL)propertyIsOptional:(NSString *)propertyName
 {
-  NSArray *optionalProperties = @[@"_id", @"clientId", @"minimumValue", @"maximumValue", @"updated", @"defaultUnitId", @"multiply", @"add", @"createdAt", @"updatedAt"];
+  NSArray *optionalProperties = @[@"minimumValue", @"maximumValue", ];
 
   if ([optionalProperties containsObject:propertyName]) {
     return YES;

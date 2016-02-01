@@ -23,7 +23,7 @@
 /* Error message. 
  */
 @property(nonatomic) NSString* message;
-/* Date and time of the update 
+/* Date and time of the update in UTC time zone 
  */
 @property(nonatomic) NSString* createdAt;
 

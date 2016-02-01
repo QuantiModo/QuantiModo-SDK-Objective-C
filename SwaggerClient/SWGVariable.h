@@ -7,6 +7,7 @@
  * Do not edit the class manually.
  */
 
+#import "SWGVariable.h"
 
 
 @protocol SWGVariable
@@ -14,113 +15,95 @@
 
 @interface SWGVariable : SWGObject
 
-/* id [optional]
+/* Variable ID [optional]
  */
 @property(nonatomic) NSNumber* _id;
-/* client_id [optional]
- */
-@property(nonatomic) NSString* clientId;
-/* parent_id [optional]
- */
-@property(nonatomic) NSNumber* parentId;
-/* Name of the variable 
+/* User-defined variable display name. 
  */
 @property(nonatomic) NSString* name;
-/* Category of the variable 
+/* Name used when the variable was originally created in the `variables` table. 
  */
-@property(nonatomic) NSNumber* variableCategoryId;
-/* ID of the default unit of measurement to use for this variable 
+@property(nonatomic) NSString* originalName;
+/* Variable category like Mood, Sleep, Physical Activity, Treatment, Symptom, etc. 
  */
-@property(nonatomic) NSNumber* defaultUnitId;
-/* How to combine values of this variable (for instance, to see a summary of the values over a month) 0 for sum OR 1 for mean [optional]
+@property(nonatomic) NSString* category;
+/* Abbreviated name of the default unit for the variable 
+ */
+@property(nonatomic) NSString* abbreviatedUnitName;
+/* Id of the default unit for the variable 
+ */
+@property(nonatomic) NSNumber* abbreviatedUnitId;
+/* Comma-separated list of source names to limit variables to those sources 
+ */
+@property(nonatomic) NSString* sources;
+/* Minimum reasonable value for this variable (uses default unit) 
+ */
+@property(nonatomic) NSNumber* minimumValue;
+/* Maximum reasonable value for this variable (uses default unit) 
+ */
+@property(nonatomic) NSNumber* maximumValue;
+/* Way to aggregate measurements over time. Options are \"MEAN\" or \"SUM\".  SUM should be used for things like minutes of exercise.  If you use MEAN for exercise, then a person might exercise more minutes in one day but add separate measurements that were smaller.  So when we are doing correlational analysis, we would think that the person exercised less that day even though they exercised more.  Conversely, we must use MEAN for things such as ratings which cannot be SUMMED. 
  */
 @property(nonatomic) NSString* combinationOperation;
-/* filling_value [optional]
+/* Value for replacing null measurements 
  */
 @property(nonatomic) NSNumber* fillingValue;
-/* maximum_allowed_value [optional]
+/* The Variable this Variable should be joined with. If the variable is joined with some other variable then it is not shown to user in the list of variables. 
  */
-@property(nonatomic) NSNumber* maximumAllowedValue;
-/* minimum_allowed_value [optional]
+@property(nonatomic) NSString* joinWith;
+/* Array of Variables that are joined with this Variable 
  */
-@property(nonatomic) NSNumber* minimumAllowedValue;
-/* onset_delay [optional]
+@property(nonatomic) NSArray<SWGVariable>* joinedVariables;
+/* Id of the parent variable if this variable has any parent 
+ */
+@property(nonatomic) NSNumber* parent;
+/* Array of Variables that are sub variables to this Variable 
+ */
+@property(nonatomic) NSArray<SWGVariable>* subVariables;
+/* How long it takes for a measurement in this variable to take effect 
  */
 @property(nonatomic) NSNumber* onsetDelay;
-/* duration_of_action [optional]
+/* How long the effect of a measurement in this variable lasts 
  */
 @property(nonatomic) NSNumber* durationOfAction;
-/* public [optional]
+/* Earliest measurement time 
  */
-@property(nonatomic) NSNumber* public;
-/* cause_only [optional]
+@property(nonatomic) NSNumber* earliestMeasurementTime;
+/* Latest measurement time 
+ */
+@property(nonatomic) NSNumber* latestMeasurementTime;
+/* When this variable or its settings were last updated 
+ */
+@property(nonatomic) NSNumber* updated;
+/* A value of 1 indicates that this variable is generally a cause in a causal relationship.  An example of a causeOnly variable would be a variable such as Cloud Cover which would generally not be influenced by the behaviour of the user. 
  */
 @property(nonatomic) NSNumber* causeOnly;
-/* most_common_value [optional]
+/* Number of correlations 
  */
-@property(nonatomic) NSNumber* mostCommonValue;
-/* most_common_unit_id [optional]
- */
-@property(nonatomic) NSNumber* mostCommonUnitId;
-/* standard_deviation [optional]
- */
-@property(nonatomic) NSNumber* standardDeviation;
-/* variance [optional]
- */
-@property(nonatomic) NSNumber* variance;
-/* mean [optional]
- */
-@property(nonatomic) NSNumber* mean;
-/* median [optional]
- */
-@property(nonatomic) NSNumber* median;
-/* number_of_measurements [optional]
- */
-@property(nonatomic) NSNumber* numberOfMeasurements;
-/* number_of_unique_values [optional]
- */
-@property(nonatomic) NSNumber* numberOfUniqueValues;
-/* skewness [optional]
- */
-@property(nonatomic) NSNumber* skewness;
-/* kurtosis [optional]
- */
-@property(nonatomic) NSNumber* kurtosis;
-/* status [optional]
- */
-@property(nonatomic) NSString* status;
-/* error_message [optional]
- */
-@property(nonatomic) NSString* errorMessage;
-/* last_successful_update_time [optional]
- */
-@property(nonatomic) NSDate* lastSuccessfulUpdateTime;
-/* created_at [optional]
- */
-@property(nonatomic) NSDate* createdAt;
-/* updated_at [optional]
- */
-@property(nonatomic) NSDate* updatedAt;
-/* product_url [optional]
- */
-@property(nonatomic) NSString* productUrl;
-/* image_url [optional]
- */
-@property(nonatomic) NSString* imageUrl;
-/* price [optional]
- */
-@property(nonatomic) NSNumber* price;
-/* number_of_user_variables [optional]
- */
-@property(nonatomic) NSNumber* numberOfUserVariables;
-/* outcome [optional]
+@property(nonatomic) NSNumber* numberOfCorrelations;
+/* Outcome variables (those with `outcome` == 1) are variables for which a human would generally want to identify the influencing factors.  These include symptoms of illness, physique, mood, cognitive performance, etc.  Generally correlation calculations are only performed on outcome variables. 
  */
 @property(nonatomic) NSNumber* outcome;
-/* minimum_recorded_value [optional]
+/* The number of measurements that a given user had for this variable the last time a correlation calculation was performed. Generally correlation values are only updated once the current number of measurements for a variable is more than 10% greater than the measurementsAtLastAnalysis.  This avoids a computationally-demanding recalculation when there's not enough new data to make a significant difference in the correlation. 
  */
-@property(nonatomic) NSNumber* minimumRecordedValue;
-/* maximum_recorded_value [optional]
+@property(nonatomic) NSNumber* measurementsAtLastAnalysis;
+/* Number of measurements 
  */
-@property(nonatomic) NSNumber* maximumRecordedValue;
+@property(nonatomic) NSNumber* numberOfMeasurements;
+/* Last unit 
+ */
+@property(nonatomic) NSString* lastUnit;
+/* Last value 
+ */
+@property(nonatomic) NSNumber* lastValue;
+/* Most common value 
+ */
+@property(nonatomic) NSNumber* mostCommonValue;
+/* Most common unit 
+ */
+@property(nonatomic) NSString* mostCommonUnit;
+/* Last source 
+ */
+@property(nonatomic) NSNumber* lastSource;
 
 @end

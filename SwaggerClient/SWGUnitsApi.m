@@ -113,7 +113,7 @@ static SWGUnitsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -148,6 +148,10 @@ static SWGUnitsApi* singletonAPI = nil;
 ///
 /// Get all available units
 /// Get all available units
+///  @param accessToken User's OAuth2 access token
+///
+///  @param _id Unit id
+///
 ///  @param unitName Unit name
 ///
 ///  @param abbreviatedUnitName Restrict the results to a specific unit by providing the unit abbreviation.
@@ -156,7 +160,9 @@ static SWGUnitsApi* singletonAPI = nil;
 ///
 ///  @returns NSArray<SWGUnit>*
 ///
--(NSNumber*) v1UnitsGetWithCompletionBlock: (NSString*) unitName
+-(NSNumber*) v1UnitsGetWithCompletionBlock: (NSString*) accessToken
+         _id: (NSNumber*) _id
+         unitName: (NSString*) unitName
          abbreviatedUnitName: (NSString*) abbreviatedUnitName
          categoryName: (NSString*) categoryName
         
@@ -176,15 +182,23 @@ static SWGUnitsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(unitName != nil) {
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
+    if (_id != nil) {
+        
+        queryParams[@"id"] = _id;
+    }
+    if (unitName != nil) {
         
         queryParams[@"unitName"] = unitName;
     }
-    if(abbreviatedUnitName != nil) {
+    if (abbreviatedUnitName != nil) {
         
         queryParams[@"abbreviatedUnitName"] = abbreviatedUnitName;
     }
-    if(categoryName != nil) {
+    if (categoryName != nil) {
         
         queryParams[@"categoryName"] = categoryName;
     }
@@ -209,7 +223,7 @@ static SWGUnitsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -244,6 +258,8 @@ static SWGUnitsApi* singletonAPI = nil;
 ///
 /// Units for Variable
 /// Get a list of all possible units to use for a given variable
+///  @param accessToken User's OAuth2 access token
+///
 ///  @param unitName Name of Unit you want to retrieve
 ///
 ///  @param abbreviatedUnitName Abbreviated Unit Name of the unit you want
@@ -254,7 +270,8 @@ static SWGUnitsApi* singletonAPI = nil;
 ///
 ///  @returns NSArray<SWGUnit>*
 ///
--(NSNumber*) v1UnitsVariableGetWithCompletionBlock: (NSString*) unitName
+-(NSNumber*) v1UnitsVariableGetWithCompletionBlock: (NSString*) accessToken
+         unitName: (NSString*) unitName
          abbreviatedUnitName: (NSString*) abbreviatedUnitName
          categoryName: (NSString*) categoryName
          variable: (NSString*) variable
@@ -275,19 +292,23 @@ static SWGUnitsApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(unitName != nil) {
+    if (accessToken != nil) {
+        
+        queryParams[@"access_token"] = accessToken;
+    }
+    if (unitName != nil) {
         
         queryParams[@"unitName"] = unitName;
     }
-    if(abbreviatedUnitName != nil) {
+    if (abbreviatedUnitName != nil) {
         
         queryParams[@"abbreviatedUnitName"] = abbreviatedUnitName;
     }
-    if(categoryName != nil) {
+    if (categoryName != nil) {
         
         queryParams[@"categoryName"] = categoryName;
     }
-    if(variable != nil) {
+    if (variable != nil) {
         
         queryParams[@"variable"] = variable;
     }
@@ -312,7 +333,7 @@ static SWGUnitsApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];

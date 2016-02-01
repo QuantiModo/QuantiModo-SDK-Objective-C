@@ -1,6 +1,8 @@
 #import "SWGVotesApi.h"
 #import "SWGQueryParamCollection.h"
+#import "SWGPostVote.h"
 #import "SWGCommonResponse.h"
+#import "SWGVoteDelete.h"
 
 
 @interface SWGVotesApi ()
@@ -72,38 +74,22 @@ static SWGVotesApi* singletonAPI = nil;
 ///
 /// Post or update vote
 /// This is to enable users to indicate their opinion on the plausibility of a causal relationship between a treatment and outcome. QuantiModo incorporates crowd-sourced plausibility estimations into their algorithm. This is done allowing user to indicate their view of the plausibility of each relationship with thumbs up/down buttons placed next to each prediction.
-///  @param cause Cause variable name
+///  @param body Contains the cause variable, effect variable, and vote value.
 ///
-///  @param effect Effect variable name
-///
-///  @param correlation Correlation value
-///
-///  @param vote Vote: 0 (for implausible) or 1 (for plausible)
+///  @param accessToken User's OAuth2 access token
 ///
 ///  @returns SWGCommonResponse*
 ///
--(NSNumber*) v1VotesPostWithCompletionBlock: (NSString*) cause
-         effect: (NSString*) effect
-         correlation: (NSNumber*) correlation
-         vote: (NSNumber*) vote
+-(NSNumber*) v1VotesPostWithCompletionBlock: (SWGPostVote*) body
+         accessToken: (NSString*) accessToken
         
         completionHandler: (void (^)(SWGCommonResponse* output, NSError* error))completionBlock { 
         
 
     
-    // verify the required parameter 'cause' is set
-    if (cause == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `cause` when calling `v1VotesPost`"];
-    }
-    
-    // verify the required parameter 'effect' is set
-    if (effect == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `effect` when calling `v1VotesPost`"];
-    }
-    
-    // verify the required parameter 'correlation' is set
-    if (correlation == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `correlation` when calling `v1VotesPost`"];
+    // verify the required parameter 'body' is set
+    if (body == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `body` when calling `v1VotesPost`"];
     }
     
 
@@ -118,21 +104,9 @@ static SWGVotesApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(cause != nil) {
+    if (accessToken != nil) {
         
-        queryParams[@"cause"] = cause;
-    }
-    if(effect != nil) {
-        
-        queryParams[@"effect"] = effect;
-    }
-    if(correlation != nil) {
-        
-        queryParams[@"correlation"] = correlation;
-    }
-    if(vote != nil) {
-        
-        queryParams[@"vote"] = vote;
+        queryParams[@"access_token"] = accessToken;
     }
     
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
@@ -155,7 +129,7 @@ static SWGVotesApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -164,7 +138,7 @@ static SWGVotesApi* singletonAPI = nil;
     NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
     
-    
+    bodyParam = body;
     
 
     
@@ -190,27 +164,19 @@ static SWGVotesApi* singletonAPI = nil;
 ///
 /// Delete vote
 /// Delete previously posted vote
-///  @param cause Cause variable name
-///
-///  @param effect Effect variable name
+///  @param body The cause and effect variable names for the predictor vote to be deleted.
 ///
 ///  @returns SWGCommonResponse*
 ///
--(NSNumber*) v1VotesDeletePostWithCompletionBlock: (NSString*) cause
-         effect: (NSString*) effect
+-(NSNumber*) v1VotesDeletePostWithCompletionBlock: (SWGVoteDelete*) body
         
         completionHandler: (void (^)(SWGCommonResponse* output, NSError* error))completionBlock { 
         
 
     
-    // verify the required parameter 'cause' is set
-    if (cause == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `cause` when calling `v1VotesDeletePost`"];
-    }
-    
-    // verify the required parameter 'effect' is set
-    if (effect == nil) {
-        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `effect` when calling `v1VotesDeletePost`"];
+    // verify the required parameter 'body' is set
+    if (body == nil) {
+        [NSException raise:@"Invalid parameter" format:@"Missing the required parameter `body` when calling `v1VotesDeletePost`"];
     }
     
 
@@ -225,14 +191,6 @@ static SWGVotesApi* singletonAPI = nil;
     
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
-    if(cause != nil) {
-        
-        queryParams[@"cause"] = cause;
-    }
-    if(effect != nil) {
-        
-        queryParams[@"effect"] = effect;
-    }
     
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.defaultHeaders];
 
@@ -254,7 +212,7 @@ static SWGVotesApi* singletonAPI = nil;
     }
 
     // request content type
-    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[]];
+    NSString *requestContentType = [SWGApiClient selectHeaderContentType:@[@"application/json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"oauth2"];
@@ -263,7 +221,7 @@ static SWGVotesApi* singletonAPI = nil;
     NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *files = [[NSMutableDictionary alloc] init];
     
-    
+    bodyParam = body;
     
 
     

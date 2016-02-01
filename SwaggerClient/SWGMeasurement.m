@@ -2,13 +2,24 @@
 
 @implementation SWGMeasurement
 
+- (instancetype)init {
+  self = [super init];
+
+  if (self) {
+    // initalise property's default value, if any
+    
+  }
+
+  return self;
+}
+
 /**
  * Maps json key to property name.
  * This method is used by `JSONModel`.
  */
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"id": @"_id", @"user_id": @"userId", @"client_id": @"clientId", @"connector_id": @"connectorId", @"variable_id": @"variableId", @"source_id": @"sourceId", @"start_time": @"startTime", @"value": @"value", @"unit_id": @"unitId", @"original_value": @"originalValue", @"original_unit_id": @"originalUnitId", @"duration": @"duration", @"note": @"note", @"latitude": @"latitude", @"longitude": @"longitude", @"location": @"location", @"created_at": @"createdAt", @"updated_at": @"updatedAt", @"error": @"error" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"variable": @"variable", @"source": @"source", @"startTime": @"startTime", @"humanTime": @"humanTime", @"value": @"value", @"unit": @"unit", @"originalValue": @"originalValue", @"storedValue": @"storedValue", @"storedAbbreviatedUnitName": @"storedAbbreviatedUnitName", @"originalAbbreviatedUnitName": @"originalAbbreviatedUnitName", @"abbreviatedUnitName": @"abbreviatedUnitName", @"note": @"note" }];
 }
 
 /**
@@ -18,7 +29,7 @@
  */
 + (BOOL)propertyIsOptional:(NSString *)propertyName
 {
-  NSArray *optionalProperties = @[@"_id", @"userId", @"clientId", @"connectorId", @"originalValue", @"originalUnitId", @"duration", @"note", @"latitude", @"longitude", @"location", @"createdAt", @"updatedAt", @"error"];
+  NSArray *optionalProperties = @[@"humanTime", @"originalValue", @"storedValue", @"storedAbbreviatedUnitName", @"originalAbbreviatedUnitName", @"abbreviatedUnitName", @"note"];
 
   if ([optionalProperties containsObject:propertyName]) {
     return YES;

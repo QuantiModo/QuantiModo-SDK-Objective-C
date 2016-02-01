@@ -7,6 +7,7 @@
  * Do not edit the class manually.
  */
 
+#import "SWGTrackingReminderPending.h"
 
 
 @protocol SWGInlineResponse2002
@@ -15,7 +16,7 @@
 @interface SWGInlineResponse2002 : SWGObject
 
 
-@property(nonatomic) NSString* data;
+@property(nonatomic) NSArray<SWGTrackingReminderPending>* data;
 
 @property(nonatomic) NSNumber* success;
 

@@ -2,13 +2,24 @@
 
 @implementation SWGConnector
 
+- (instancetype)init {
+  self = [super init];
+
+  if (self) {
+    // initalise property's default value, if any
+    
+  }
+
+  return self;
+}
+
 /**
  * Maps json key to property name.
  * This method is used by `JSONModel`.
  */
 + (JSONKeyMapper *)keyMapper
 {
-  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"id": @"_id", @"name": @"name", @"display_name": @"displayName", @"image": @"image", @"get_it_url": @"getItUrl", @"short_description": @"shortDescription", @"long_description": @"longDescription", @"enabled": @"enabled", @"oauth": @"oauth" }];
+  return [[JSONKeyMapper alloc] initWithDictionary:@{ @"id": @"_id", @"name": @"name", @"displayName": @"displayName", @"image": @"image", @"getItUrl": @"getItUrl", @"connected": @"connected", @"connectInstructions": @"connectInstructions", @"lastUpdate": @"lastUpdate", @"totalMeasurementsInLastUpdate": @"totalMeasurementsInLastUpdate", @"noDataYet": @"noDataYet" }];
 }
 
 /**
@@ -18,7 +29,7 @@
  */
 + (BOOL)propertyIsOptional:(NSString *)propertyName
 {
-  NSArray *optionalProperties = @[@"_id", ];
+  NSArray *optionalProperties = @[];
 
   if ([optionalProperties containsObject:propertyName]) {
     return YES;
